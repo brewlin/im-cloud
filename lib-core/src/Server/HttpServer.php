@@ -24,14 +24,15 @@ class HttpServer extends Server
     {
         $this->port = env("HTTP_PORT");
         $this->host = env("HTTP_HOST");
+
         parent::__construct();
     }
     public function defaultSetting():array
     {
         return [
-            'daemonize' => env("DAEMONIZE", 0),
+            'daemonize' => (int)env("DAEMONIZE", 0),
             'worker_num' => (int)env("WORKER_NUM", 4),
-            'open_http2_protocol' => true,
+            'open_http2_protocol' => (bool)env("ENABLE_GRPC",false),
         ];
     }
     /**
@@ -40,19 +41,52 @@ class HttpServer extends Server
     public function start():void
     {
         $this->swooleServer = new \Swoole\Http\Server($this->host,$this->port,$this->mode,$this->type);
+        $this->setPanel();
         $this->setListener();
         $this->startSwoole();
     }
 
+    /**
+     * set console log
+     */
+    public function setPanel()
+    {
+        //console log
+        $this->panel["HTTP"] = [
+            'listen' => env("HTTP_HOST") . ':' . env("HTTP_PORT"),
+            'type'   => "HTTP",
+            'mode'   => env("HTTP_MODE","process"),
+            'worker' => env("WORKER_NUM"),
+        ];
+        if(env("ENABLE_GRPC",false)){
+            $this->panel["GRPC"] = [
+                'listen' => env("HTTP_HOST") . ':' . env("HTTP_PORT"),
+                'type'   => "HTTP2",
+                'mode'   => env("HTTP_MODE","process"),
+                'worker' => env("WORKER_NUM"),
+            ];
+        }
+        if(env("ENABLE_WS",false)){
+            $this->panel["WEBSOCKET"] = [
+                'listen' => env("HTTP_HOST") . ':' . env("HTTP_PORT"),
+                'type'   => "WEBSOCKET",
+                'mode'   => env("HTTP_MODE","process"),
+                'worker' => env("WORKER_NUM"),
+            ];
+
+        }
+    }
     /**
      * set http & tcp on listener
      */
     public function setListener(): void
     {
         $this->httpListener = [
-            SwooleEvent::MESSAGE => new MessageListener(),
             SwooleEvent::REQUEST => new RequestListener(),
         ];
+        if(env("ENABLE_WS",false)){
+            $this->httpListener[SwooleEvent::MESSAGE] = new MessageListener();
+        }
         $this->listener = [
            "TCP" =>  new TcpServer()
         ];

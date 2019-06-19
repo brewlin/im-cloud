@@ -26,7 +26,18 @@ use Swoole\Http\Request as CoRequest;
  */
 class Request extends PsrRequest
 {
-
+    /**
+     * http protocol http1
+     */
+    public const HTTP1 = "HTTP/1.1";
+    /**
+     * http protocol http2
+     */
+    public const HTTP2 = "HTTP/2";
+    /**
+     * @var string protocol
+     */
+    protected $protocol;
     /**
      * Router attribute
      */
@@ -144,9 +155,13 @@ class Request extends PsrRequest
      */
     private $parsers = [];
     public static $instance;
+
+    /**
+     * @return Request
+     */
     public static function getInstance(){
         if(!isset(self::$instance) ){
-           self::$instance = new self();
+            self::$instance = new self();
         }
         return self::$instance;
     }
@@ -174,6 +189,7 @@ class Request extends PsrRequest
         $self->cookieParams  = $coRequest->cookie ?: [];
         $self->serverParams  = $serverParams;
         $self->requestTarget = $serverParams['request_uri'];
+        $self->protocol      = $serverParams['server_protocol'];
 
         $parts = explode('?', $serverParams['request_uri'], 2);
         // save
@@ -648,5 +664,14 @@ class Request extends PsrRequest
         }
 
         return $content;
+    }
+
+    /**
+     * get http protocol
+     * @return string
+     */
+    public function getProtocol():string
+    {
+        return $this->protocol;
     }
 }

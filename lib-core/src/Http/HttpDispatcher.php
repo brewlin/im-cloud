@@ -29,6 +29,21 @@ class HttpDispatcher
         //dispatche route
         $dispatcher = HttpRouter::getInstance()->dispatcher;
         $routeInfo = $dispatcher->dispatch($request->getMethod(),$request->getUriPath());
+        $response = self::process($response,$routeInfo);
+        //destory context
+        $response->send();
+        Context::compelete();
+
+    }
+
+    /**
+     * dispatcher process
+     * @param Response $response
+     * @param array $routeInfo
+     * @return Response
+     */
+    public static function process(Response $response,array $routeInfo):Response
+    {
         switch ($routeInfo[0]) {
             case Dispatcher::NOT_FOUND:
                 // ... 404 Not Found 没找到对应的方法
@@ -53,14 +68,10 @@ class HttpDispatcher
                 }catch (\Throwable $e){
                     CLog::info("router dispatcher is error:".$e->getMessage());
                     $response->withStatus(500)
-                            ->withContent($e->getMessage());
+                        ->withContent($e->getMessage());
                 }
                 break;
         }
-        //destory context
-        $response->send();
-        Context::compelete();
-
+        return $response;
     }
-
 }

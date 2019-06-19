@@ -33,6 +33,7 @@ class Server
 
     protected $httpListener;
     protected $listener;
+    protected $panel;
 
     /**
      * Pid file
@@ -282,35 +283,32 @@ class Server
      * console  write
      */
     public function consoleshow(){
-        // Http
-        $panel = [
-            'HTTP' => [
-                'listen' => env("HTTP_HOST") . ':' . env("HTTP_PORT"),
-                'type'   => env("HTTP","TCP"),
-                'mode'   => env("HTTP_MODE","process"),
-                'worker' => env("WORKER_NUM"),
-            ],
-        ];
-
         // Listener
         foreach ($this->listener as $name => $listener) {
             if (!$listener instanceof ServerInterface) {
                 continue;
             }
-            $panel[$name] = [
+            $this->panel[$name] = [
                 'listen' => sprintf('%s:%s', $listener->getHost(), $listener->getPort()),
                 'type'   => $listener->getTypeName(),
                 "model" => "TCP",
+                'worker' => env("WORKER_NUM",1)
             ];
         }
 
-        show($panel);
-        Console::write("<success>HTTP server {$panel['HTTP']['listen']} start success !</success>");
+        show($this->panel);
+        Console::write("<success>HTTP server {$this->panel['HTTP']['listen']} start success !</success>");
+        if(env("ENABLE_WS",false)){
+            Console::write("<success>WEBSOCKET server {$this->panel['HTTP']['listen']} start success !</success>");
+        }
+        if(env("ENABLE_GRPC",false)){
+            Console::write("<success>GRPC server {$this->panel['HTTP']['listen']} start success !</success>");
+        }
         foreach ($this->listener as $name => $listener) {
             if (!$listener instanceof ServerInterface) {
                 continue;
             }
-            Console::write("<success>{$name} server {$panel['HTTP']['listen']} start success !</success>");
+            Console::write("<success>{$name} server {$this->panel['HTTP']['listen']} start success !</success>");
         }
     }
 }
