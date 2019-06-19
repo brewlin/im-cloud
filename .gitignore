@@ -2,3 +2,4 @@
 vendor
 github.com
 .phpintel
+composer.lock
