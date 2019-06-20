@@ -30,11 +30,15 @@
     "repositories": {
         "0":{
             "type":"path",
-            "url":"../lib-grpc"
+            "url":"../../package/im-grpc"
         },
         "1":{
             "type":"path",
-            "url":"../lib-core"
+            "url":"../../package/im-core"
+        },
+        "2":{
+            "type":"path",
+            "url":"../../package/im-discovery"
         },
         "packagist": {
             "type": "composer",
