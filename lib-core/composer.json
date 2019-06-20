@@ -12,7 +12,11 @@
     "autoload":{
         "psr-4":{
             "Core\\":"src"
-        }
+        },
+        "files": [
+            "src/Helper/functions.php"
+        ]
+    }
 
     },
     "require": {

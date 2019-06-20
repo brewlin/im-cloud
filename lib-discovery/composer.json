@@ -10,11 +10,10 @@
     ],
     "autoload": {
         "psr-4": {
-            "Consul\\": "src"
-        }
+            "Discovery\\": "src"
+        },
+        "files": [
+            "src/Helper/functions.php"
+        ]
     },
-    "require": {
-        "sensiolabs/consul-php-sdk": "^3.1",
-        "swoole/etch-client":"^1.0"
-    }
 }
