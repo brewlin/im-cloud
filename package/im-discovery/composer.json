@@ -1,6 +1,6 @@
 {
-    "name": "brewlin/im-consul",
-    "description": "lib for im-cloud consul center",
+    "name": "brewlin/im-discovery",
+    "description": "lib for im-cloud discovery center",
     "license": "MIT",
     "authors": [
         {
@@ -15,5 +15,5 @@
         "files": [
             "src/Helper/functions.php"
         ]
-    },
+    }
 }

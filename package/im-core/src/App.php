@@ -10,6 +10,7 @@ namespace Core;
 
 
 use Core\Cloud;
+use Core\Processor\Container;
 use Core\Server\HttpServer;
 use Core\Log\Logger;
 use Core\Processor\AppProcessor;
@@ -55,6 +56,7 @@ class App
         return [
             new EnvProcessor($this),
             new ConfigProcessor($this),
+            new Container($this),
         ];
     }
 

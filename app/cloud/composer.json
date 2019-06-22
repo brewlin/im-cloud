@@ -19,7 +19,8 @@
         "psr/http-message": "^1.0",
         "toolkit/cli-utils": "~1.0",
         "brewlin/im-grpc":"@dev",
-        "brewlin/im-core":"@dev"
+        "brewlin/im-core":"@dev",
+        "brewlin/im-discovery":"@dev"
 
     },
     "autoload": {

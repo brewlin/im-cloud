@@ -13,7 +13,7 @@ if (!function_exists('balancer')) {
      */
     function balancer(): BalancerSelector
     {
-        return \Discovery\BalancerSelector::getInstance();
+        return bean(BalancerSelector::class);
     }
 }
 
@@ -23,6 +23,6 @@ if (!function_exists('provider')) {
      */
     function provider(): ProviderSelector
     {
-        return ProviderSelector::getInstance();
+        return bean(ProviderSelector::class);
     }
 }

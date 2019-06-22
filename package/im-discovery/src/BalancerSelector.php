@@ -27,14 +27,6 @@ class BalancerSelector implements SelectorInterface
 
     ];
 
-    public static $instance;
-    public static function getInstance(){
-        if(!isset(self::$instance)){
-            self::$instance = new self();
-        }
-        return self::$instance;
-    }
-
     /**
      * get balancer
      *
@@ -53,7 +45,7 @@ class BalancerSelector implements SelectorInterface
         }
 
         $balancerBeanName = $balancers[$type];
-        return $balancerBeanName::getInstance();
+        return bean($balancerBeanName);
     }
 
     /**

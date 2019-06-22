@@ -16,10 +16,9 @@
         "files": [
             "src/Helper/functions.php"
         ]
-    }
-
     },
     "require": {
-        "swoole/etcd-client": "^1.0"
+        "swoole/etcd-client": "^1.0",
+        "psr/container": "^1.0"
     }
 }

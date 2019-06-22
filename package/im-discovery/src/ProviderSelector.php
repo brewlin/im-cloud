@@ -1,6 +1,7 @@
 <?php
 
 namespace Discovery;
+use Discovery\Provider\ConsulProvider;
 use Discovery\Provider\ProviderInterface;
 
 /**
@@ -27,14 +28,6 @@ class ProviderSelector implements SelectorInterface
         = [
 
         ];
-    public static $instance;
-    public static function getInstance(){
-        if(!isset(self::$instance)){
-            self::$instance = new self();
-        }
-        return self::$instance;
-    }
-
     /**
      * Select a provider by Selector
      *
@@ -54,8 +47,7 @@ class ProviderSelector implements SelectorInterface
         }
 
         $providerBeanName = $providers[$type];
-
-        return App::getBean($providerBeanName);
+        return bean($providerBeanName);
     }
 
     /**

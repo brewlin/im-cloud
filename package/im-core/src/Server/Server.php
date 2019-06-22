@@ -10,6 +10,7 @@ namespace Core\Server;
 
 
 use Core\Console\Console;
+use Core\Container\Container;
 use Core\Swoole\SwooleEvent;
 use Swoft\Log\Helper\CLog;
 use Swoft\Stdlib\Helper\Dir;

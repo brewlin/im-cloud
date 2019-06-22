@@ -12,6 +12,18 @@ use Toolkit\Cli\Cli;
 use Core\Console\Console;
 
 /**
+ * 获取bean
+ */
+if (!function_exists("bean")){
+    /**
+     * @param $id
+     * @return object
+     */
+    function bean($id){
+        return \Core\Container\Container::getInstance()->get($id);
+    }
+}
+/**
  * 获取 协程上下文  response 消息 助手
  */
 if (!function_exists("response")){

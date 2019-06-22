@@ -8,13 +8,6 @@ namespace Discovery\Balancer;
  */
 class RoundRobinBalancer implements BalancerInterface
 {
-    public static $instance;
-    public static function getInstance(){
-        if(!isset(self::$instance)){
-            self::$instance = new self();
-        }
-        return self::$instance;
-    }
     private $lastIndex = 0;
 
     public function select(array $serviceList, ...$params)
