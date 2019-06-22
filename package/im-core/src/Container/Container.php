@@ -9,7 +9,9 @@
 namespace Core\Container;
 
 
+use Core\Console\Console;
 use Psr\Container\ContainerInterface;
+use Swoft\Log\Helper\CLog;
 
 class Container implements ContainerInterface
 {
@@ -30,13 +32,19 @@ class Container implements ContainerInterface
         return self::$instance;
 
     }
+
+    /**
+     * @param string $id
+     * @return object
+     */
     public function get($id)
     {
-        if (isset($this->singletonPool[$id])) {
+        if (isset($this->singlePool[$id])) {
             return $this->singlePool[$id];
         }
-        $this->create($id);
-        return $this->singlePool[$id];
+        throw new \Exception("single conainer not exist!".$id);
+//        $this->create($id);
+//        return $this->singlePool[$id];
     }
     public function has($id)
     {

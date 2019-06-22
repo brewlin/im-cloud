@@ -2,15 +2,7 @@
 
 namespace App;
 
+use Core\Http\HttpRouter;
 
-use FastRoute\RouteCollector;
-
-class Router
-{
-    function register(RouteCollector $routeCollector)
-    {
-        //broadcast to everyone
-        $routeCollector->post('/im.cloud.Cloud/Broadcast', '/Grpc/Cloud/broadcast');
-
-    }
-}
+//Grpc server router
+HttpRouter::post('/im.cloud.Cloud/Broadcast', '/Grpc/Cloud/broadcast');

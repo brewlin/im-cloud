@@ -3,6 +3,7 @@
 namespace Core\Http\Request;
 
 use function array_merge;
+use Core\Concern\ContainerTrait;
 use Core\Http\ContentType;
 use Core\Http\Stream;
 use function explode;
@@ -154,17 +155,7 @@ class Request extends PsrRequest
      * ]
      */
     private $parsers = [];
-    public static $instance;
-
-    /**
-     * @return Request
-     */
-    public static function getInstance(){
-        if(!isset(self::$instance) ){
-            self::$instance = new self();
-        }
-        return self::$instance;
-    }
+    use ContainerTrait;
 
     /**
      * Create Psr server request from swoole request
@@ -176,7 +167,7 @@ class Request extends PsrRequest
     public static function new(CoRequest $coRequest): self
     {
         /** @var Request $self */
-        $self = self::getInstance();
+        $self = self::__instance();
 
         $serverParams = array_merge(self::DEFAULT_SERVER, $coRequest->server);
 

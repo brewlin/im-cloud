@@ -9,6 +9,7 @@
 namespace Core\Http;
 
 
+use Core\Container\Container;
 use Core\Context\Context;
 use Core\Http\Request\Request;
 use Core\Http\Response\Response;
@@ -26,8 +27,10 @@ class HttpDispatcher
         $context = HttpContext::new($request,$response);
         Context::set($context);
         CLog::info("http method:%s ,http url:%s",$request->getMethod(),$request->getUriPath());
-        //dispatche route
-        $dispatcher = HttpRouter::getInstance()->dispatcher;
+        /**
+         * @var Dispatcher
+         */
+        $dispatcher = Container::getInstance()->get(HttpRouter::class)->dispatcher;
         $routeInfo = $dispatcher->dispatch($request->getMethod(),$request->getUriPath());
         $response = self::process($response,$routeInfo);
         //destory context

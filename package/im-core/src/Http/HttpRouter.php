@@ -9,28 +9,40 @@
 namespace Core\Http;
 
 
-use App\Router;
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
 use function FastRoute\simpleDispatcher;
+require_once ROOT."/app/Router.php";
 
+/**
+ * Class HttpRouter
+ * @package Core\Http
+ * @method static post(string $path,string $class):bool
+ * @method static get(string $path,string $class):bool
+ */
 class HttpRouter
 {
     /**
      * @var Dispatcher
      */
     public $dispatcher;
-    public static $instance;
-    public static function getInstance(){
-        if(!isset(self::$instance)){
-            self::$instance = new self();
-        }
-        return self::$instance;
+    public static $router;
+
+    /**
+     * @param $name
+     * @param $arguments
+     */
+    public static function __callStatic($name, $arguments)
+    {
+        self::$router[$name] = $arguments;
     }
+
     public function __construct()
     {
         $dispatcher = simpleDispatcher(function (RouteCollector $route){
-            (new Router())->register($route);
+            foreach(self::$router as $method => $r){
+                $route->{$method}(...$r);
+            }
         });
         $this->dispatcher = $dispatcher;
     }

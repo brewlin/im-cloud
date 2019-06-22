@@ -2,6 +2,7 @@
 
 namespace Core\Http\Response;
 
+use Core\Concern\ContainerTrait;
 use Core\Http\ContentType;
 use Core\Http\Stream;
 use function implode;
@@ -99,13 +100,7 @@ class Response implements ResponseInterface
      * @var string
      */
     private $fileType = '';
-    public static $instance;
-    public static function getInstance(){
-        if(!isset(self::$instance)){
-            self::$instance = new self();
-        }
-        return self::$instance;
-    }
+    use ContainerTrait;
 
     /**
      * Create response replace of constructor
@@ -116,7 +111,7 @@ class Response implements ResponseInterface
      */
     public static function new(CoResponse $coResponse): self
     {
-        $self = self::getInstance();
+        $self = self::__instance();
 
         // $self = \bean('httpResponse');
         /** @var Response $self */
