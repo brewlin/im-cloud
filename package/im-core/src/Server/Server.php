@@ -12,6 +12,7 @@ namespace Core\Server;
 use Core\Console\Console;
 use Core\Container\Container;
 use Core\Swoole\SwooleEvent;
+use Process\ProcessManager;
 use Swoft\Log\Helper\CLog;
 use Swoft\Stdlib\Helper\Dir;
 use Swoft\Stdlib\Helper\Sys;
@@ -110,11 +111,10 @@ class Server
         self::$server = $this;
 
         $this->consoleshow();
-
+        ProcessManager::load($this->swooleServer);
         // Start swoole server
         $this->swooleServer->start();
     }
-
     /**
      * Add events
      *

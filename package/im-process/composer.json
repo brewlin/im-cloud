@@ -1,0 +1,20 @@
+{
+    "name": "brewlin/im-process",
+    "description": "service components processmanager",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "xiaodo",
+            "email": "97404667@qq.com"
+        }
+    ],
+    "autoload":{
+        "psr-4":{
+            "Process\\":"src"
+        }
+
+    },
+    "require": {
+    }
+}

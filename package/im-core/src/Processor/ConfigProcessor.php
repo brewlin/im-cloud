@@ -17,7 +17,12 @@ class ConfigProcessor extends Processor
         define('APP_DEBUG', (int)getenv('APP_DEBUG', 0));
         define('SWOFT_DEBUG', (int)getenv('App_DEBUG', 0));
         define("APP_NAME",(string)getenv("APP_NAME","im-undifined-node"));
+        $this->loadConfig();
         return true;
     }
+    public function loadConfig(){
+        require_once ROOT."/config/process.php";
+    }
+
 
 }

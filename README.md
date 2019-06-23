@@ -37,12 +37,14 @@ todo
 ### 2.完成了`grpc-server` 路由注册和 grpc-client 请求流程的demo
 ### 3.构建完成 protobuf 构建grpc 接口
 ### 4.`im-discovery`，基础完成
-### 5.kafaka consul to do...
+### 5.`im-process`,进程管理器 基础完成
+### kafaka consul to do...
 
 ## 二、组件依赖
 ### @[im-core](./package/im-core) (done)
 ### @[im-grpc](./package/im-grpc) (done)
-### @[im-discovery](./package/im-discovery) (soon)
+### @[im-discovery](./package/im-discovery) (basic)
+### @[im-process](./package/im-process)(soon)
 ### @[cloud](./app/cloud) (todo)
 ### @[job](./app/job)   (todo)
 ### @[logic](./app/logic) (todo)
