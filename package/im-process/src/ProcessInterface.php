@@ -7,7 +7,7 @@
  */
 namespace Process;
 
-use Process\Process as ImProcess;
+use Process\Process;
 
 /**
  * The process interface
@@ -15,9 +15,9 @@ use Process\Process as ImProcess;
 interface ProcessInterface
 {
     /**
-     * @param ImProcess $process
+     * @param Process $process
      */
-    public function run(ImProcess $process);
+    public function run(Process $process);
 
     /**
      * @return bool

@@ -69,16 +69,12 @@ class ProcessBuilder
     private static function getProcessMaping(string $name): array
     {
         $process = ProcessManager::get($name);
-        if (!isset($process['name']) || !isset($process['boot']) || !isset($process['pipe']) || !isset($process['inout']) || !isset($process['co'])) {
-            throw new \Exception(sprintf('The %s process is ncomplete ! data=%s', $name, json_encode($process, JSON_UNESCAPED_UNICODE)));
-        }
-
         $data = [
-            $process['name'],
-            $process['boot'],
-            $process['pipe'],
-            $process['inout'],
-            $process['co'],
+            $process->name,
+            $process->boot,
+            $process->pipe,
+            $process->inout,
+            $process->co,
         ];
 
         return $data;
@@ -95,7 +91,7 @@ class ProcessBuilder
         $processObject = ProcessManager::get($name);
         self::beforeProcess($name, $boot);
         if($processObject->check()){
-            PhpHelper::call([$processObject, 'run'], [$process]);
+            PhpHelper::call([$processObject, 'run'], $process);
         }
         self::afterProcess();
     }

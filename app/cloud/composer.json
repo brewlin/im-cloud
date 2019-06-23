@@ -20,7 +20,8 @@
         "toolkit/cli-utils": "~1.0",
         "brewlin/im-grpc":"@dev",
         "brewlin/im-core":"@dev",
-        "brewlin/im-discovery":"@dev"
+        "brewlin/im-discovery":"@dev",
+        "brewlin/im-process":"@dev"
 
     },
     "autoload": {
@@ -40,6 +41,10 @@
         "2":{
             "type":"path",
             "url":"../../package/im-discovery"
+        },
+        "3":{
+            "type":"path",
+            "url":"../../package/im-process"
         },
         "packagist": {
             "type": "composer",
