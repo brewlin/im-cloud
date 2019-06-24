@@ -39,12 +39,11 @@ class DiscoveryProcess extends AbstractProcess
      */
     public function run(Process $process)
     {
-        $consuleConfig = require_once ROOT."/config/provider.php";
-        provider()->select()->registerService($consuleConfig);
+        provider()->select()->registerService();
         while (true){
-            $services = provider()->select()->getServiceList();
-            $this->updateServices($services);
-            sleep(2);
+            $services = provider()->select()->getServiceList("service:im-cloud");
+//            $this->updateServices($services);
+            sleep(10);
         }
     }
 

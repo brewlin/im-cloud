@@ -119,7 +119,7 @@ class ConsulProvider implements ProviderInterface
      *
      * @var string
      */
-    private $discoveryDc = "";
+    private $discoveryDc = "dc1";
 
     /**
      * Specifies a node name to sort the node list in ascending order based on the estimated round trip time from that node
@@ -143,6 +143,18 @@ class ConsulProvider implements ProviderInterface
      * @var bool
      */
     private $discoveryPassing = true;
+
+    /**
+     * register data config
+     * @var array
+     */
+    private $registerParam;
+
+    /**
+     * discovery data config
+     * @var array
+     */
+    private $discoveryParam;
 
     /**
      * get service list
@@ -192,34 +204,41 @@ class ConsulProvider implements ProviderInterface
      */
     public function registerService(...$params)
     {
-        $hostName = gethostname();
-        if (empty($this->registerId)) {
-            $this->registerId = sprintf('service-%s-%s', $this->registerName, $hostName);
-        }
 
-        if (empty($this->registerCheckId)) {
-            $this->registerCheckId = sprintf('check-%s-%s', $this->registerName, $hostName);
-        }
+        $this->initService(...$params);
 
-        $data = [
-            'ID'                => $this->registerId,
-            'Name'              => $this->registerName,
-            'Tags'              => $this->registerTags,
-            'Address'           => $this->registerAddress,
-            'Port'              => intval($this->registerPort),
-            'EnableTagOverride' => $this->registerEnableTagOverride,
-            'Check'             => [
-                'id'       => $this->registerCheckId,
-                'name'     => $this->registerCheckName,
-                'tcp'      => $this->registerCheckTcp,
-                'interval' => sprintf('%ss', $this->registerCheckInterval),
-                'timeout'  => sprintf('%ss', $this->registerCheckTimeout),
-            ],
-        ];
-
-        $this->putService($data, self::REGISTER_PATH);
+        $this->putService($this->registerParam, self::REGISTER_PATH);
 
         return true;
+    }
+
+    /**
+     * init config
+     * @param array ...$param
+     */
+    public function initService(...$param){
+        if(empty($param["consul"])){
+            $param = require_once ROOT."/config/provider.php";
+        }
+        if(empty($param)){
+            CLog::error("consul register service faile ,config is empty");
+            throw new \Exception("consul reigster fail");
+        }
+        $config = $param["consul"];
+        $register = $config["register"];
+        $discovery = $config["discovery"];
+
+        if(empty($register) || empty($discovery)){
+            CLog::error("provider confi is wrong");
+            throw new \Exception();
+        }
+        $hostName = gethostname();
+        if(empty($register['ID'])){
+            $register['ID'] = sprintf('service-%s-%s', $register["Name"], $hostName);
+        }
+        $this->registerParam = $register;
+        $this->discoveryParam = $discovery;
+
     }
 
     /**
@@ -229,6 +248,8 @@ class ConsulProvider implements ProviderInterface
      */
     private function getDiscoveryUrl(string $serviceName): string
     {
+        $hostName = gethostname();
+        $serviceName = sprintf('service-%s-%s', $serviceName, $hostName);
         $query = [
             'passing' => $this->discoveryPassing,
             'dc'      => $this->discoveryDc,
@@ -253,16 +274,16 @@ class ConsulProvider implements ProviderInterface
      */
     private function putService(array $service, string $url)
     {
-        $options = [
-            'json' => $service,
-        ];
         $httpClient = new Client($this->address,$this->port);
         $httpClient->setMethod("PUT");
-        $httpClient->setData($options);
-        $result = $httpClient->body;
+        $httpClient->setData(json_encode($service));
+        $httpClient->execute($url);
+        $res =  $httpClient->body;
         $httpClient->close();
-        if(empty($result)){
+        if(empty($res)){
             Console::writeln(sprintf('<success>RPC service register success by consul ! tcp=%s:%d</success>', $this->registerAddress, $this->registerPort));
+        }else{
+            Console::writeln(sprintf('<error>RPC service register success by consul ! tcp=%s:%d</error>', $this->registerAddress, $this->registerPort));
         }
     }
 }
