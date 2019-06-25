@@ -3,6 +3,7 @@
 namespace Discovery\Provider;
 
 use Core\Console\Console;
+use Swlib\SaberGM;
 use Swoft\Log\Helper\CLog;
 use Swoole\Coroutine\Http\Client;
 
@@ -167,11 +168,8 @@ class ConsulProvider implements ProviderInterface
     public function getServiceList(string $serviceName, ...$params)
     {
         $url        = $this->getDiscoveryUrl($serviceName);
-        $httpClient = new Client($this->address,$this->port);
-        $httpClient->get($url);
-        $result = $httpClient->body;
-        $httpClient->close();
-        $services   = json_decode($result, true);
+        $result = SaberGM::get(sprintf("http://%s:%d%s",$this->address,$this->port,$url));
+        $services = $result->getParsedJsonArray();
 
         // 数据格式化
         $nodes = [];
@@ -218,7 +216,7 @@ class ConsulProvider implements ProviderInterface
      */
     public function initService(...$param){
         if(empty($param["consul"])){
-            $param = require_once ROOT."/config/provider.php";
+            $param = require_once ROOT."/config/discovery.php";
         }
         if(empty($param)){
             CLog::error("consul register service faile ,config is empty");
@@ -236,8 +234,12 @@ class ConsulProvider implements ProviderInterface
         if(empty($register['ID'])){
             $register['ID'] = sprintf('service-%s-%s', $register["Name"], $hostName);
         }
+        $this->address = $config["address"];
+        $this->port = $config["port"];
         $this->registerParam = $register;
         $this->discoveryParam = $discovery;
+        $this->registerAddress = $register["Address"];
+        $this->registerPort = $register["Port"];
 
     }
 
@@ -248,8 +250,6 @@ class ConsulProvider implements ProviderInterface
      */
     private function getDiscoveryUrl(string $serviceName): string
     {
-        $hostName = gethostname();
-        $serviceName = sprintf('service-%s-%s', $serviceName, $hostName);
         $query = [
             'passing' => $this->discoveryPassing,
             'dc'      => $this->discoveryDc,
@@ -274,13 +274,12 @@ class ConsulProvider implements ProviderInterface
      */
     private function putService(array $service, string $url)
     {
-        $httpClient = new Client($this->address,$this->port);
-        $httpClient->setMethod("PUT");
-        $httpClient->setData(json_encode($service));
-        $httpClient->execute($url);
-        $res =  $httpClient->body;
-        $httpClient->close();
-        if(empty($res)){
+        try{
+            $res = SaberGM::put(sprintf("%s:%d%s",$this->address,$this->port,$url),json_encode($service));
+        }catch (\Throwable $e){
+            CLog::error($e->getMessage());
+        }
+        if($res->success){
             Console::writeln(sprintf('<success>RPC service register success by consul ! tcp=%s:%d</success>', $this->registerAddress, $this->registerPort));
         }else{
             Console::writeln(sprintf('<error>RPC service register success by consul ! tcp=%s:%d</error>', $this->registerAddress, $this->registerPort));

@@ -2,21 +2,21 @@
 
 return [
     'consul' => [
-        'address' => '192.168.199.184',
-        'port'    => 8500,
+        'address' => env("DISCOVERY_ADDRESS","127.0.0.1"),
+        'port'    => env("DISCOVERY_PORT","8500"),
         'register' => [
             'ID'                => '',
             'Name'              => 'im-cloud-node',
             'Tags'              => [],
             'enableTagOverride'=> false,
-            'Address'           => '192.168.199.103',
+            'Address'           => '127.0.0.1',
             'Port'              => 8000,
             'Check'             => [
                 'id'       => '',
                 'name'     => '',
-                'tcp'      => '192.168.199.184:8099',
-                'interval' => 10,
-                'timeout'  => -1,
+                'http'      => "http://127.0.0.1:".env('HTTP_PORT',9500)."/health",
+                'interval' => "10s",
+                'timeout'  => "10s",
             ],
         ],
         'discovery' => [

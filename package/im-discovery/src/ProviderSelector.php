@@ -38,7 +38,7 @@ class ProviderSelector implements SelectorInterface
     public function select(string $type = null)
     {
         if (empty($type)) {
-            $type = $this->provider;
+            $type = env("DISCOVERY_TYPE",$this->provider);
         }
 
         $providers = $this->mergeProviders();

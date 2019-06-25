@@ -41,7 +41,8 @@ class DiscoveryProcess extends AbstractProcess
     {
         provider()->select()->registerService();
         while (true){
-            $services = provider()->select()->getServiceList("service:im-cloud");
+            $services = provider()->select()->getServiceList("im-cloud-node");
+            var_dump($services);
 //            $this->updateServices($services);
             sleep(10);
         }

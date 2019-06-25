@@ -15,5 +15,8 @@
         "files": [
             "src/Helper/functions.php"
         ]
+    },
+    "require": {
+        "swlib/saber": "^1.0"
     }
 }
