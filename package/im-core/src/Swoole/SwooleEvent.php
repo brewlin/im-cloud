@@ -127,7 +127,10 @@ final class SwooleEvent
         self::FINISH    => FinishInterface::class,
 
         //for worker
-        self::PIPE_MESSAGE => PipeMessageInterface::class
+        self::PIPE_MESSAGE => PipeMessageInterface::class,
+        self::WORKER_STOP => WorkerStopInterface::class,
+        self::SHUTDOWN => ShutdownInterface::class,
+
     ];
 
     /**

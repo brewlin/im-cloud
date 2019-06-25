@@ -12,8 +12,12 @@
  */
 use \Core\Swoole\SwooleEvent;
 use \App\Event\PipeMessageListener;
+use \App\Event\WorkerStopListener;
+use \App\Event\ShutdownListener;
 
 return [
     //监听onpipmessage事件
     SwooleEvent::PIPE_MESSAGE => new PipeMessageListener(),
+    SwooleEvent::WORKER_STOP => new WorkerStopListener(),
+    SwooleEvent::SHUTDOWN    => new ShutdownListener(),
 ];

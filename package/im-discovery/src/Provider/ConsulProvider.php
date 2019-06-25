@@ -3,14 +3,13 @@
 namespace Discovery\Provider;
 
 use Core\Console\Console;
+use Swlib\Saber;
 use Swlib\SaberGM;
 use Swoft\Log\Helper\CLog;
 use Swoole\Coroutine\Http\Client;
 
 /**
  * Consul provider
- *
- * @Bean()
  */
 class ConsulProvider implements ProviderInterface
 {
@@ -38,33 +37,6 @@ class ConsulProvider implements ProviderInterface
      */
     private $port = 8500;
 
-    /**
-     * Specifies a unique ID for this service. This must be unique per agent. This defaults to the Name parameter if not provided.
-     *
-     * @var string
-     */
-    private $registerId = '';
-
-    /**
-     * Specifies the logical name of the service. Many service instances may share the same logical service name.
-     *
-     * @var string
-     */
-    private $registerName = APP_NAME;
-
-    /**
-     * Specifies a list of tags to assign to the service. These tags can be used for later filtering and are exposed via the APIs.
-     *
-     * @var array
-     */
-    private $registerTags = [];
-
-    /**
-     * Specifies to disable the anti-entropy feature for this service's tags
-     *
-     * @var bool
-     */
-    private $registerEnableTagOverride = false;
 
     /**
      * Specifies the address of the service
@@ -80,40 +52,6 @@ class ConsulProvider implements ProviderInterface
      */
     private $registerPort = 88;
 
-    /**
-     * Specifies the checked ID
-     *
-     * @var string
-     */
-    private $registerCheckId = '';
-
-    /**
-     * Specifies the checked name
-     *
-     * @var string
-     */
-    private $registerCheckName = APP_NAME;
-
-    /**
-     * Specifies the checked tcp
-     *
-     * @var string
-     */
-    private $registerCheckTcp = '127.0.0.1:8099';
-
-    /**
-     * Specifies the checked interval
-     *
-     * @var int
-     */
-    private $registerCheckInterval = 10;
-
-    /**
-     * Specifies the checked timeout
-     *
-     * @var int
-     */
-    private $registerCheckTimeout = 1;
 
     /**
      * Specifies the datacenter to query. This will default to the datacenter of the agent being queried
@@ -205,7 +143,19 @@ class ConsulProvider implements ProviderInterface
 
         $this->initService(...$params);
 
-        $this->putService($this->registerParam, self::REGISTER_PATH);
+        try{
+            $res = SaberGM::put(
+                sprintf("%s:%d%s",$this->address,$this->port,self::REGISTER_PATH),
+                json_encode($this->registerParam)
+            );
+        }catch (\Throwable $e){
+            CLog::error($e->getMessage());
+        }
+        if($res->success){
+            Console::writeln(sprintf('<success>RPC service register success by consul ! tcp=%s:%d</success>', $this->registerAddress, $this->registerPort));
+        }else{
+            Console::writeln(sprintf('<error>RPC service register success by consul ! tcp=%s:%d</error>', $this->registerAddress, $this->registerPort));
+        }
 
         return true;
     }
@@ -267,22 +217,173 @@ class ConsulProvider implements ProviderInterface
     }
 
     /**
-     * CURL注册服务
-     *
-     * @param array  $service 服务信息集合
-     * @param string $url     consulURI
+     * @return array|mixed
      */
-    private function putService(array $service, string $url)
+    public function checks()
     {
+        return $this->request('get', '/v1/agent/checks');
+    }
+
+    /**
+     * @param mixed ...$param
+     * @return array
+     */
+    public function members(...$param)
+    {
+        list($option) = $param;
+        $params = [
+            'query' => $this->resolveOptions($option, ['wan']),
+        ];
+
+        return $this->request('get', '/v1/agent/members', $params);
+    }
+
+    /**
+     * @return array
+     */
+    public function self():array
+    {
+        return $this->request('get', '/v1/agent/self');
+    }
+
+    /**
+     * @param $address
+     * @param array $options
+     * @return array
+     */
+    public function join($address, ...$param): array
+    {
+        list($options) = $param;
+        $params = [
+            'query' => $this->resolveOptions($options, ['wan']),
+        ];
+
+        return $this->request('get', '/v1/agent/join/' . $address, $params);
+    }
+
+    /**
+     * @param $node
+     * @return array|mixed
+     */
+    public function forceLeave($node)
+    {
+        return $this->request('get', '/v1/agent/force-leave/' . $node);
+    }
+
+    /**
+     * @param $check
+     * @return array
+     */
+    public function registerCheck($check): array
+    {
+        $params = [
+            'body' => json_encode($check),
+        ];
+
+        return $this->request('put', '/v1/agent/check/register', $params);
+    }
+
+    /**
+     * @param $checkId
+     * @return array
+     */
+    public function deregisterCheck($checkId): array
+    {
+        return $this->request('put', '/v1/agent/check/deregister/' . $checkId);
+    }
+
+    /**
+     * @param $checkId
+     * @param array $options
+     * @return array
+     */
+    public function passCheck($checkId,...$param): array
+    {
+        list($options) = $param;
+        $params = [
+            'query' => $this->resolveOptions($options, ['note']),
+        ];
+
+        return $this->request('put', '/v1/agent/check/pass/' . $checkId, $params);
+    }
+
+    /**
+     * @param $checkId
+     * @param array $options
+     * @return array
+     */
+    public function warnCheck($checkId, ...$param)
+    {
+        list($options) = $param;
+        $params = [
+            'query' => $this->resolveOptions($options, ['note']),
+        ];
+
+        return $this->request('put', '/v1/agent/check/warn/' . $checkId, $params);
+    }
+
+    /**
+     * @param $checkId
+     * @param array $options
+     * @return array
+     */
+    public function failCheck($checkId, ...$param): array
+    {
+        list($options) = $param;
+        $params = [
+            'query' => $this->resolveOptions($options, ['note']),
+        ];
+
+        return $this->request('put', '/v1/agent/check/fail/' . $checkId, $params);
+    }
+
+    /**
+     * @param string
+     * @return string
+     */
+    private function getServiceId(string $service):string
+    {
+        return "service-{$service}-".gethostname();
+    }
+
+    /**
+     * del one service
+     * @param $serviceId
+     * @return array
+     */
+    public function deregisterService($serviceId): array
+    {
+        return $this->request('put', '/v1/agent/service/deregister/' . $this->getServiceId($serviceId));
+    }
+
+    /**
+     * @param array $options
+     * @param array $availableOptions
+     * @return array
+     */
+    protected function resolveOptions(array $options, array $availableOptions): array
+    {
+        return array_intersect_key($options, array_flip($availableOptions));
+    }
+
+    /**
+     * @param string $method
+     * @param string $url
+     * @return array
+     */
+    private function request(string $method,string $url,$options = [],$body = []):array {
         try{
-            $res = SaberGM::put(sprintf("%s:%d%s",$this->address,$this->port,$url),json_encode($service));
+            if (! isset($options['base_uri'])) {
+                $options['base_uri'] = $this->address.":".$this->port;
+            }
+            $saber = Saber::create($options);
+            $res = $saber->{$method}($url,$body);
+            return $res->getParsedJsonArray();
         }catch (\Throwable $e){
-            CLog::error($e->getMessage());
-        }
-        if($res->success){
-            Console::writeln(sprintf('<success>RPC service register success by consul ! tcp=%s:%d</success>', $this->registerAddress, $this->registerPort));
-        }else{
-            Console::writeln(sprintf('<error>RPC service register success by consul ! tcp=%s:%d</error>', $this->registerAddress, $this->registerPort));
+            Clog::error("consul request failed:method{$method},url:{$url}");
+            Clog::error($e->getMessage());
+            return [];
         }
     }
+
 }

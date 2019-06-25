@@ -114,6 +114,7 @@ class Server
         self::$server = $this;
 
         $this->consoleshow();
+        //load child process
         ProcessManager::load($this->swooleServer);
         // Start swoole server
         $this->swooleServer->start();
@@ -130,8 +131,9 @@ class Server
     {
         foreach ($swooleEvents as $name => $listener) {
             // Default events
+            $listenerMethod = sprintf('on%s', ucfirst($name));
             if (isset($defaultEvents[$name])) {
-                $server->on($name, $listener);
+                $server->on($name,is_array($listener)?$listener:[$listener,$listenerMethod]);
                 continue;
             }
 
@@ -143,7 +145,6 @@ class Server
                 throw new \Exception(sprintf('Swoole %s event listener is not %s', $name, $listenerInterface));
             }
 
-            $listenerMethod = sprintf('on%s', ucfirst($name));
             $server->on($name, [$listener, $listenerMethod]);
         }
     }
@@ -282,6 +283,7 @@ class Server
      */
     public function onShutdown(SwooleServer $server): void
     {
+        var_dump("shutdown");
     }
     /**
      * console  write
