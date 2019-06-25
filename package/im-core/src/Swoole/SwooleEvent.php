@@ -125,6 +125,9 @@ final class SwooleEvent
         // For task
         self::TASK      => TaskInterface::class,
         self::FINISH    => FinishInterface::class,
+
+        //for worker
+        self::PIPE_MESSAGE => PipeMessageInterface::class
     ];
 
     /**

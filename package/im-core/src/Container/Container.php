@@ -35,7 +35,7 @@ class Container implements ContainerInterface
 
     /**
      * @param string $id
-     * @return object
+     * @return mixed
      */
     public function get($id)
     {

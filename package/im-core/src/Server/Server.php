@@ -68,6 +68,9 @@ class Server
     {
         return self::$server;
     }
+    public function getSwooleServer():?\Swoole\Server{
+       return $this->swooleServer;
+    }
     public function __construct()
     {
         $this->setting = $this->defaultSetting();

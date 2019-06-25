@@ -9,6 +9,7 @@
 namespace App\Process;
 
 
+use Core\Cloud;
 use Core\Processor\ProcessorInterface;
 use Process\Contract\AbstractProcess;
 use Process\Process;
@@ -42,7 +43,13 @@ class DiscoveryProcess extends AbstractProcess
         provider()->select()->registerService();
         while (true){
             $services = provider()->select()->getServiceList("im-cloud-node");
-            var_dump($services);
+            for($i = 0; $i < (int)env("WORKER_NUM",4);$i++)
+            {
+
+                //将可以用的服务同步到所有的worker进程
+                Cloud::server()->getSwooleServer()->sendMessage($services,$i);
+
+            }
 //            $this->updateServices($services);
             sleep(10);
         }

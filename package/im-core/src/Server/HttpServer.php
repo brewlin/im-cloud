@@ -90,6 +90,18 @@ class HttpServer extends Server
         $this->listener = [
            "TCP" =>  new TcpServer()
         ];
+        $this->mergerListener();
+    }
+
+    /**
+     * merger config root/config/event.php
+     * @return void
+     */
+    public function mergerListener():void
+    {
+        $event = require_once ROOT."/config/event.php";
+        $this->httpListener = array_merge($this->httpListener,$event);
+
     }
 
 }
