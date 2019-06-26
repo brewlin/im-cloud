@@ -353,8 +353,11 @@ class ConsulProvider implements ProviderInterface
      */
     public function deregisterService($serviceId): array
     {
-        return $this->request('put', '/v1/agent/service/deregister/' . $this->getServiceId($serviceId));
+        return $this->curlput(sprintf("%s:%d%s",$this->address,$this->port,'/v1/agent/service/deregister/' . $this->getServiceId($serviceId)),[]);
+//        SaberGM::put(sprintf("%s:%d%s",$this->address,$this->port,'/v1/agent/service/deregister/' . $this->getServiceId($serviceId)));
+//        return $this->request('put', '/v1/agent/service/deregister/' . $this->getServiceId($serviceId));
     }
+
 
     /**
      * @param array $options
@@ -384,6 +387,28 @@ class ConsulProvider implements ProviderInterface
             Clog::error($e->getMessage());
             return [];
         }
+    }
+
+    /**
+     * @param string $method
+     * @param string $url
+     * @param $param
+     */
+    private function curlput(string $url,$param){
+        $ch = curl_init();
+        curl_setopt($ch,CURLOPT_URL,$url);
+        curl_setopt($ch,CURLOPT_HTTPHEADER,['Content-type:application/json']);
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+        curl_setopt($ch,CURLOPT_CUSTOMREQUEST,"PUT");
+        curl_setopt($ch,CURLOPT_POSTFIELDS,json_encode($param));
+        $ouput = curl_exec($ch);
+        curl_close($ch);
+        $res =  json_decode($ouput,true);
+        if(empty($res)){
+            return [];
+        }
+        return $res;
+
     }
 
 }

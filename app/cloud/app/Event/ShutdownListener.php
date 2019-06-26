@@ -23,10 +23,10 @@ class ShutdownListener implements ShutdownInterface
     {
         CLog::info("注销 注册中心 im-cloud-node 节点");
         //注销节点
-        Co::create(function (){
+//        Co::create(function (){
             provider()->select()->deregisterService("im-cloud-node");
-        });
-        sleep(10);
+//        });
+//        sleep(10);
 
     }
 
