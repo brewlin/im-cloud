@@ -154,7 +154,7 @@ class ConsulProvider implements ProviderInterface
         if($res->success){
             Console::writeln(sprintf('<success>RPC service register success by consul ! tcp=%s:%d</success>', $this->registerAddress, $this->registerPort));
         }else{
-            Console::writeln(sprintf('<error>RPC service register success by consul ! tcp=%s:%d</error>', $this->registerAddress, $this->registerPort));
+            Console::writeln(sprintf('<error>RPC service register failed by consul ! tcp=%s:%d</error>', $this->registerAddress, $this->registerPort));
         }
 
         return true;
