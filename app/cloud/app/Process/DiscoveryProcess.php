@@ -42,7 +42,8 @@ class DiscoveryProcess extends AbstractProcess
     {
         provider()->select()->registerService();
         while (true){
-            $services = provider()->select()->getServiceList("im-cloud-node");
+            $services = provider()->select()->getServiceList("grpc-im-logic-node");
+            var_dump($services);
             for($i = 0; $i < (int)env("WORKER_NUM",4);$i++)
             {
 

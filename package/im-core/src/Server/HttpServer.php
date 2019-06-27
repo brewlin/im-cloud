@@ -87,9 +87,11 @@ class HttpServer extends Server
         if(env("ENABLE_WS",false)){
             $this->httpListener[SwooleEvent::MESSAGE] = new MessageListener();
         }
-        $this->listener = [
-           "TCP" =>  new TcpServer()
-        ];
+        if(env("ENABLE_TCP",false)){
+            $this->listener = [
+                "TCP" =>  new TcpServer()
+            ];
+        }
         $this->mergerListener();
     }
 

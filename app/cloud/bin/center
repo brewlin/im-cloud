@@ -15,5 +15,6 @@ define("ROOT",dirname(__DIR__));
 Swoole\Coroutine::set([
     'max_coroutine' => 300000,
 ]);
+
 // Run application
 (new \App\Application())->run();

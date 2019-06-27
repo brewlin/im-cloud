@@ -6,11 +6,13 @@ return [
         'port'    => env("DISCOVERY_PORT","8500"),
         'register' => [
             'ID'                => '',
-            'Name'              => 'im-cloud-node',
+            //只注册了grpc 服务，其他都是私有的
+            //tcp 和websocket   通过nginx负载均衡即可
+            'Name'              => 'grpc-im-cloud-node',
             'Tags'              => [],
             'enableTagOverride'=> false,
             'Address'           => '127.0.0.1',
-            'Port'              => 8000,
+            'Port'              => (int)env("HTTP_PORT",9500),
             'Check'             => [
                 'id'       => '',
                 'name'     => '',

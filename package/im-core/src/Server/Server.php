@@ -34,7 +34,7 @@ class Server
     public $manager_pid;
 
     protected $httpListener;
-    protected $listener;
+    protected $listener = [];
     protected $panel;
 
     /**
@@ -302,7 +302,7 @@ class Server
             ];
         }
 
-        show($this->panel);
+        show($this->panel,env("APP_NAME"));
         Console::write("<success>HTTP server {$this->panel['HTTP']['listen']} start success !</success>");
         if(env("ENABLE_WS",false)){
             Console::write("<success>WEBSOCKET server {$this->panel['HTTP']['listen']} start success !</success>");
