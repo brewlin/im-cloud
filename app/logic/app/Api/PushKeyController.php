@@ -7,12 +7,24 @@
  */
 
 namespace App\logic\app\Api;
+use Core\Context\Context;
 
-
-class PushKeyController
+/**
+ * Class PushKeyController
+ * @package App\logic\app\Api
+ */
+class PushKeyController extends BaseController
 {
     public function keys()
     {
+        $post  = Context::get()->getRequest()->input();
+        if(empty($post["operation"]) || empty($post["keys"])){
+            return $this->error("缺少参数");
+        }
+        $arg = [
+            "op" => $post["operation"],
+            "keys" => $post["keys"],
+        ];
 
     }
 
