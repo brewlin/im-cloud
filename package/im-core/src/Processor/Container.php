@@ -33,7 +33,8 @@ class Container extends Processor
     public function defaultAutoload(){
         return [
             new CoreAutoloader(),
-            new \Discovery\AutoLoader()
+            new \Discovery\AutoLoader(),
+            new \ImRedis\AutoLoader(),
         ];
     }
 

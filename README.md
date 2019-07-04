@@ -43,11 +43,11 @@ todo
 ## 二、组件依赖
 ### @[im-core](./package/im-core) (done)
 ### @[im-grpc](./package/im-grpc) (done)
-### @[im-discovery](./package/im-discovery) (basic)
-### @[im-process](./package/im-process)(soon)
+### @[im-discovery](./package/im-discovery) (done)
+### @[im-process](./package/im-process)(done)
+### @[im-redis](./package/im-redis)(done)
 ### @[cloud](./app/cloud) (todo)
 ### @[job](./app/job)   (todo)
-### @[logic](./app/logic) (todo)
-### @im-message (todo)
+### @[logic](./app/logic) (soon)
 
 

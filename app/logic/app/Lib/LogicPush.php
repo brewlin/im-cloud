@@ -9,10 +9,13 @@
 namespace App\logic\app\Lib;
 
 
+use App\logic\app\Service\Dao\RedisDao;
+
 class LogicPush
 {
     public function pushKeys(int $op,string $keys,$msg)
     {
+        $servers =  (new RedisDao())->keyKeyServer($keys);
 
 
     }
