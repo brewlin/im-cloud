@@ -6,7 +6,7 @@
  * Time: 下午 3:11
  */
 
-namespace App\logic\app\Service\Dao;
+namespace App\Service\Dao;
 
 
 use ImRedis\Redis;

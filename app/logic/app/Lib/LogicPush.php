@@ -6,18 +6,28 @@
  * Time: 23:05
  */
 
-namespace App\logic\app\Lib;
+namespace App\Lib;
 
 
-use App\logic\app\Service\Dao\RedisDao;
+use App\Service\Dao\QueueDao;
+use App\Service\Dao\RedisDao;
+use Core\Container\Container;
 
 class LogicPush
 {
-    public function pushKeys(int $op,string $keys,$msg)
+    public function pushKeys(int $op,array $keys,$msg)
     {
-        $servers =  (new RedisDao())->keyKeyServer($keys);
-
-
+        $servers =  (new RedisDao())->getServersByKeys($keys);
+        $pushKeys = [];
+        foreach ($keys as $i => $key){
+            $server = $servers[$i];
+            if(!empty($server) && empty($key))
+                $pushKeys[$server][] = $key;
+        }
+        foreach ($pushKeys as $server => $key){
+            //丢到队列里去操做，让job去处理
+            Container::getInstance()->get(QueueDao::class)->pushMsg($op,$pushKeys[$server],$msg);
+        }
     }
 
 }
