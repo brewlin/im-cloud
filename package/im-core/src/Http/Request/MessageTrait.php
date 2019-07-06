@@ -16,8 +16,6 @@ use function trim;
 
 /**
  * Class MessageTrait
- *
- * @since 2.0
  */
 trait MessageTrait
 {

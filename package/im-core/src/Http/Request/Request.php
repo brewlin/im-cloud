@@ -18,11 +18,10 @@ use function substr;
 use Core\Http\HttpHelper;
 use Swoft\Stdlib\Helper\Str;
 use Swoole\Http\Request as CoRequest;
+use Core\Container\Mapping\Bean;
 
 /**
  * Class Request - The PSR ServerRequestInterface implement
- *
- * @since 2.0
  * @Bean(name="httpRequest", scope=Bean::PROTOTYPE)
  */
 class Request extends PsrRequest

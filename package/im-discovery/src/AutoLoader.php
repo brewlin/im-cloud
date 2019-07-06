@@ -14,16 +14,14 @@ use Discovery\Balancer\RandomBalancer;
 use Discovery\Balancer\RoundRobinBalancer;
 use Discovery\Provider\ConsulProvider;
 
-class AutoLoader implements \Core\Contract\Autoloader
+class AutoLoader implements \Core\Contract\LoaderInterface
 {
-    public function handler()
+    public function getPrefixDirs(): array
     {
-        Container::getInstance()->create(RandomBalancer::class);
-        Container::getInstance()->create(RoundRobinBalancer::class);
-        Container::getInstance()->create(BalancerSelector::class);
-        Container::getInstance()->create(ProviderSelector::class);
-        Container::getInstance()->create(ConsulProvider::class);
-        // TODO: Implement handler() method.
+        return [
+            __NAMESPACE__ => __DIR__,
+        ];
+        // TODO: Implement getPrefixDirs() method.
     }
 
 }

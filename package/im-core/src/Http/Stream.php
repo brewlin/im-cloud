@@ -9,6 +9,7 @@ use ReflectionException;
 use RuntimeException;
 use const SEEK_SET;
 use function strlen;
+use Core\Container\Mapping\Bean;
 
 /**
  * Class Stream

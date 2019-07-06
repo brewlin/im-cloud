@@ -17,7 +17,8 @@ class LogicPush
 {
     public function pushKeys(int $op,array $keys,$msg)
     {
-        $servers =  (new RedisDao())->getServersByKeys($keys);
+        /** @var RedisDao $servers */
+        $servers = \container()->get(RedisDao::class)->getServersByKeys($keys);
         $pushKeys = [];
         foreach ($keys as $i => $key){
             $server = $servers[$i];
@@ -26,7 +27,7 @@ class LogicPush
         }
         foreach ($pushKeys as $server => $key){
             //丢到队列里去操做，让job去处理
-            Container::getInstance()->get(QueueDao::class)->pushMsg($op,$pushKeys[$server],$msg);
+            \container()->get(QueueDao::class)->pushMsg($op,$pushKeys[$server],$msg);
         }
     }
 

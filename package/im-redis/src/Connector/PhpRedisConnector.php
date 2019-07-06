@@ -3,6 +3,7 @@
 
 namespace ImRedis\Connector;
 
+use Core\Container\Mapping\Bean;
 use Redis;
 use RedisCluster;
 use Swoft\Stdlib\Helper\Arr;
@@ -10,6 +11,7 @@ use Swoft\Stdlib\Helper\JsonHelper;
 
 /**
  * Class PhpRedisConnector
+ * @Bean()
  */
 class PhpRedisConnector
 {

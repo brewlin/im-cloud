@@ -24,6 +24,17 @@ if (!function_exists("bean")){
     }
 }
 /**
+ * 获取容器 container
+ */
+if(!function_exists("container")){
+    /**
+     * @return \Core\Container\Container
+     */
+    function container(){
+        return \Core\Container\Container::getInstance();
+    }
+}
+/**
  * 获取 协程上下文  response 消息 助手
  */
 if (!function_exists("response")){

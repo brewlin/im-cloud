@@ -3,6 +3,7 @@
 namespace Discovery\Provider;
 
 use Core\Console\Console;
+use Core\Container\Mapping\Bean;
 use Swlib\Saber;
 use Swlib\SaberGM;
 use Swoft\Log\Helper\CLog;
@@ -10,6 +11,7 @@ use Swoole\Coroutine\Http\Client;
 
 /**
  * Consul provider
+ * @Bean()
  */
 class ConsulProvider implements ProviderInterface
 {
@@ -70,7 +72,6 @@ class ConsulProvider implements ProviderInterface
     /**
      * Specifies the tag to filter the list. This is specifies as part of the URL as a query parameter.
      *
-     * @Value(name="${config.provider.consul.discovery.tag}", env="${CONSUL_DISCOVERY_TAG}")
      * @var string
      */
     private $discoveryTag = "";
@@ -78,7 +79,6 @@ class ConsulProvider implements ProviderInterface
     /**
      * Specifies that the server should return only nodes with all checks in the passing state
      *
-     * @Value(name="${config.provider.consul.discovery.passing}", env="${CONSUL_DISCOVERY_PASSING}")
      * @var bool
      */
     private $discoveryPassing = true;

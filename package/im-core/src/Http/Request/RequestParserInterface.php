@@ -4,8 +4,6 @@ namespace Core\Http\Request;
 
 /**
  * Class RequestParserInterface
- *
- * @since 2.0
  */
 interface RequestParserInterface
 {

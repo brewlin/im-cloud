@@ -6,8 +6,6 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class ResponseFormatterInterface
- *
- * @since 2.0
  */
 interface ResponseFormatterInterface
 {

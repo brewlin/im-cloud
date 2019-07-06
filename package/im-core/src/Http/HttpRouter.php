@@ -9,6 +9,7 @@
 namespace Core\Http;
 
 
+use Core\Container\Mapping\Bean;
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
 use function FastRoute\simpleDispatcher;
@@ -17,6 +18,7 @@ require_once ROOT."/app/Router.php";
 /**
  * Class HttpRouter
  * @package Core\Http
+ * @Bean()
  * @method static post(string $path,string $class):bool
  * @method static get(string $path,string $class):bool
  */

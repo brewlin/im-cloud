@@ -4,7 +4,6 @@ namespace Core\Http\Response;
 
 /**
  * Interface ResponseInterface
- * @since 2.0
  */
 interface ResponseInterface extends \Psr\Http\Message\ResponseInterface
 {

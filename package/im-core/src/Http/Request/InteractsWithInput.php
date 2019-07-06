@@ -13,8 +13,6 @@ use Swoft\Stdlib\Helper\JsonHelper;
 
 /**
  * Class InteractsWithInput
- *
- * @since 2.0
  */
 trait InteractsWithInput
 {

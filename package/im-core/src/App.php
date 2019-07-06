@@ -10,6 +10,7 @@ namespace Core;
 
 
 use Core\Cloud;
+use Core\Processor\AnnotationProcessor;
 use Core\Processor\Container;
 use Core\Server\HttpServer;
 use Core\Log\Logger;
@@ -56,6 +57,7 @@ class App
         return [
             new EnvProcessor($this),
             new ConfigProcessor($this),
+            new AnnotationProcessor($this),
             new Container($this),
         ];
     }

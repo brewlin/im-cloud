@@ -12,11 +12,9 @@ use ReflectionException;
 use Core\Http\Request\MessageTrait;
 use Swoole\Http\Response as CoResponse;
 use Throwable;
-
+use Core\Container\Mapping\Bean;
 /**
  * Class Response
- *
- * @since 2.0
  * @Bean(name="httpResponse", scope=Bean::PROTOTYPE)
  */
 class Response implements ResponseInterface

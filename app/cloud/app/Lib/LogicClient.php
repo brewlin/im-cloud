@@ -10,9 +10,15 @@ namespace App\Lib;
 
 
 use Core\Container\Container;
+use Core\Container\Mapping\Bean;
 use Discovery\Balancer\RandomBalancer;
 use Grpc\ChannelCredentials;
 
+/**
+ * Class LogicClient
+ * @Bean()
+ * @package App\Lib
+ */
 class LogicClient
 {
     /**

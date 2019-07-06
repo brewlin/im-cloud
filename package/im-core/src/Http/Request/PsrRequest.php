@@ -12,7 +12,6 @@ use function strtoupper;
 /**
  * Class Request
  *
- * @since 2.0
  */
 class PsrRequest implements RequestInterface
 {

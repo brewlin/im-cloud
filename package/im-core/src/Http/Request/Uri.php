@@ -12,6 +12,7 @@ use function rawurlencode;
 use ReflectionException;
 use function strpos;
 use function strtolower;
+use Core\Container\Mapping\Bean;
 
 /**
  * Class Uri

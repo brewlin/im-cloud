@@ -2,7 +2,8 @@
 
 namespace Core\Processor;
 
-use Core\Autoloader as CoreAutoloader;
+use Core\AutoLoader as CoreAutoloader;
+use Core\Container\ContainerRegister;
 use Core\Contract\Autoloader;
 
 /**
@@ -18,24 +19,9 @@ class Container extends Processor
      */
     public function handle(): bool
     {
-        $autoloader = $this->defaultAutoload();
-        foreach ($autoloader as $loader){
-            if($loader instanceof Autoloader){
-                $loader->handler();
-            }
-        }
+        ContainerRegister::parse();
         return true;
     }
 
-    /**
-     * @return array[object]
-     */
-    public function defaultAutoload(){
-        return [
-            new CoreAutoloader(),
-            new \Discovery\AutoLoader(),
-            new \ImRedis\AutoLoader(),
-        ];
-    }
 
 }

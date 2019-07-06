@@ -6,6 +6,7 @@ use ReflectionException;
 use Core\Context\AbstractContext;
 use Core\Http\Request\Request;
 use Core\Http\Response\Response;
+use Core\Container\Mapping\Bean;
 
 /**
  * Class HttpContext

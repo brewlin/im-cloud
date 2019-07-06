@@ -4,8 +4,6 @@ namespace Core\Http;
 
 /**
  * Class ContentType
- *
- * @since 2.0
  */
 final class ContentType
 {

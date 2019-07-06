@@ -2,11 +2,13 @@
 
 namespace Discovery;
 
+use Core\Container\Mapping\Bean;
 use Discovery\Balancer\RandomBalancer;
 use Discovery\Balancer\BalancerInterface;
 
 /**
  * the manager of balancer
+ * @Bean()
  */
 class BalancerSelector implements SelectorInterface
 {

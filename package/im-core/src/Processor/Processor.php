@@ -6,7 +6,6 @@ use Core\App;
 
 /**
  * Abstract processor
- * @since 2.0
  */
 abstract class Processor implements ProcessorInterface
 {
@@ -20,7 +19,7 @@ abstract class Processor implements ProcessorInterface
     /**
      * Processor constructor.
      *
-     * @param ProcessorInterface @application
+     * @param ProcessorInterface application
      */
     public function __construct(App $application)
     {

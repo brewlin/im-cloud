@@ -1,10 +1,12 @@
 <?php
 
 namespace Discovery;
+use Core\Container\Mapping\Bean;
 use Discovery\Provider\ConsulProvider;
 use Discovery\Provider\ProviderInterface;
 
 /**
+ * @Bean()
  * Provider selector
  */
 class ProviderSelector implements SelectorInterface

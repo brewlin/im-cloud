@@ -1,10 +1,12 @@
 <?php
 
 namespace Discovery\Balancer;
+use Core\Container\Mapping\Bean;
 
 
 /**
  * 轮询负载
+ * @Bean()
  */
 class RoundRobinBalancer implements BalancerInterface
 {

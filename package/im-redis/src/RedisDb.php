@@ -5,9 +5,11 @@
  * @time 17:11
  */
 namespace ImRedis;
+use Core\Container\Mapping\Bean;
 
 /**
  * Class RedisDb
+ * @Bean()
  */
 class RedisDb
 {
