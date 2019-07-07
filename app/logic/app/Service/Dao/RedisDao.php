@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: brewlin
  * Date: 2019/7/4 0004
- * Time: 下午 3:11
+ * Time: 下坈 3:11
  */
 
 namespace App\Service\Dao;
@@ -45,5 +45,17 @@ class RedisDao
             $arg[] = $this->keyKeyServer($v);
         }
         return Redis::mget($arg);
-	}
+    }
+    /**
+     * @param array mids
+     * @return array
+     */
+    public function getKeysByMids(array $mids)
+    {
+        $ress = [];
+        foreach($mids as $mid){
+            $ress = array_merge($ress,Redis::hgetall($this->keyMidServer($mid)));
+        }
+        return $ress;
+    }
 }

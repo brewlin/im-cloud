@@ -13,6 +13,9 @@ use App\Service\Dao\QueueDao;
 use App\Service\Dao\RedisDao;
 use Core\Container\Container;
 
+/**
+ * @package lib
+ */
 class LogicPush
 {
     public function pushKeys(int $op,array $keys,$msg)
@@ -27,8 +30,24 @@ class LogicPush
         }
         foreach ($pushKeys as $server => $key){
             //丢到队列里去操做，让job去处理
-            \container()->get(QueueDao::class)->pushMsg($op,$pushKeys[$server],$msg);
+            \container()->get(QueueDao::class)->pushMsg($op,$server,$pushKeys[$server],$msg);
         }
     }
+    public function pushMids(int $op,array $mids,$msg)
+    {
+        /** @var RedisDao $servers */
+        $servers = \container()->get(RedisDao::class)->getKeysByMids($mids);
+        $keys = [];
+        foreach($servers as $key => $server){
+            $keys[$server][] = $key;
+        }
+        foreach($keys as $server => $key){
+            //丢到队列里去操做，让job去处理
+            \container()->get(QueueDao::class)->pushMsg($op,$server,$key,$msg);
+        }
+
+
+    }
+    
 
 }
