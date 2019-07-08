@@ -7,6 +7,7 @@
  */
 
 namespace App\logic\app\Api;
+use App\Lib\LogicPush;
 use Core\Context\Context;
 
 /**
@@ -24,8 +25,10 @@ class PushKeyController extends BaseController
         $arg = [
             "op" => $post["operation"],
             "keys" => $post["keys"],
+            "msg" => $post["msg"]
         ];
-
+        container()->get(LogicPush::class)->pushKeys($arg["op"],$arg["keys"],$arg["msg"]);
+        return $this->success();
     }
 
 }

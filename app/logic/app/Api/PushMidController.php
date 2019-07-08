@@ -9,7 +9,12 @@
 namespace App\logic\app\Api;
 
 
-class PushMidController
+use App\Api\MsgEnum;
+use App\Lib\LogicPush;
+use Core\Context\Context;
+use Swoft\Log\Helper\Log;
+
+class PushMidController extends BaseController
 {
     public function mids()
     {
@@ -22,6 +27,11 @@ class PushMidController
             "keys" => $post["mids"],
             "msg" => $post[""]
         ];
+        /**
+         * @var LogicPush
+         */
+        container()->get(LogicPush::class)->pushMids($arg["op"],$arg["keys"],$arg["msg"]);
+        return $this->success();
     }
 
 }

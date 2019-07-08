@@ -11,10 +11,13 @@ namespace App\Lib;
 
 use App\Service\Dao\QueueDao;
 use App\Service\Dao\RedisDao;
+use App\Service\Model\Room;
 use Core\Container\Container;
+use Core\Container\Mapping\Bean;
 
 /**
  * @package lib
+ * @Bean()
  */
 class LogicPush
 {
@@ -46,7 +49,20 @@ class LogicPush
             \container()->get(QueueDao::class)->pushMsg($op,$server,$key,$msg);
         }
 
+    }
 
+    /**
+     * @param int $op
+     * @param $type
+     * @param $room
+     * @param $msg
+     * @throws \Exception
+     */
+    public function pushRoom(int $op,$type,$room,$msg){
+        \container()
+            ->get(QueueDao::class)
+            ->broadcastRoomMsg($op,\bean(Room::class)
+                ->encodeRoomKey($type,$room),$msg);
     }
     
 

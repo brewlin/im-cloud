@@ -7,6 +7,7 @@
  */
 
 namespace App\logic\app\Api;
+use App\Api\MsgEnum;
 use Core\Context\Context;
 
 /**
@@ -15,7 +16,7 @@ use Core\Context\Context;
  */
 class BaseController
 {
-    public function error($msg = "",$data = [],$code = 404)
+    public function error($msg = "",$data = [],$code = MsgEnum::Error)
     {
         $data = [
             "msg" => $msg,
@@ -26,7 +27,7 @@ class BaseController
                               ->withStatus($code)
                               ->withContent($data);
     }
-    public function success($data = [],$msg = "",$code = 200)
+    public function success($data = [],$msg = "",$code = MsgEnum::Ok)
     {
          $data = [
             "msg" => $msg,

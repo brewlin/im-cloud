@@ -9,7 +9,11 @@
 namespace App\logic\app\Api;
 
 
-class PushAllController
+class PushAllController extends BaseController
 {
+    public function all()
+    {
+
+    }
 
 }
