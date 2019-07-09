@@ -58,11 +58,24 @@ class LogicPush
      * @param $msg
      * @throws \Exception
      */
-    public function pushRoom(int $op,$type,$room,$msg){
+    public function pushRoom(int $op,$type,$room,$msg)
+    {
         \container()
             ->get(QueueDao::class)
             ->broadcastRoomMsg($op,\bean(Room::class)
                 ->encodeRoomKey($type,$room),$msg);
+    }
+
+    /**
+     * @param int $op
+     * @param int $speed
+     * @param $msg
+     */
+    public function pushAll(int $op,int $speed,$msg)
+    {
+        \container()
+            ->get(QueueDao::class)
+            ->broadcastMsg($op,$speed,$msg);
     }
     
 
