@@ -38,7 +38,7 @@ todo
 ### 3.构建完成 protobuf 构建grpc 接口
 ### 4.`im-discovery`，基础完成
 ### 5.`im-process`,进程管理器 基础完成
-### kafaka consul to do...
+### 6.`im-redis`,done
 
 ## 二、组件依赖
 ### @[im-core](./package/im-core) (done)
@@ -46,6 +46,7 @@ todo
 ### @[im-discovery](./package/im-discovery) (done)
 ### @[im-process](./package/im-process)(done)
 ### @[im-redis](./package/im-redis)(done)
+### @[im-queue](./package/im-queue)(soon)
 ### @[cloud](./app/cloud) (todo)
 ### @[job](./app/job)   (todo)
 ### @[logic](./app/logic) (soon)

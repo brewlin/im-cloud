@@ -6,13 +6,23 @@
  * Time: 下午 5:47
  */
 
-namespace App\logic\app\Api;
-
-
-class OnlineController
+namespace App\Api;
+use App\Lib\LogicOnline;
+/**
+ * @package Online
+ */
+class OnlineController extends BaseController
 {
     public function top()
     {
+        $post  = Context::get()->getRequest()->input();
+        if(empty($post["type"]) || empty($post["limit"])){
+            return $this->error("缺少参数");
+        }
+        \container()
+            ->get(LogicOnline::class)
+            ->onlineTop($post["type"],$post["limit"]);
+        return $this->success();
 
     }
     public function room()
