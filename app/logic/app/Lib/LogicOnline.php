@@ -19,7 +19,7 @@ use Core\Container\Mapping\Bean;
  * @package lib
  * @Bean()
  */
-class LogicOline
+class LogicOnline
 {
     public function onlineTop(int $op,array $keys,$msg)
     {

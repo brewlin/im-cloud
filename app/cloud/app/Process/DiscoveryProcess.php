@@ -45,10 +45,8 @@ class DiscoveryProcess extends AbstractProcess
             $services = provider()->select()->getServiceList("grpc-im-logic-node");
             for($i = 0; $i < (int)env("WORKER_NUM",4);$i++)
             {
-
                 //将可以用的服务同步到所有的worker进程
                 Cloud::server()->getSwooleServer()->sendMessage($services,$i);
-
             }
 //            $this->updateServices($services);
             sleep(10);
