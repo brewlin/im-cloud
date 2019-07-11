@@ -2,7 +2,7 @@
 /**
  * Created by PhpStorm.
  * User: brewlin
- * Date: 2019/7/1
+ * Date: 2019/7/10
  * Time: 23:05
  */
 
@@ -19,9 +19,9 @@ use Core\Container\Mapping\Bean;
  * @package lib
  * @Bean()
  */
-class LogicPush
+class LogicOline
 {
-    public function pushKeys(int $op,array $keys,$msg)
+    public function onlineTop(int $op,array $keys,$msg)
     {
         /** @var RedisDao $servers */
         $servers = \container()->get(RedisDao::class)->getServersByKeys($keys);
@@ -36,47 +36,4 @@ class LogicPush
             \container()->get(QueueDao::class)->pushMsg($op,$server,$pushKeys[$server],$msg);
         }
     }
-    public function pushMids(int $op,array $mids,$msg)
-    {
-        /** @var RedisDao $servers */
-        $servers = \container()->get(RedisDao::class)->getKeysByMids($mids);
-        $keys = [];
-        foreach($servers as $key => $server){
-            $keys[$server][] = $key;
-        }
-        foreach($keys as $server => $key){
-            //丢到队列里去操做，让job去处理
-            \container()->get(QueueDao::class)->pushMsg($op,$server,$key,$msg);
-        }
-
-    }
-
-    /**
-     * @param int $op
-     * @param $type
-     * @param $room
-     * @param $msg
-     * @throws \Exception
-     */
-    public function pushRoom(int $op,$type,$room,$msg)
-    {
-        \container()
-            ->get(QueueDao::class)
-            ->broadcastRoomMsg($op,\bean(Room::class)
-                ->encodeRoomKey($type,$room),$msg);
-    }
-
-    /**
-     * @param int $op
-     * @param int $speed
-     * @param $msg
-     */
-    public function pushAll(int $op,int $speed,$msg)
-    {
-        \container()
-            ->get(QueueDao::class)
-            ->broadcastMsg($op,$speed,$msg);
-    }
-    
-
 }
