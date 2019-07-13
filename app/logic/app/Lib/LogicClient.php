@@ -37,4 +37,12 @@ class LogicClient
         $client->start();
         return $client;
     }
+
+    /**
+     * @param $server
+     */
+    public static function updateService($server)
+    {
+        self::$serviceList = $server;
+    }
 }
