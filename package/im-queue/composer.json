@@ -22,5 +22,9 @@
 
     },
     "require": {
+        "psr/container": "^1.0",
+        "psr/event-dispatcher": "^1.0",
+        "psr/log": "^1.0",
+        "php-amqplib/php-amqplib": "^2.7"
     }
 }
