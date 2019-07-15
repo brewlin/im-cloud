@@ -13,6 +13,7 @@ use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Swoft\Log\Helper\CLog;
 use Throwable;
 
 class Consumer extends Builder
@@ -60,17 +61,17 @@ class Consumer extends Builder
                 try {
                     $result = $consumerMessage->consume($data);
                     if ($result === Result::ACK) {
-                        $this->logger->debug($deliveryTag . ' acked.');
+                        CLog::debug($deliveryTag.' aced.');
                         return $channel->basic_ack($deliveryTag);
                     }
                     if ($consumerMessage->isRequeue() && $result === Result::REQUEUE) {
-                        $this->logger->debug($deliveryTag . ' requeued.');
+                        Clog::debug($deliveryTag . ' requeued.');
                         return $channel->basic_reject($deliveryTag, true);
                     }
                 } catch (Throwable $exception) {
-                    $this->logger->debug($exception->getMessage());
+                    CLog::debug($exception->getMessage());
                 }
-                $this->logger->debug($deliveryTag . ' rejected.');
+                CLog::debug($deliveryTag . ' rejected.');
                 $channel->basic_reject($deliveryTag, false);
             }
         );

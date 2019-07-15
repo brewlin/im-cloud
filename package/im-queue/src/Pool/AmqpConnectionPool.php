@@ -3,16 +3,14 @@
 declare(strict_types=1);
 
 
-namespace ImQueue\Amqp\Pool;
+namespace ImQueue\Pool;
 
 use ImQueue\Amqp\Connection;
 
-use ImQueue\Pool\Pool;
-use ImQueue\Utils\Arr;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 
-class AmqpConnectionPool extends Pool
+class AmqpConnectionPool
 {
     protected $name;
 
