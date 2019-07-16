@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-
+use Core\Container\Mapping\Bean;
 namespace ImQueue\Pool;
-
+/**
+ * @Bean()
+ */
 class PoolFactory
 {
     /**
@@ -12,8 +14,11 @@ class PoolFactory
      */
     public static $pools = [];
 
-    public function __construct($name)
+    public function __construct()
     {
+        $type = env("QUEUE_TYPE","amqp");
+        $name = QueueSelector::QUEUE_TYPE[$type];
+
         $poolSize = env("QUEUE_POOL_SIZE",10);
         PoolFactory::$pools[$name] = new \chan($poolSize);
         for($i = 0 ; $i <= $poolSize; $i++){

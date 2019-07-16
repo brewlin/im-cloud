@@ -12,9 +12,11 @@ use Core\Container\Mapping\Bean;
 class QueueSelector implements SelectorInterface
 {
     /**
-     * consul
+     * type
      */
-    const TYPE_QUEUE = 'amqp';
+    const TYPE_QUEUE = [
+        'amqp' => AMqpConnectionPool::class
+    ];
 
     /**
      * Default provider
