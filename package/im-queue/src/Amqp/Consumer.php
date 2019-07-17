@@ -37,7 +37,6 @@ class Consumer extends Builder
         $pool = $this->getConnectionPool(AmqpConnectionPool::class);
         /** @var \ImQueue\Amqp\Connection $connection */
         $connection = $pool->createConnection();
-        var_dump($connection);
         $channel = $connection->getConfirmChannel();
 
         $this->declare($consumerMessage, $channel);

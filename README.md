@@ -47,7 +47,7 @@ todo
 ### @[im-discovery](./package/im-discovery) (done)
 ### @[im-process](./package/im-process)(done)
 ### @[im-redis](./package/im-redis)(done)
-### @[im-queue](./package/im-queue)(soon)
+### @[im-queue](./package/im-queue)(done amqp,soon kafak)
 ### @[cloud](./app/cloud) (todo)
 ### @[job](./app/job)   (todo)
 ### @[logic](./app/logic) (soon)

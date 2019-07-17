@@ -18,7 +18,7 @@ class Consumer
     }
     public function pro()
     {
-        producer()->produce(new Producer(["test"]));
+        producer()->produce(new Producer(["test" => "sdfsd"]));
     }
 
 }

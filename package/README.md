@@ -10,3 +10,7 @@
 ## @[im-grpc](./im-grpc)
 > grpc 接口 protobuf 定义
 
+## @[im-queue](./im-quque)
+> 消息队列的使用，支持多种消息队列，amqp,kafak。。
+- 已完成amqp协议，支持rabitmq的使用
+
