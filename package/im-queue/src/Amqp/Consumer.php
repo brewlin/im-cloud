@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace ImQueue\Amqp;
 
+use Core\Container\Mapping\Bean;
 use ImQueue\Amqp\Exception\MessageException;
 use ImQueue\Amqp\Message\ConsumerMessageInterface;
 use ImQueue\Amqp\Message\MessageInterface;
@@ -16,6 +17,11 @@ use Psr\Log\LoggerInterface;
 use Swoft\Log\Helper\CLog;
 use Throwable;
 
+/**
+ * Class Consumer
+ * @package ImQueue\Amqp
+ * @Bean()
+ */
 class Consumer extends Builder
 {
     /**
@@ -26,16 +32,6 @@ class Consumer extends Builder
     /**
      * @var LoggerInterface
      */
-    private $logger;
-
-    public function __construct(
-        ContainerInterface $container,
-        PoolFactory $poolFactory,
-        LoggerInterface $logger
-    ) {
-        parent::__construct($container, $poolFactory);
-        $this->logger = $logger;
-    }
 
     public function consume(ConsumerMessageInterface $consumerMessage): void
     {

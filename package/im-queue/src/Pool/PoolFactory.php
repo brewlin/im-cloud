@@ -2,10 +2,14 @@
 
 declare(strict_types=1);
 
-use Core\Container\Mapping\Bean;
 namespace ImQueue\Pool;
+use Core\Container\Mapping\Bean;
+use ImQueue\QueueSelector;
+
 /**
+ * Class PoolFactory
  * @Bean()
+ * @package ImQueue\Pool
  */
 class PoolFactory
 {
@@ -14,15 +18,16 @@ class PoolFactory
      */
     public static $pools = [];
 
-    public function __construct()
+    public static function initPool()
     {
         $type = env("QUEUE_TYPE","amqp");
-        $name = QueueSelector::QUEUE_TYPE[$type];
+        $name = QueueSelector::TYPE_QUEUE[$type];
 
         $poolSize = env("QUEUE_POOL_SIZE",10);
+        $config = require ROOT."/config/queue.php";
         PoolFactory::$pools[$name] = new \chan($poolSize);
         for($i = 0 ; $i <= $poolSize; $i++){
-            PoolFactory::$pools[$name]->push(new $name);
+            PoolFactory::$pools[$name]->push(new $name($config));
         }
     }
 
@@ -34,6 +39,15 @@ class PoolFactory
     {
         if (isset(self::$pools[$name])) {
             return self::$pools[$name]->pop();
+        }
+    }
+
+    /**
+     * @param AmqpConnectionPool
+     */
+    public static function releasePool($pool){
+        if (isset(self::$pools[$pool->getName()])) {
+            return self::$pools[$pool->getName()]->push($pool);
         }
     }
 }

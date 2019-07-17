@@ -8,36 +8,35 @@ namespace ImQueue\Pool;
 use ImQueue\Amqp\Connection;
 
 use InvalidArgumentException;
-use Psr\Container\ContainerInterface;
 
 class AmqpConnectionPool
 {
-    protected $name;
 
     protected $config;
+    /**
+     * @var ConnectionInterface
+     */
+    protected $connection;
 
-    public function __construct(ContainerInterface $container, string $name)
+    protected $name;
+
+    public function __construct($config)
     {
-        $this->name = $name;
-        $config = $container->get(ConfigInterface::class);
-        $key = sprintf('amqp.%s', $this->name);
-        if (! $config->has($key)) {
-            throw new InvalidArgumentException(sprintf('config[%s] is not exist!', $key));
-        }
-
-        $this->config = $config->get($key);
-        $options = Arr::get($this->config, 'pool', []);
-
-        parent::__construct($container, $options);
+        $this->config = $config;
+        $this->connection =  new Connection($this);
+        $this->name = AmqpConnectionPool::class;
     }
 
     public function getName(): string
     {
         return $this->name;
     }
+    public function getConfig(){
+        return $this->config;
+    }
 
     protected function createConnection(): ConnectionInterface
     {
-        return new Connection($this->container, $this, $this->config);
+        return $this->connection;
     }
 }

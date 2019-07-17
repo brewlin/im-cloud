@@ -5,17 +5,14 @@ declare(strict_types=1);
 namespace ImQueue\Amqp;
 
 use ImQueue\Amqp\Connection\AMQPSwooleConnection;
-use ImQueue\Amqp\Pool\AmqpConnectionPool;
-use ImQueue\Contract\ConnectionInterface;
-use ImQueue\Pool\Connection as BaseConnection;
-use ImQueue\Utils\Arr;
-use ImQueue\Utils\Coroutine;
+use ImQueue\Pool\AmqpConnectionPool;
+use ImQueue\Pool\ConnectionInterface;
+use ImQueue\Pool\PoolFactory;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
-use Psr\Container\ContainerInterface;
 
-class Connection extends BaseConnection implements ConnectionInterface
+class Connection implements ConnectionInterface
 {
     /**
      * @var AmqpConnectionPool
@@ -57,13 +54,12 @@ class Connection extends BaseConnection implements ConnectionInterface
      */
     private $confirmChannel;
 
-    public function __construct(ContainerInterface $container, AmqpConnectionPool $pool, array $config)
+    public function __construct(AmqpConnectionPool $pool)
     {
-        parent::__construct($container, $pool);
-        $this->config = $config;
-        $this->context = $container->get(Context::class);
-        $this->params = new Params(Arr::get($config, 'params', []));
+        $this->pool = $pool;
+        $this->config = $pool->getConfig();
         $this->connection = $this->initConnection();
+        $this->params = new Params($this->config["params"]);
     }
 
     public function __call($name, $arguments)
@@ -151,5 +147,14 @@ class Connection extends BaseConnection implements ConnectionInterface
         }
 
         return false;
+    }
+    public function release(): void
+    {
+        PoolFactory::releasePool($this->pool);
+    }
+
+    public function getConnection()
+    {
+        return $this->getActiveConnection();
     }
 }

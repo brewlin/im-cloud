@@ -4,6 +4,7 @@
  */
 namespace ImQueue;
 use Core\Container\Mapping\Bean;
+use ImQueue\Pool\AmqpConnectionPool;
 
 /**
  * @Bean()
@@ -15,7 +16,7 @@ class QueueSelector implements SelectorInterface
      * type
      */
     const TYPE_QUEUE = [
-        'amqp' => AMqpConnectionPool::class
+        'amqp' => AmqpConnectionPool::class
     ];
 
     /**

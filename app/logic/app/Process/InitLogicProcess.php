@@ -41,7 +41,6 @@ class InitLogicProcess extends AbstractProcess
     {
         $scheduler = new Coroutine\Scheduler;
         $scheduler->add([Logic::class,"loadOnline"]);
-
         $scheduler->start();
     }
 

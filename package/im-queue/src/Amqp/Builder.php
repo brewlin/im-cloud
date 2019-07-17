@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace ImQueue\Amqp;
 
 use ImQueue\Amqp\Message\MessageInterface;
-use ImQueue\Amqp\Pool\AmqpConnectionPool;
-use ImQueue\Amqp\Pool\PoolFactory;
+use ImQueue\Pool\AmqpConnectionPool;
+use ImQueue\Pool\PoolFactory;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Exception\AMQPProtocolChannelException;
 use Psr\Container\ContainerInterface;
@@ -48,8 +48,12 @@ class Builder
         $channel->exchange_declare($builder->getExchange(), $builder->getType(), $builder->isPassive(), $builder->isDurable(), $builder->isAutoDelete(), $builder->isInternal(), $builder->isNowait(), $builder->getArguments(), $builder->getTicket());
     }
 
-    protected function getConnectionPool(string $poolName): AmqpConnectionPool
+    /**
+     * @param string $poolName
+     * @return AmqpConnectionPool | KafakaConnectionPool
+     */
+    protected function getConnectionPool(string $poolName)
     {
-        return $this->poolFactory->getPool($poolName);
+        return PoolFactory::getPool($poolName);
     }
 }
