@@ -5,7 +5,7 @@ namespace App;
 use Core\Http\HttpRouter;
 
 //Grpc server router
-//HttpRouter::post('/im.cloud.Cloud/Broadcast', '/Grpc/Cloud/broadcast');
+HttpRouter::post('/im.cloud.Cloud/Broadcast', '/Grpc/Cloud/broadcast');
 
 //consul health check
 HttpRouter::get("/health","/Api/HealthController/health");
@@ -22,4 +22,5 @@ HttpRouter::get("/im/online/total","/Api/OnlineController/total");
 
 //query nodes
 HttpRouter::get("/im/nodes/instances","/Api/NodeController/instances");
+HttpRouter::get("/consumer","/Test/Consumer/con");
 

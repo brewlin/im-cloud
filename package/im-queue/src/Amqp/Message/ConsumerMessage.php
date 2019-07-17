@@ -6,7 +6,6 @@ namespace ImQueue\Amqp\Message;
 
 use ImQueue\Amqp\Builder\QueueBuilder;
 use ImQueue\Amqp\Packer\Packer;
-use ImQueue\Utils\ApplicationContext;
 use Psr\Container\ContainerInterface;
 
 abstract class ConsumerMessage extends Message implements ConsumerMessageInterface
@@ -49,9 +48,7 @@ abstract class ConsumerMessage extends Message implements ConsumerMessageInterfa
 
     public function unserialize(string $data)
     {
-        $container = ApplicationContext::getContainer();
-        $packer = $container->get(Packer::class);
-
+        $packer = bean(Packer::class);
         return $packer->unpack($data);
     }
 }

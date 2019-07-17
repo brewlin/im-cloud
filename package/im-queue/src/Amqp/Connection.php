@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ImQueue\Amqp;
 
+use Core\Co;
 use ImQueue\Amqp\Connection\AMQPSwooleConnection;
 use ImQueue\Pool\AmqpConnectionPool;
 use ImQueue\Pool\ConnectionInterface;
@@ -11,6 +12,7 @@ use ImQueue\Pool\PoolFactory;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use Swoole\Coroutine;
 
 class Connection implements ConnectionInterface
 {
@@ -58,8 +60,9 @@ class Connection implements ConnectionInterface
     {
         $this->pool = $pool;
         $this->config = $pool->getConfig();
-        $this->connection = $this->initConnection();
         $this->params = new Params($this->config["params"]);
+        $this->connection = $this->initConnection();
+
     }
 
     public function __call($name, $arguments)
@@ -123,7 +126,7 @@ class Connection implements ConnectionInterface
     protected function initConnection(): AbstractConnection
     {
         $class = AMQPStreamConnection::class;
-        if (Coroutine::id() > 0) {
+        if (Co::id() > 0) {
             $class = AMQPSwooleConnection::class;
         }
 

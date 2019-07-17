@@ -7,6 +7,7 @@ use Core\Container\Mapping\Bean;
 use ImQueue\QueueSelector;
 use Log\Helper\CLog;
 use Log\Helper\Log;
+use Swoole\Coroutine as co;
 
 /**
  * Class PoolFactory
@@ -25,11 +26,11 @@ class PoolFactory
         $type = env("QUEUE_TYPE","amqp");
         $name = QueueSelector::TYPE_QUEUE[$type];
 
-        $poolSize = env("QUEUE_POOL_SIZE",10);
+        $poolSize = (int)env("QUEUE_POOL_SIZE",10);
         $config = require ROOT."/config/queue.php";
-        PoolFactory::$pools[$name] = new \chan($poolSize);
-        for($i = 0 ; $i <= $poolSize; $i++){
-            PoolFactory::$pools[$name]->push(new $name($config));
+        PoolFactory::$pools[$name] = new co\Channel(10);
+        for($i = 0 ; $i < $poolSize; $i++){
+            PoolFactory::$pools[$name]->push((new $name($config)));
         }
     }
 

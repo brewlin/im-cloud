@@ -33,9 +33,11 @@ class Consumer extends Builder
 
     public function consume(ConsumerMessageInterface $consumerMessage): void
     {
+        CLog::info("start get amqp pool");
         $pool = $this->getConnectionPool(AmqpConnectionPool::class);
         /** @var \ImQueue\Amqp\Connection $connection */
         $connection = $pool->createConnection();
+        var_dump($connection);
         $channel = $connection->getConfirmChannel();
 
         $this->declare($consumerMessage, $channel);

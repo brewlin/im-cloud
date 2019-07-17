@@ -23,7 +23,7 @@ class AmqpConnectionPool
     public function __construct($config)
     {
         $this->config = $config;
-        $this->connection =  new Connection($this);
+//        $this->connection =  new Connection($this);
         $this->name = AmqpConnectionPool::class;
     }
 
@@ -37,6 +37,8 @@ class AmqpConnectionPool
 
     public function createConnection(): ConnectionInterface
     {
+        if(!$this->connection)
+            $this->connection = new Connection($this);
         return $this->connection;
     }
     public function release(AmqpConnectionPool $pool){
