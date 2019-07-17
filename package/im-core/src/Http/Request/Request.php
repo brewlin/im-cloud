@@ -16,7 +16,7 @@ use function rtrim;
 use function strtoupper;
 use function substr;
 use Core\Http\HttpHelper;
-use Swoft\Stdlib\Helper\Str;
+use Stdlib\Helper\Str;
 use Swoole\Http\Request as CoRequest;
 use Core\Container\Mapping\Bean;
 

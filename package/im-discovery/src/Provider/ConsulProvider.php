@@ -6,7 +6,7 @@ use Core\Console\Console;
 use Core\Container\Mapping\Bean;
 use Swlib\Saber;
 use Swlib\SaberGM;
-use Swoft\Log\Helper\CLog;
+use Log\Helper\CLog;
 use Swoole\Coroutine\Http\Client;
 
 /**

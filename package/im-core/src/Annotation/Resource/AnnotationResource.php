@@ -12,9 +12,9 @@ use SplFileInfo;
 use Core\Annotation\Mapping\AnnotationParser;
 use Core\Annotation\AnnotationRegister;
 use Core\Contract\LoaderInterface;
-use Swoft\Stdlib\Helper\ComposerHelper;
-use Swoft\Stdlib\Helper\DirectoryHelper;
-use Swoft\Stdlib\Helper\ObjectHelper;
+use Stdlib\Helper\ComposerHelper;
+use Stdlib\Helper\DirectoryHelper;
+use Stdlib\Helper\ObjectHelper;
 use function class_exists;
 use function file_exists;
 use function in_array;
@@ -85,7 +85,7 @@ class AnnotationResource extends Resource
 
     /**
      * Can disable AutoLoader class before load component classes.
-     * eg. [ Swoft\Console\AutoLoader::class  => 1 ]
+     * eg. [ Console\AutoLoader::class  => 1 ]
      *
      * @var array
      */

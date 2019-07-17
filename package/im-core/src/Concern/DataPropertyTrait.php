@@ -3,7 +3,7 @@
 namespace Core\Concern;
 
 use function array_merge;
-use Swoft\Stdlib\Helper\ArrayHelper;
+use Stdlib\Helper\ArrayHelper;
 
 /**
  * Trait DataPropertyTrait

@@ -9,7 +9,7 @@
 namespace Core\Processor;
 
 
-use Swoft\Stdlib\Helper\ArrayHelper;
+use Stdlib\Helper\ArrayHelper;
 
 class AppProcessor extends Processor
 {

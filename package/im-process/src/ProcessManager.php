@@ -9,7 +9,7 @@ namespace Process;
 
 
 use Process\Contract\AbstractProcess;
-use Swoft\Log\Helper\CLog;
+use Log\Helper\CLog;
 use Swoole\Server;
 
 class ProcessManager

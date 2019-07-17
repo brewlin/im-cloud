@@ -14,7 +14,7 @@ im-cloud 底层基础库，composer包
 ----- Helper   全局助手 如 request() response()等 获取协程上下文
 ----- Http     http 和http2 的实现 包括swoole注册启动以及http生命周期的管理，
 ----- Listener 封装默认的监听swoole 事件监听器
------ Log      使用swoft-log 依赖进行日志打印
+----- Log      使用   log 依赖进行日志打印
 ----- Processor 程序启动 默认加载的模块
 ----- server    管理swoole启动 http  tcp websocket 等
 ----- Swoole    封装swoole接口

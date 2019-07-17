@@ -39,7 +39,7 @@ class Builder
         if (! $channel) {
             $pool = $this->getConnectionPool($message->getPoolName());
             /** @var \ImQueue\Amqp\Connection $connection */
-            $connection = $pool->get();
+            $connection = $pool->createConnection();
             $channel = $connection->getChannel();
         }
 

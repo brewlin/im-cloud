@@ -8,8 +8,8 @@ use InvalidArgumentException;
 use function stripos;
 use Core\Http\Stream;
 use Core\Http\Upload\UploadedFile;
-use Swoft\Stdlib\Helper\ArrayHelper;
-use Swoft\Stdlib\Helper\JsonHelper;
+use Stdlib\Helper\ArrayHelper;
+use Stdlib\Helper\JsonHelper;
 
 /**
  * Class InteractsWithInput

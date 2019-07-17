@@ -4,7 +4,7 @@ namespace Core\Processor;
 
 use Exception;
 use Core\Annotation\AnnotationRegister;
-use Swoft\Log\Helper\CLog;
+use Log\Helper\CLog;
 
 /**
  * Annotation processor

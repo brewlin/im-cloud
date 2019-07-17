@@ -10,7 +10,7 @@ namespace Core\Processor;
 
 
 use Dotenv\Dotenv;
-use Swoft\Log\Helper\CLog;
+use Log\Helper\CLog;
 
 class EnvProcessor extends Processor
 {

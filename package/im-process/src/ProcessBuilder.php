@@ -7,7 +7,7 @@
  */
 namespace Process;
 
-use Swoft\Stdlib\Helper\PhpHelper;
+use Stdlib\Helper\PhpHelper;
 use Swoole\Process as SwooleProcess;
 
 

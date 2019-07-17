@@ -10,7 +10,7 @@ namespace App\Event;
 
 
 use Core\Swoole\MessageInterface;
-use Swoft\Log\Helper\CLog;
+use Log\Helper\CLog;
 use Swoole\Websocket\Frame;
 use Swoole\Websocket\Server;
 

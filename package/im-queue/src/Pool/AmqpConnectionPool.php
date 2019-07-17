@@ -35,8 +35,11 @@ class AmqpConnectionPool
         return $this->config;
     }
 
-    protected function createConnection(): ConnectionInterface
+    public function createConnection(): ConnectionInterface
     {
         return $this->connection;
+    }
+    public function release(AmqpConnectionPool $pool){
+        PoolFactory::releasePool($pool);
     }
 }

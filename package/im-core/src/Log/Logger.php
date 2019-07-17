@@ -9,7 +9,7 @@
 namespace Core\Log;
 
 
-use Swoft\Log\Helper\CLog;
+use Log\Helper\CLog;
 
 /**
  * Console logger
@@ -19,7 +19,7 @@ use Swoft\Log\Helper\CLog;
 class Logger
 {
     /**
-     * init swoft/log  composer
+     * init log  composer
      */
     public static function initLog(){
         $config = [

@@ -14,7 +14,7 @@ use Core\Http\HttpDispatcher;
 use Core\Http\Request\Request as HttpRequest;
 use Core\Http\Response\Response as HttpResponse;
 use Core\Swoole\RequestInterface;
-use Swoft\Log\Helper\CLog;
+use Log\Helper\CLog;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
 

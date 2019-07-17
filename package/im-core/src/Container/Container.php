@@ -11,7 +11,7 @@ namespace Core\Container;
 
 use Core\Console\Console;
 use Psr\Container\ContainerInterface;
-use Swoft\Log\Helper\CLog;
+use Log\Helper\CLog;
 
 class Container implements ContainerInterface
 {

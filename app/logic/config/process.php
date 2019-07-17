@@ -9,5 +9,6 @@ use Process\ProcessManager;
 use App\Process\DiscoveryProcess;
 use App\Process\InitLogicProcess;
 
-ProcessManager::register("discovery",new DiscoveryProcess());
+//ProcessManager::register("discovery",new DiscoveryProcess());
+
 

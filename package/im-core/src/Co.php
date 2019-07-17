@@ -15,9 +15,9 @@ use ReflectionException;
 use function sgo;
 use Core;
 use Core\Context\Context;
-use Swoft\Log\Debug;
-use Swoft\Stdlib\Helper\PhpHelper;
-use Swoft\Log\Helper\CLog;
+use Log\Debug;
+use Stdlib\Helper\PhpHelper;
+use Log\Helper\CLog;
 use Swoole\Coroutine;
 use Throwable;
 

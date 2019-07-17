@@ -21,7 +21,7 @@ use FastRoute\RouteCollector;
 use function FastRoute\simpleDispatcher;
 use Goim\Comet\BroadcastReq;
 use Goim\Comet\CometClient;
-use Swoft\Log\Helper\CLog;
+use Log\Helper\CLog;
 
 class App
 {

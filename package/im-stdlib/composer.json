@@ -1,0 +1,22 @@
+{
+  "name": "brewlin/stdlib",
+  "type": "library",
+  "keywords": [
+    "php",
+    "swoole",
+    "helper"
+  ],
+  "description": "swoole",
+  "license": "Apache-2.0",
+  "require": {
+    "php": ">7.1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Stdlib\\": "src/"
+    },
+    "files": [
+      "src/Helper/Functions.php"
+    ]
+  }
+}

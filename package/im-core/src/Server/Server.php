@@ -13,9 +13,9 @@ use Core\Console\Console;
 use Core\Container\Container;
 use Core\Swoole\SwooleEvent;
 use Process\ProcessManager;
-use Swoft\Log\Helper\CLog;
-use Swoft\Stdlib\Helper\Dir;
-use Swoft\Stdlib\Helper\Sys;
+use Log\Helper\CLog;
+use Stdlib\Helper\Dir;
+use Stdlib\Helper\Sys;
 use Swoole\Server as SwooleServer;
 
 class Server

@@ -1,0 +1,23 @@
+{
+  "name": "brewlin/log",
+  "type": "library",
+  "keywords": [
+    "php",
+    "swoole"
+  ],
+  "description": "swoole",
+  "license": "Apache-2.0",
+  "require": {
+    "php": ">=7.1",
+    "monolog/monolog": "^1.24",
+    "toolkit/cli-utils": "^1.0",
+    "brewlin/stdlib": "@dev"
+  },
+  "autoload": {
+    "classmap": [
+    ],
+    "psr-4": {
+      "Log\\": "src/"
+    }
+  }
+}

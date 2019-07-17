@@ -14,7 +14,7 @@ use Core\Context\Context;
 use Core\Http\Request\Request;
 use Core\Http\Response\Response;
 use FastRoute\Dispatcher;
-use Swoft\Log\Helper\CLog;
+use Log\Helper\CLog;
 
 class HttpDispatcher
 {

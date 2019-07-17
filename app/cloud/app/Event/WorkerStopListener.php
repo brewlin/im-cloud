@@ -10,7 +10,7 @@ namespace App\Event;
 
 
 use Core\Swoole\WorkerStopInterface;
-use Swoft\Log\Helper\CLog;
+use Log\Helper\CLog;
 use Swoole\Coroutine;
 use Swoole\Server as SwooleServer;
 

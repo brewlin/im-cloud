@@ -9,12 +9,11 @@ use Core\Container\Mapping\Bean;
 use ImQueue\Amqp\Exception\MessageException;
 use ImQueue\Amqp\Message\ConsumerMessageInterface;
 use ImQueue\Amqp\Message\MessageInterface;
-use ImQueue\Amqp\Pool\PoolFactory;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use Swoft\Log\Helper\CLog;
+use Log\Helper\CLog;
 use Throwable;
 
 /**
@@ -37,7 +36,7 @@ class Consumer extends Builder
     {
         $pool = $this->getConnectionPool($consumerMessage->getPoolName());
         /** @var \ImQueue\Amqp\Connection $connection */
-        $connection = $pool->get();
+        $connection = $pool->createConnection();
         $channel = $connection->getConfirmChannel();
 
         $this->declare($consumerMessage, $channel);
@@ -75,8 +74,7 @@ class Consumer extends Builder
         while (count($channel->callbacks) > 0) {
             $channel->wait();
         }
-
-        $pool->release($connection);
+        $pool->release($pool);
     }
 
     public function declare(MessageInterface $message, ?AMQPChannel $channel = null): void
@@ -88,7 +86,7 @@ class Consumer extends Builder
         if (! $channel) {
             $pool = $this->getConnectionPool($message->getPoolName());
             /** @var \ImQueue\Amqp\Connection $connection */
-            $connection = $pool->get();
+            $connection = $pool->createConnection();
             $channel = $connection->getChannel();
         }
 
