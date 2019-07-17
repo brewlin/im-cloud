@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace ImQueue\Pool;
 use Core\Container\Mapping\Bean;
 use ImQueue\QueueSelector;
+use Log\Helper\CLog;
+use Log\Helper\Log;
 
 /**
  * Class PoolFactory

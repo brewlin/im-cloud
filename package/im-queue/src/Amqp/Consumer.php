@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 
 namespace ImQueue\Amqp;
@@ -9,6 +7,7 @@ use Core\Container\Mapping\Bean;
 use ImQueue\Amqp\Exception\MessageException;
 use ImQueue\Amqp\Message\ConsumerMessageInterface;
 use ImQueue\Amqp\Message\MessageInterface;
+use ImQueue\Pool\AmqpConnectionPool;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Container\ContainerInterface;
@@ -34,7 +33,7 @@ class Consumer extends Builder
 
     public function consume(ConsumerMessageInterface $consumerMessage): void
     {
-        $pool = $this->getConnectionPool($consumerMessage->getPoolName());
+        $pool = $this->getConnectionPool(AmqpConnectionPool::class);
         /** @var \ImQueue\Amqp\Connection $connection */
         $connection = $pool->createConnection();
         $channel = $connection->getConfirmChannel();

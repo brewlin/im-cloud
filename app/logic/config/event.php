@@ -15,6 +15,7 @@ use \App\Event\PipeMessageListener;
 use \App\Event\WorkerStopListener;
 use \App\Event\ShutdownListener;
 use \App\Event\MessageListener;
+use \App\Event\WorkerStartListener;
 
 return [
     //监听onpipmessage事件
@@ -22,5 +23,6 @@ return [
     SwooleEvent::WORKER_STOP => new WorkerStopListener(),
     SwooleEvent::SHUTDOWN    => new ShutdownListener(),
     //监听websocket 事件
-    SwooleEvent::MESSAGE     => new MessageListener()
+    SwooleEvent::MESSAGE     => new MessageListener(),
+    SwooleEvent::WORKER_START => new WorkerStartListener()
 ];

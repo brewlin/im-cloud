@@ -6,7 +6,7 @@
  * Time: 下午 5:47
  */
 
-namespace App\logic\app\Api;
+namespace App\Api;
 
 
 class NodeController

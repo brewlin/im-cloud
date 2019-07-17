@@ -141,6 +141,7 @@ class AnnotationRegister
             "Process\\",
             "ImRedis\\",
             "Discovery\\",
+            "ImQueue\\"
         ],$scanNs));
         $resource->load();
     }

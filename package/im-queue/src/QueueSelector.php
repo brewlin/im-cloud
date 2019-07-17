@@ -4,6 +4,8 @@
  */
 namespace ImQueue;
 use Core\Container\Mapping\Bean;
+use ImQueue\Amqp\Consumer;
+use ImQueue\Amqp\Producer;
 use ImQueue\Pool\AmqpConnectionPool;
 
 /**
@@ -18,13 +20,20 @@ class QueueSelector implements SelectorInterface
     const TYPE_QUEUE = [
         'amqp' => AmqpConnectionPool::class
     ];
+    const DEFAULT_TYPE = 'amqp';
 
     /**
-     * Default provider
+     * Default consumers
      *
-     * @var string
+     * @var array
      */
-    private $provider = self::TYPE_QUEUE;
+    private $consumers = [];
+
+    /**
+     * Default producers
+     * @var array
+     */
+    private $producers = [];
 
     /**
      * @var array
@@ -39,13 +48,11 @@ class QueueSelector implements SelectorInterface
      * @param string $type
      * @throws \InvalidArgumentException
      */
-    public function select(string $type = null)
+    public function select(string $type=null,$isConsumer = true)
     {
-        if (empty($type)) {
-            $type = env("QUEUE_TYPE",$this->provider);
-        }
+        $type = env("QUEUE_TYPE",self::DEFAULT_TYPE);
+        $providers = $this->mergeQueue($isConsumer);
 
-        $providers = $this->mergeProviders();
         if (!isset($providers[$type])) {
             throw new \InvalidArgumentException(sprintf('Provider %s does not exist', $type));
         }
@@ -59,9 +66,15 @@ class QueueSelector implements SelectorInterface
      *
      * @return array
      */
-    private function mergeProviders()
+    private function mergeQueue($isConsumer = true)
     {
-        return array_merge($this->providers, $this->defaultProvivers());
+        $this->consumers =  array_merge($this->consumers, $this->defaultConsumers());
+        $this->producers = array_merge($this->producers,$this->defaultProducers());
+
+        if($isConsumer)return $this->consumers;
+        return $this->producers;
+
+
     }
 
     /**
@@ -69,10 +82,16 @@ class QueueSelector implements SelectorInterface
      *
      * @return array
      */
-    private function defaultProvivers()
+    private function defaultConsumers()
     {
         return [
-            self::TYPE_QUEUE => AMQPProvider::class,
+            "amqp" => Consumer::class,
+        ];
+    }
+    private function defaultProducers()
+    {
+        return [
+            "amqp" => Producer::class
         ];
     }
 }

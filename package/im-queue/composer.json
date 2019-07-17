@@ -18,7 +18,10 @@
     "autoload":{
         "psr-4":{
             "ImQueue\\":"src"
-        }
+        },
+        "files": [
+            "src/Helper/functions.php"
+        ]
 
     },
     "require": {

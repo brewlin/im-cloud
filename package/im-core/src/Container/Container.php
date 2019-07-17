@@ -42,6 +42,7 @@ class Container implements ContainerInterface
         if (isset($this->singlePool[$id])) {
             return $this->singlePool[$id];
         }
+        CLog::error("bean not exist:".$id);
         throw new \Exception("single conainer not exist!".$id);
 //        $this->create($id);
 //        return $this->singlePool[$id];

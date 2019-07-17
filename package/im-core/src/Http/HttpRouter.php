@@ -13,7 +13,6 @@ use Core\Container\Mapping\Bean;
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
 use function FastRoute\simpleDispatcher;
-require_once ROOT."/app/Router.php";
 
 /**
  * Class HttpRouter
@@ -36,14 +35,17 @@ class HttpRouter
      */
     public static function __callStatic($name, $arguments)
     {
-        self::$router[$name] = $arguments;
+        self::$router[$name][] = $arguments;
     }
 
     public function __construct()
     {
+        require_once ROOT."/app/Router.php";
         $dispatcher = simpleDispatcher(function (RouteCollector $route){
             foreach(self::$router as $method => $r){
-                $route->{$method}(...$r);
+                foreach ($r as $r1){
+                    $route->{$method}(...$r1);
+                }
             }
         });
         $this->dispatcher = $dispatcher;

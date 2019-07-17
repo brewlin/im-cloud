@@ -6,11 +6,12 @@
  * Time: 下午 5:47
  */
 
-namespace App\logic\app\Api;
+namespace App\Api;
 
 
 use App\Lib\LogicPush;
 use Core\Context\Context;
+use ImQueue\Amqp\Consumer;
 
 class PushAllController extends BaseController
 {

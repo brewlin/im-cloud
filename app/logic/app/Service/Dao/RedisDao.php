@@ -10,8 +10,14 @@ namespace App\Service\Dao;
 
 
 use App\Service\Model\Online;
+use Core\Container\Mapping\Bean;
 use ImRedis\Redis;
 
+/**
+ * Class RedisDao
+ * @package App\Service\Dao
+ * @Bean()
+ */
 class RedisDao
 {
     const _prefixMidServer    = "mid_%d"; // mid -> key:server

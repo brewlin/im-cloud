@@ -6,13 +6,15 @@
  * Time: 22:45
  */
 
-namespace App\logic\app\Event;
+namespace App\Event;
 
 
 use App\Lib\Logic;
 use App\Process\InitLogicProcess;
+use Core\Co;
 use Core\Swoole\WorkerStartInterface;
 use ImQueue\Pool\PoolFactory;
+use Log\Helper\CLog;
 use Swoole\Coroutine;
 use Swoole\Server as SwooleServer;
 
@@ -29,10 +31,22 @@ class WorkerStartListener implements WorkerStartInterface
 //            bean(InitLogicProcess::class)->run();
 //        }
         //每个worker进程都独立初始化Queue 连接池(amqp.kafak.....)
-        $scheduler = new Coroutine\Scheduler;
-        $scheduler->add([Logic::class,"loadOnline"]);
-        $scheduler->add([bean(PoolFactory::class,"initPool")]);
-        $scheduler->start();
+//        $scheduler = new Coroutine\Scheduler;
+//        $scheduler->add(function(){
+            Co::create(function (){
+                Logic::loadOnline();
+            },false);
+            Co::create(function (){
+                bean(PoolFactory::class)->initPool();
+            },false);
+
+//        });
+//        $scheduler->start();
+//        $scheduler->add(function(){
+//            bean(PoolFactory::class)->initPool();
+//
+//        });
+//        $scheduler->start();
 
     }
 

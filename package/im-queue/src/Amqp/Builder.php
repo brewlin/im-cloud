@@ -15,21 +15,6 @@ class Builder
 {
     protected $name = 'default';
 
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
-     * @var PoolFactory
-     */
-    private $poolFactory;
-
-    public function __construct(ContainerInterface $container, PoolFactory $poolFactory)
-    {
-        $this->container = $container;
-        $this->poolFactory = $poolFactory;
-    }
 
     /**
      * @throws AMQPProtocolChannelException when the channel operation is failed

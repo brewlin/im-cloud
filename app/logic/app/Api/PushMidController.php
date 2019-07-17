@@ -6,7 +6,7 @@
  * Time: 下午 5:45
  */
 
-namespace App\logic\app\Api;
+namespace App\Api;
 
 
 use App\Api\MsgEnum;

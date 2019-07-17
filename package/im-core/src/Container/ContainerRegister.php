@@ -28,7 +28,6 @@ class ContainerRegister
                 $anno = $parseObj["annotation"];
                 foreach ($anno as $annoObj) {
                     if ($annoObj instanceof Bean) {
-                        var_dump($ns);
                         Container::getInstance()->create($ns);
                     }
                 }

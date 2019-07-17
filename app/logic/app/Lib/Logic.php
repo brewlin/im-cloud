@@ -27,20 +27,22 @@ class Logic
         //放到协程调度运行
         while (true){
             $server = LogicClient::$serviceList;
+            if(empty($server))goto SLEEP;
             foreach ($server as $ser){
                 /**
                  * @var Online
                  */
                 $online = container()->get(RedisDao::class)->serverOnline($ser);
             }
-            $pid = Cloud::server()->getSwooleServer()->worker_pid;
-            for($i = 0;$i < env("WORKER_NUM",4);$i ++){
-                if($pid != WorkerStartListener::INIT_LOGIC){
-                    Cloud::server()->getSwooleServer()->sendMessage(["call" => [Logic::class,"updateOnline"],"arg" => [$online->roomCount]],$i);
-                }
+//            $pid = Cloud::server()->getSwooleServer()->worker_pid;
+//            for($i = 0;$i < env("WORKER_NUM",4);$i ++){
+//                if($pid != WorkerStartListener::INIT_LOGIC){
+//                    Cloud::server()->getSwooleServer()->sendMessage(["call" => [Logic::class,"updateOnline"],"arg" => [$online->roomCount]],$i);
+//                }
                 //当前进程则直接更新
                 self::$roomCount = $online->roomCount;
-            }
+//            }
+SLEEP:
             Coroutine::sleep(10);
         }
     }
