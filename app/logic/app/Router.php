@@ -22,5 +22,7 @@ HttpRouter::get("/im/online/total","/Api/OnlineController/total");
 
 //query nodes
 HttpRouter::get("/im/nodes/instances","/Api/NodeController/instances");
+//consumer producer test
 HttpRouter::get("/consumer","/Test/Consumer/con");
+HttpRouter::get("/producer","/Test/Consumer/pro");
 

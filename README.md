@@ -39,6 +39,7 @@ todo
 ### 4.`im-discovery`，基础完成
 ### 5.`im-process`,进程管理器 基础完成
 ### 6.`im-redis`,done
+### 7.`im-queue`,soon,消息队列 kafaka amqp 基于pool连接池
 
 ## 二、组件依赖
 ### @[im-core](./package/im-core) (done)

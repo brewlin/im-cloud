@@ -43,7 +43,7 @@ abstract class ProducerMessage extends Message implements ProducerMessageInterfa
 
     public function serialize(): string
     {
-        $packer = ApplicationContext::getContainer()->get(Packer::class);
+        $packer = bean(Packer::class);
         return $packer->pack($this->payload);
     }
 }

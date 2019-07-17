@@ -5,21 +5,25 @@ declare(strict_types=1);
 
 namespace ImQueue\Amqp;
 
+use Core\Container\Mapping\Bean;
 use ImQueue\Amqp\Message\ProducerMessageInterface;
+use ImQueue\Pool\AmqpConnectionPool;
 use PhpAmqpLib\Message\AMQPMessage;
 
+/**
+ * Class Producer
+ * @package ImQueue\Amqp
+ * @Bean()
+ */
 class Producer extends Builder
 {
     public function produce(ProducerMessageInterface $producerMessage, bool $confirm = false, int $timeout = 5): bool
     {
         $result = false;
-
-        $this->injectMessageProperty($producerMessage);
-
         $message = new AMQPMessage($producerMessage->payload(), $producerMessage->getProperties());
-        $pool = $this->getConnectionPool($producerMessage->getPoolName());
+        $pool = $this->getConnectionPool(AmqpConnectionPool::class);
         /** @var \ImQueue\Amqp\Connection $connection */
-        $connection = $pool->get();
+        $connection = $pool->createConnection();
         if ($confirm) {
             $channel = $connection->getConfirmChannel();
         } else {
@@ -43,13 +47,4 @@ class Producer extends Builder
         return $confirm ? $result : true;
     }
 
-    private function injectMessageProperty(ProducerMessageInterface $producerMessage)
-    {
-        if (class_exists(AnnotationCollector::class)) {
-            /** @var \ImQueue\Amqp\Annotation\Producer $annotation */
-            $annotation = AnnotationCollector::getClassAnnotation(get_class($producerMessage), Annotation\Producer::class);
-            $annotation->routingKey && $producerMessage->setRoutingKey($annotation->routingKey);
-            $annotation->exchange && $producerMessage->setExchange($annotation->exchange);
-        }
-    }
 }
