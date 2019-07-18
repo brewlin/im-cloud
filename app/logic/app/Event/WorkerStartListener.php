@@ -37,7 +37,7 @@ class WorkerStartListener implements WorkerStartInterface
                 Logic::loadOnline();
             },false);
             Co::create(function (){
-                bean(PoolFactory::class)->initPool();
+                PoolFactory::initPool();
             },false);
 
 //        });
