@@ -15,8 +15,8 @@ class Producer extends ProducerMessage
 {
     public function __construct($data)
     {
-        $this->setRoutingKey("im-logic");
-        $this->setExchange("im-logic");
+        $this->setRoutingKey(env("ROUTE_KEY"));
+        $this->setExchange(env("EXCHANGE"));
         $this->setPayload($data);
     }
 
