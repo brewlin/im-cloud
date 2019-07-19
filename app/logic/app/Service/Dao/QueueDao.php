@@ -32,7 +32,7 @@ class QueueDao
         $pushmsg->setKeys($keys);
         $pushmsg->setMsg($msg);
         //发送到队列里
-        producer()->produce(new Producer(serialize($pushmsg)));
+        producer()->produce(new Producer($pushmsg));
     }
 
     /**
@@ -49,7 +49,23 @@ class QueueDao
         $pushmsg->setOperation($op);
         $pushmsg->setRoom($room);
         //发送到队列里
-        producer()->produce(new Producer(serialize($pushmsg)));
+        producer()->produce(new Producer($pushmsg));
+    }
+
+    /**
+     * broadcast
+     * @param int $op
+     * @param int $peed
+     * @param $msg
+     */
+    public function broadcastMsg(int $op,int $speed,$msg)
+    {
+        $pushmsg = new PushMsg();
+        $pushmsg->setOperation($op);
+        $pushmsg->setSpeed($speed);
+        $pushmsg->setMsg($msg);
+        //发送到队列里
+        \producer()->produce(new Producer($pushmsg));
     }
 
 }
