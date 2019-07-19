@@ -8,11 +8,9 @@
 
 namespace App\Service\Model;
 
-use Core\Container\Mapping\Bean;
 
 /**
  * Class Room
- * @Bean()
  * @package App\Service\Model
  */
 class Room
@@ -22,7 +20,7 @@ class Room
      * @param $room
      * @return string
      */
-    public function encodeRoomKey($type,$room)
+    public static function encodeRoomKey($type,$room)
     {
         return sprintf("%s://%s",$type,$room);
     }
@@ -31,7 +29,7 @@ class Room
      * @param $key
      * @return array|bool
      */
-    public function decodeRoomKey($key)
+    public static function decodeRoomKey($key)
     {
         $parse = parse_url($key);
         if(empty($parse)){

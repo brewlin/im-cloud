@@ -21,19 +21,46 @@ use Core\Container\Mapping\Bean;
  */
 class LogicOnline
 {
-    public function onlineTop(int $op,array $keys,$msg)
+    /**
+     * @param string $type
+     * @param int $n
+     * @return array
+     */
+    public function onlineTop(string $type,int $n)
     {
-        /** @var RedisDao $servers */
-        $servers = \container()->get(RedisDao::class)->getServersByKeys($keys);
-        $pushKeys = [];
-        foreach ($keys as $i => $key){
-            $server = $servers[$i];
-            if(!empty($server) && empty($key))
-                $pushKeys[$server][] = $key;
+        $tops = [];
+        foreach (Logic::$roomCount as $key => $cnt){
+            //string.hasPrefix
+            if(strpos($key,$type) == 0){
+                list($_,$roomId) = Room::decodeRoomKey($key);
+                $tops[] = [
+                    "roomId" => $roomId,
+                    "count" => $cnt,
+                ];
+            }
         }
-        foreach ($pushKeys as $server => $key){
-            //丢到队列里去操做，让job去处理
-            \container()->get(QueueDao::class)->pushMsg($op,$server,$pushKeys[$server],$msg);
+
+        $sortKey = array_column($tops,"count");
+        array_multisort($sortKey,SORT_DESC,$tops);
+
+        if(count($tops) > $n){
+            $tops = array_slice($tops,0,$n);
         }
+        return $tops;
+    }
+
+    /**
+     * @param string $type
+     * @param array $rooms
+     * @return array
+     */
+    public function onlineRoom(string $type,array $rooms)
+    {
+        $res = [];
+        foreach ($rooms as $room)
+        {
+            $res[$room] = Logic::$roomCount[Room::encodeRoomKey($type,$room)];
+        }
+        return $res;
     }
 }
