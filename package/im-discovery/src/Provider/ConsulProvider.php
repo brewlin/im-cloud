@@ -166,7 +166,7 @@ class ConsulProvider implements ProviderInterface
      */
     public function initService(...$param){
         if(empty($param["consul"])){
-            $param = require_once ROOT."/config/discovery.php";
+            $param = config("discovery");
         }
         if(empty($param)){
             CLog::error("consul register service faile ,config is empty");

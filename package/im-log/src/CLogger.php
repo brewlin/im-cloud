@@ -18,7 +18,7 @@ class CLogger extends \Monolog\Logger
     /**
      * @var string
      */
-    protected $name = 'swoft';
+    protected $name = 'im-cloud';
 
     /**
      * Whether to enable console logger

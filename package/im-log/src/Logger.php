@@ -41,7 +41,7 @@ class Logger extends \Monolog\Logger
      *
      * @var string
      */
-    protected $name = 'swoft';
+    protected $name = 'im-cloud';
 
     /**
      * Flush interval

@@ -57,6 +57,26 @@ if (!function_exists("request")) {
         return Context::get()->getRequest();
     }
 }
+if (!function_exists('config')) {
+    /**
+     * Get value from config by key or default
+     *
+     * @param string $key
+     * @param mixed  $default
+     *
+     * @return mixed
+     */
+    function config(string $key = null, $default = null)
+    {
+        /** @var \Core\Config\Config $config */
+        $config = \Core\Container\Container::getInstance()->get(\Core\Config\Config::class);
+        if (!$config) {
+            \Log\Helper\CLog::error("config instance is not exist");
+            return;
+        }
+        return $config->get($key, $default);
+    }
+}
 if (!function_exists('env')) {
     /**
      * Gets the value of an environment variable.

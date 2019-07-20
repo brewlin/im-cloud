@@ -41,7 +41,7 @@ class Request extends PsrRequest
     /**
      * Router attribute
      */
-    public const ROUTER_ATTRIBUTE = 'swoftRouterHandler';
+    public const ROUTER_ATTRIBUTE = 'cloudRouterHandler';
 
     /**
      * Html

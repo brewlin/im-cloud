@@ -102,7 +102,6 @@ class UploadedFile implements UploadedFileInterface
      */
     public function moveTo($targetPath): void
     {
-        $targetPath = \Swoft::getAlias($targetPath);
         $this->validateActive();
         if (!$this->isStringNotEmpty($targetPath)) {
             throw new \InvalidArgumentException('Invalid path provided for move operation');

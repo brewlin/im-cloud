@@ -226,6 +226,7 @@ class Response implements ResponseInterface
         }
 
         $new = clone $this;
+        if(is_array($content))$content = json_encode($content);
         $new->stream = Stream::new($content);
         return $new;
     }

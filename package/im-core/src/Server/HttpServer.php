@@ -101,7 +101,7 @@ class HttpServer extends Server
      */
     public function mergerListener():void
     {
-        $event = require_once ROOT."/config/event.php";
+        $event = config("event");
         $this->httpListener = array_merge($this->httpListener,$event);
 
     }

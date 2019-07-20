@@ -110,11 +110,7 @@ class RedisDb
 
     public  function __construct()
     {
-        $redisPath = ROOT."/config/redis.php";
-        if(!file_exists($redisPath)){
-            return;
-        }
-        $redisConfig = require ROOT."/config/redis.php";
+        $redisConfig = config("redis");
         $this->setConfig($redisConfig);
     }
 

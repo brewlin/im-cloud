@@ -124,7 +124,6 @@ class AnnotationRegister
      *
      * @param array $config
      *
-     * @throws AnnotationException
      * @throws ReflectionException
      */
     public static function load(array $config = []): void

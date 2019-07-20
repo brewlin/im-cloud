@@ -27,7 +27,7 @@ class PoolFactory
         $name = QueueSelector::TYPE_QUEUE[$type];
 
         $poolSize = (int)env("QUEUE_POOL_SIZE",10);
-        $config = require ROOT."/config/queue.php";
+        $config = config("queue");
         PoolFactory::$pools[$name] = new co\Channel(10);
         for($i = 0 ; $i < $poolSize; $i++){
             PoolFactory::$pools[$name]->push((new $name($config)));
