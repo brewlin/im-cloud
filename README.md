@@ -1,7 +1,19 @@
-多节点服务中间件架构-Im-Cloud通讯平台 
-==============
-概述
-=======
+![](./resource/im-logo.png)
+<p>
+  <a href="https://github.com/brewlin/im-cloud">
+    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" target="_blank" />
+  </a>
+  <a href="https://github.com/brewlin/im-cloud/LICENSE">
+    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" target="_blank" />
+  </a>
+</p>
+
+> 基于原生 swoole 全协程化构建 im-cloud中间件，多节点扩容
+
+### 🏠 [Homepage](https://github.com/brewlin/im-cloud)
+
+
+## 概述
 + 基于`swoole`原生商业化即时推送im服务,不再进行业务处理，单独作为中间件使用，可弹性扩充节点增加性能处理,业务demo:http://github.com/brewlin/swoft-im(还没进行重构)
 + 高性能 水平扩容 分布式服务架构 接入服务治理
 + [`cloud`](./app/cloud) 作为中心服务节点 `grpc-server` 节点，对外可以进行TCP、Websocket 客户端进行`长连接`,可以对水平扩容至多个节点 并注册到服务中心 例如`consul`，每个cloud节点维护自己的客户端
@@ -51,5 +63,10 @@ todo
 ### @[cloud](./app/cloud) (todo)
 ### @[job](./app/job)   (todo)
 ### @[logic](./app/logic) (soon)
+
+## 📝 License
+
+Copyright © 2019 [brewlin](https://github.com/brewlin).<br />
+This project is [MIT](https://github.com/brewlin/im-cloud/LICENSE) licensed.
 
 
