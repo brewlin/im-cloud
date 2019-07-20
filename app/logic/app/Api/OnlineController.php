@@ -7,6 +7,7 @@
  */
 
 namespace App\Api;
+use App\Lib\Logic;
 use App\Lib\LogicOnline;
 use Core\Context\Context;
 
@@ -15,25 +16,37 @@ use Core\Context\Context;
  */
 class OnlineController extends BaseController
 {
+    /**
+     * @return OnlineController|\Core\Http\Response\Response
+     * @throws \Exception
+     */
     public function top()
     {
         $post  = Context::get()->getRequest()->input();
         if(empty($post["type"]) || empty($post["limit"])){
             return $this->error("缺少参数");
         }
-        \container()
+        $res  = \container()
             ->get(LogicOnline::class)
             ->onlineTop($post["type"],$post["limit"]);
-        return $this->success();
+        return $this->success($res);
 
     }
+
+    /**
+     * @return OnlineController|\Core\Http\Response\Response
+     * @throws \Exception
+     */
     public function room()
     {
-
-    }
-    public function total()
-    {
-
+        $post  = Context::get()->getRequest()->input();
+        if(empty($post["type"]) || empty($post["rooms"])){
+            return $this->error("缺少参数");
+        }
+        $res = \container()
+            ->get(LogicOnline::class)
+            ->onlineRoom($post["type"],$post["rooms"]);
+        return $this->success($res);
     }
 
 }

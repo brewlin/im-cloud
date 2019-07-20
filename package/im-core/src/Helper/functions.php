@@ -48,11 +48,11 @@ if (!function_exists("response")){
 /**
  * 获取 协程上下文  response 消息 助手
  */
-if (!function_exists("resquest")) {
+if (!function_exists("request")) {
     /**
      * @return \Core\Http\Request\Request
      */
-    function resquest()
+    function request()
     {
         return Context::get()->getRequest();
     }
