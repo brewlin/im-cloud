@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace ImQueue\Amqp;
 
+use Core\Pool\PoolConnectionInterface;
+use Core\Pool\PoolFactory;
 use ImQueue\Amqp\Message\MessageInterface;
 use ImQueue\Pool\AmqpConnectionPool;
-use ImQueue\Pool\PoolFactory;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Exception\AMQPProtocolChannelException;
 use Psr\Container\ContainerInterface;
@@ -35,10 +36,12 @@ class Builder
 
     /**
      * @param string $poolName
-     * @return AmqpConnectionPool | KafakaConnectionPool
+     * @return PoolConnectionInterface
      */
     protected function getConnectionPool(string $poolName)
     {
-        return PoolFactory::getPool($poolName);
+        /** @var PoolFactory $pool */
+        $pool = bean(\Core\Pool\PoolFactory::class);
+        return $pool->getPool($poolName);
     }
 }

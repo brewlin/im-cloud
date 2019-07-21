@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace ImQueue\Pool;
+namespace Core\Pool;
 
 interface ConnectionInterface
 {

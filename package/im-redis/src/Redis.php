@@ -11,7 +11,9 @@ namespace ImRedis;
 
 
 use Core\Container\Container;
+use Core\Pool\PoolFactory;
 use ImRedis\Connector\PhpRedisConnector;
+use ImRedis\Pool\RedisConnectionPool;
 use ImRedis\RedisDb;
 use Throwable;
 
@@ -148,9 +150,14 @@ class Redis
     public static function connection()
     {
         try {
-           $connection = Container::getInstance()->get(PhpRedisConnector::class);
-           $config = Container::getInstance()->get(RedisDb::class);
-           $con = $connection->connect($config->getConfig(),[]);
+            /** @var RedisConnectionPool $pool */
+            $pool = bean(PoolFactory::class)->getPool(RedisConnectionPool::class);
+            /** @var PhpRedisConnector $con */
+            $con = $pool->createConnection();
+//           $connection = Container::getInstance()->get(PhpRedisConnector::class);
+//           $config = Container::getInstance()->get(RedisDb::class);
+//           $con = $connection->connect($config->getConfig(),[]);
+
         } catch (Throwable $e) {
             throw new Exception(
                 sprintf('Pool error is %s file=%s line=%d', $e->getMessage(), $e->getFile(), $e->getLine())
