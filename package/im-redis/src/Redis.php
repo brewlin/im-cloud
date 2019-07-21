@@ -153,7 +153,7 @@ class Redis
             /** @var RedisConnectionPool $pool */
             $pool = bean(PoolFactory::class)->getPool(RedisConnectionPool::class);
             /** @var PhpRedisConnector $con */
-            $con = $pool->createConnection();
+//            $con = $pool->createConnection();
 //           $connection = Container::getInstance()->get(PhpRedisConnector::class);
 //           $config = Container::getInstance()->get(RedisDb::class);
 //           $con = $connection->connect($config->getConfig(),[]);
@@ -163,7 +163,7 @@ class Redis
                 sprintf('Pool error is %s file=%s line=%d', $e->getMessage(), $e->getFile(), $e->getLine())
             );
         }
-        return $con;
+        return $pool;
     }
 
     /**
@@ -174,7 +174,13 @@ class Redis
      */
     public static function __callStatic(string $method, array $arguments)
     {
-        $connection = self::connection();
-        return $connection->{$method}(...$arguments);
+        /** @var RedisConnectionPool $pool */
+        $pool = self::connection();
+        /** @var PhpRedisConnector $connection */
+        $connection = $pool->createConnection();
+        $res = $connection->{$method}(...$arguments);
+        $pool->release($pool);
+        return $res;
+
     }
 }
