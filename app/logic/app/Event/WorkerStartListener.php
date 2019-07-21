@@ -26,27 +26,16 @@ class WorkerStartListener implements WorkerStartInterface
     {
         $workerNum = env("WORKER_NUM",4);
 
-        //单独分配一个进程进行初始化处理，最后在分发到个个同级子进程中
 //        if($workerId == self::INIT_LOGIC){
 //            bean(InitLogicProcess::class)->run();
 //        }
-        //每个worker进程都独立初始化Queue 连接池(amqp.kafak.....)
 //        $scheduler = new Coroutine\Scheduler;
 //        $scheduler->add(function(){
             Co::create(function (){
                 Logic::loadOnline();
             },false);
-            Co::create(function (){
-                PoolFactory::initPool();
-            },false);
 
 //        });
-//        $scheduler->start();
-//        $scheduler->add(function(){
-//            bean(PoolFactory::class)->initPool();
-//
-//        });
-//        $scheduler->start();
 
     }
 

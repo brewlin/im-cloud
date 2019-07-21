@@ -65,9 +65,10 @@ class AmqpConnectionPool implements PoolConnectionInterface
         $poolSize = (int)env("QUEUE_POOL_SIZE",10);
         $config = config("queue");
         $chan = new Channel($poolSize);
-
         for($i = 0 ; $i < $poolSize; $i++){
-            $chan->push((new AmqpConnectionPool())->init($config));
+            $obj = new AmqpConnectionPool();
+            $obj->init($config);
+            $chan->push($obj);
         }
         $pool->registerPool(AmqpConnectionPool::class,$chan);
     }
