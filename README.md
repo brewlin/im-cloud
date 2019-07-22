@@ -65,7 +65,7 @@ todo
 ### @[im-redis](./package/im-redis)(done)
 ### @[im-queue](./package/im-queue)(done amqp,soon kafak)
 ### @[cloud](./app/cloud) (todo)
-### @[job](./app/job)   (todo)
+### @[job](./app/job)   (soon)
 ### @[logic](./app/logic) (soon)
 
 ## 📝 License

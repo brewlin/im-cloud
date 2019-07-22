@@ -14,6 +14,9 @@ composer install
 cd job
 composer install
 ```
+### 进度
+- 完成了队列的消费 多进程消费
+- 完成了grpc cloud的调用
 
 ## @[logic](./logic)
 > 业务中心节点
@@ -21,4 +24,9 @@ composer install
 cd logic
 composer install
 ```
+### 进度
+- 完成了http api
+- 完成了grpc api
+- 完成了注册发现与服务调用
+- 完成了队列的生产 使用rabbitmq
 
