@@ -13,7 +13,7 @@ use Core\Container\Container;
 use Discovery\Balancer\RandomBalancer;
 use Grpc\ChannelCredentials;
 
-class LogicClient
+class CloudClient
 {
     /**
      * servicelist
@@ -26,12 +26,16 @@ class LogicClient
 
     /**
      * 返回一个可用的grpc 客户端 和logic 节点进行交互
-     * @return \Im\Logic\LogicClient
+     * @return \Im\Cloud\CloudClient
      * @throws \Exception
      */
-    public static function getLogicClient(){
-        $node = Container::getInstance()->get(RandomBalancer::class)->select(self::$serviceList);
-        $client = new \Im\Logic\LogicClient($node,[
+    public static function getCloudClient($serverId = ""){
+        if($serverId)
+            $node = self::$serviceList[$serverId];
+        else
+            $node = Container::getInstance()->get(RandomBalancer::class)->select(self::$serviceList);
+        if(empty($node))return null;
+        $client = new \Im\Cloud\CloudClient($node,[
             'credentials' => ChannelCredentials::createInsecure()
         ]);
         $client->start();

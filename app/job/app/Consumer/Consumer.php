@@ -9,6 +9,7 @@
 namespace App\Consumer;
 
 
+use App\Lib\Job;
 use Im\Logic\PushMsg;
 use ImQueue\Amqp\Message\ConsumerMessage;
 
@@ -32,7 +33,9 @@ class Consumer extends ConsumerMessage
      */
     public function consume($data): string
     {
-        // TODO: Implement consume() method.
+        /** @var Job $job */
+        $job = container()->get(Job::class);
+        $job->push($data);
     }
 
 }
