@@ -15,6 +15,7 @@
         "swoft/swoole-ide-helper": "dev-master",
         "psr/http-message": "^1.0",
         "toolkit/cli-utils": "~1.0",
+        "swoole/etcd-client": "^1.0",
         "php-amqplib/php-amqplib": "^2.7"
 
     },

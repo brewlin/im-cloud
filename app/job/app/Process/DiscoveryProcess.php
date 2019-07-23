@@ -42,8 +42,9 @@ class DiscoveryProcess extends AbstractProcess
     public function run(Process $process)
     {
         //job节点无需注册 服务中心
+        $config = config("discovery");
         while (true){
-            $services = provider()->select()->getServiceList("grpc-im-cloud-node");
+            $services = provider()->select()->getServiceList($config["discovery"]["name"]);
             var_dump($services);
             for($i = 0; $i < (int)env("WORKER_NUM",4);$i++)
             {
