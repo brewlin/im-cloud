@@ -22,7 +22,7 @@ return [
             ],
         ],
         'discovery' => [
-            'name' => 'im-logic',
+            'name' => 'grpc-im-logic-node',
             'dc' => 'dc1',
             'near' => '',
             'tag' =>'',

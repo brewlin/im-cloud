@@ -38,10 +38,7 @@ class MessageListener implements MessageInterface
             $line = $e->getLine();
             $code = $e->getCode();
             $exception = $e->getMessage();
-            CLog::error("file:".$file);
-            CLog::error("line:".$line);
-            CLog::error("code:".$code);
-            CLog::error("msg:".$exception);
+            CLog::error("file:".$file." line:$line code:$code msg:$exception");
         }
     }
 

@@ -21,6 +21,7 @@ class Producer extends Builder
     {
         $result = false;
         $message = new AMQPMessage($producerMessage->payload(), $producerMessage->getProperties());
+        /** @var AmqpConnectionPool $pool */
         $pool = $this->getConnectionPool(AmqpConnectionPool::class);
         /** @var \ImQueue\Amqp\Connection $connection */
         $connection = $pool->createConnection();
@@ -41,7 +42,7 @@ class Producer extends Builder
             $connection->reconnect();
             throw $exception;
         } finally {
-            $connection->release();
+            $pool->release($pool);
         }
 
         return $confirm ? $result : true;

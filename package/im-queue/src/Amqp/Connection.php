@@ -7,8 +7,8 @@ namespace ImQueue\Amqp;
 use Core\Co;
 use ImQueue\Amqp\Connection\AMQPSwooleConnection;
 use ImQueue\Pool\AmqpConnectionPool;
-use ImQueue\Pool\ConnectionInterface;
-use ImQueue\Pool\PoolFactory;
+use Core\Pool\ConnectionInterface;
+use Core\Pool\PoolFactory;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
@@ -153,7 +153,6 @@ class Connection implements ConnectionInterface
     }
     public function release(): void
     {
-        PoolFactory::releasePool($this->pool);
     }
 
     public function getConnection()

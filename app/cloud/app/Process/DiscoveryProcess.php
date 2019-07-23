@@ -41,8 +41,9 @@ class DiscoveryProcess extends AbstractProcess
     public function run(Process $process)
     {
         provider()->select()->registerService();
+        $config = config("discovery");
         while (true){
-            $services = provider()->select()->getServiceList("grpc-im-logic-node");
+            $services = provider()->select()->getServiceList($config["discovery"]["name"]);
             for($i = 0; $i < (int)env("WORKER_NUM",4);$i++)
             {
                 //将可以用的服务同步到所有的worker进程

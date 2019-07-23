@@ -40,7 +40,7 @@ class HttpRouter
 
     public function __construct()
     {
-        require_once ROOT . "/app/Router.php";
+//        require_once ROOT . "/app/Router.php";
         $dispatcher = simpleDispatcher(function (RouteCollector $route){
             foreach(self::$router as $method => $r){
                 foreach ($r as $r1){
