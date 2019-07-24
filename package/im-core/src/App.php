@@ -17,6 +17,7 @@ use Core\Log\Logger;
 use Core\Processor\AppProcessor;
 use Core\Processor\ConfigProcessor;
 use Core\Processor\EnvProcessor;
+use Core\Server\WebsocketServer;
 use FastRoute\RouteCollector;
 use function FastRoute\simpleDispatcher;
 use Goim\Comet\BroadcastReq;
@@ -67,6 +68,9 @@ class App
      */
     public function run(){
         $this->processor->handle();
+        if(env("ENABLE_WS")){
+            ( new WebsocketServer())->start();
+        }
         (new HttpServer())->start();
     }
 

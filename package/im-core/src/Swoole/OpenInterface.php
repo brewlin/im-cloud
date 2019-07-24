@@ -2,7 +2,7 @@
 
 namespace Core\Swoole;
 
-use Core\Http\Request\Request;
+use Swoole\Http\Request;
 use Swoole\Websocket\Server;
 
 /**

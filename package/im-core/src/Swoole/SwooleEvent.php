@@ -118,6 +118,7 @@ final class SwooleEvent
         // For websocket server
         self::HANDSHAKE => HandshakeInterface::class,
         self::MESSAGE   => MessageInterface::class,
+        self::OPEN       => OpenInterface::class,
         // For tcp
         self::CLOSE     => CloseInterface::class,
         self::RECEIVE   => ReceiveInterface::class,
@@ -131,6 +132,7 @@ final class SwooleEvent
         self::WORKER_STOP => WorkerStopInterface::class,
         self::SHUTDOWN => ShutdownInterface::class,
         self::WORKER_START => WorkerStartInterface::class,
+        
 
     ];
 
