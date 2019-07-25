@@ -14,7 +14,7 @@ use \Core\Swoole\SwooleEvent;
 use \App\Event\PipeMessageListener;
 use \App\Event\WorkerStopListener;
 use \App\Event\ShutdownListener;
-use \App\Event\MessageListener;
+use \App\Websocket\MessageListener;
 
 return [
     //监听onpipmessage事件
