@@ -16,12 +16,17 @@ use \App\Event\WorkerStopListener;
 use \App\Event\ShutdownListener;
 use \App\Websocket\MessageListener;
 use \App\Websocket\HandshakeListener;
+use App\Tcp\ReceiveListener;
 
 return [
     //监听onpipmessage事件
     SwooleEvent::PIPE_MESSAGE => new PipeMessageListener(),
     SwooleEvent::WORKER_STOP => new WorkerStopListener(),
     SwooleEvent::SHUTDOWN    => new ShutdownListener(),
+
+    //监听tcp事件
+    SwooleEvent::RECEIVE     => new ReceiveListener(),
+
     //监听websocket 事件
     SwooleEvent::MESSAGE     => new MessageListener(),
     //websocket握手事件

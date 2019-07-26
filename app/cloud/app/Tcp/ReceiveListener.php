@@ -2,42 +2,36 @@
 /**
  * Created by PhpStorm.
  * User: brewlin
- * Date: 2019/6/26
- * Time: 21:31
+ * Date: 2019/7/26 0026
+ * Time: 下午 5:58
  */
 
-namespace App\Websocket;
+namespace App\Tcp;
 
 
 use App\Lib\LogicClient;
-use App\Websocket\Exception\HandshakeException;
 use App\Websocket\Exception\RequireArgException;
-use Core\Swoole\MessageInterface;
+use Core\Swoole\ReceiveInterface;
 use Im\Logic\ConnectReply;
 use Im\Logic\ConnectReq;
 use Log\Helper\CLog;
-use Swoole\Websocket\Frame;
-use Swoole\Websocket\Server;
+use Swoole\Server;
 
-/**
- * websocket 接收事件入口
- * Class MessageListener
- * @package App\Event
- */
-class MessageListener implements MessageInterface
+class ReceiveListener implements ReceiveInterface
 {
     /**
      * @param Server $server
-     * @param Frame $frame
+     * @param int $fd
+     * @param int $reactorId
+     * @param string $data
      */
-    public function onMessage(Server $server, Frame $frame): void
+    public function onReceive(Server $server, int $fd, int $reactorId, string $data): void
     {
-        CLog::info("fd:{$frame->fd} data:{$frame->data}");
-        try {
-            $data = $frame->data;
-            $data = json_decode($data, 1);
+        try
+        {
+            $data = json_decode($data, true);
             if (!$data)
-                throw new HandshakeException("require token",0);
+                throw new \Exception("require token",0);
 
             //step 1
             $this->checkAuth($data);
@@ -45,7 +39,8 @@ class MessageListener implements MessageInterface
             //step 2
             $this->registerLogic($data);
 
-        } catch (\Throwable $e) {
+        }catch (\Throwable $e)
+        {
             $file = $e->getFile();
             $line = $e->getLine();
             $code = $e->getCode();
@@ -53,11 +48,10 @@ class MessageListener implements MessageInterface
             $msg = $e->getMessage();
             $returnData = ['code' => $code,'msg' => $msg];
             CLog::error("file:".$file." line:$line code:$code msg:$exception");
-            $server->push($frame->fd,json_encode($returnData));
-            $server->close($frame->fd);
+            $server->send($fd,json_encode($returnData));
+            $server->close($fd);
         }
     }
-
     /**
      * token check '{"mid":123, "room_id":"live://1000", "platform":"web", "accepts":[1000,1001,1002]}'
      * @param array $data

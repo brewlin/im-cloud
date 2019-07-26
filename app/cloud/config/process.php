@@ -8,4 +8,4 @@
 use Process\ProcessManager;
 use App\Process\DiscoveryProcess;
 
-ProcessManager::register("discovery",new DiscoveryProcess());
+ProcessManager::register("im-cloud-discovery",new DiscoveryProcess());
