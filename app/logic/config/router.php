@@ -5,11 +5,18 @@ namespace App;
 use Core\Http\HttpRouter;
 
 //Grpc server router
-HttpRouter::post('/im.cloud.Cloud/Broadcast', '/Grpc/Cloud/broadcast');
+HttpRouter::post('/im.logic.Logic/Ping', '/Grpc/Logic/ping');
+HttpRouter::post('/im.logic.Logic/Close', '/Grpc/Logic/close');
+HttpRouter::post('/im.logic.Logic/Connect', '/Grpc/Logic/connect');
+HttpRouter::post('/im.logic.Logic/Disconnect', '/Grpc/Logic/disConnect');
+HttpRouter::post('/im.logic.Logic/Connect', '/Grpc/Logic/connect');
+HttpRouter::post('/im.logic.Logic/Heartbeat', '/Grpc/Logic/heartBeat');
+HttpRouter::post('/im.logic.Logic/RenewOnline', '/Grpc/Logic/renewOnline');
 
 //consul health check
 HttpRouter::get("/health","/Api/HealthController/health");
 
+//api router
 HttpRouter::post("/im/push/keys","/Api/PushKeyController/keys");
 HttpRouter::post("/im/push/mids","/Api/PushMidController/mids");
 HttpRouter::post("/im/push/room","/Api/PushRoomController/room");

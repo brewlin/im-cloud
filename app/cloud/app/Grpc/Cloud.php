@@ -9,9 +9,13 @@
 namespace App\GRpc;
 
 
+use App\Lib\Broadcast;
+use App\Service\Dao\Push;
+use Core\Co;
 use Core\Context\Context;
 use Grpc\Parser;
 use Im\Cloud\BroadcastReply;
+use Im\Cloud\BroadcastReq;
 use Im\Cloud\PushMsgReply;
 use Im\Cloud\PushMsgReq;
 use Im\Logic\CloseReply;
@@ -20,17 +24,6 @@ use Log\Helper\CLog;
 
 class Cloud
 {
-    public function broadcast(){
-        var_dump("broad");
-        //使用 grpc 包根据probuf 格式进行序列化
-        $broadcatRp = Parser::serializeMessage(new BroadcastReply());
-        //可以根据全局上下文获取reponse
-//        return Context::get()
-//                       ->getResponse()
-//                       ->withContent($broadcatRp);
-        //使用助手也可以
-        return response()->withContent($broadcatRp);
-    }
     /**
      * @return \Core\Http\Response\Response
      */
@@ -62,8 +55,40 @@ class Cloud
             CLog::error("cloud grpc pushmsg keys proto is empty raw data:".json_encode($pushMsgReq));
             return response()->withContent($pushMsgRpy);
         }
-//        foreach ($pushMsgReq->getKeys())
+        /** @var array $keys */
+        $keys = $pushMsgReq->getKeys();
+        $data = $pushMsgReq->getProtoOp();
+        //coroutine do
+        Co::create(function ()use($keys,$data){
+            foreach ($keys as $key){
+                bean(Push::class)->push($key,$data);
+            }
+        },false);
+        return response()->withContent($pushMsgRpy);
 
+    }
+
+    /**
+     * @return \Core\Http\Response\Response|static
+     */
+    public function broadcast(){
+        $broadcastRpy = Parser::serializeMessage(new BroadcastReply());
+        /** @var BroadcastReq $broadcastReq */
+        $broadcastReq = Parser::deserializeMessage(
+                                                    [BroadcastReq::class,null],
+                                                    Context::get()->getRequest()->getRawBody()
+        );
+        if(empty($broadcastReq->getProto())){
+            return Context::get()->getResponse()->withContent($broadcastRpy);
+        }
+        Co::create(function ()use($broadcastReq){
+            Broadcast::push($broadcastReq->getProto(),$broadcastReq->getProtoOp());
+        });
+        //使用 grpc 包根据probuf 格式进行序列化
+        return response()->withContent($broadcastRpy);
+    }
+    public function broadcastRoom()
+    {
 
     }
 }

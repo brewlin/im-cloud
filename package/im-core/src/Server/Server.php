@@ -22,7 +22,7 @@ class Server
 {
     private static $server;
     /**
-     * @var \Swoole\Server
+     * @var \Swoole\Server | \Swoole\WebSocket\Server
      */
     protected $swooleServer;
 
@@ -68,7 +68,11 @@ class Server
     {
         return self::$server;
     }
-    public function getSwooleServer():?\Swoole\Server{
+
+    /**
+     * @return \Swoole\Server | \Swoole\WebSocket\Server
+     */
+    public function getSwooleServer(){
        return $this->swooleServer;
     }
     public function __construct()
