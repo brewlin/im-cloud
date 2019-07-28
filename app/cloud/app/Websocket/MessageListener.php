@@ -10,6 +10,7 @@ namespace App\Websocket;
 
 
 use App\Lib\LogicClient;
+use App\Service\Dao\Bucket;
 use App\Websocket\Exception\HandshakeException;
 use App\Websocket\Exception\RequireArgException;
 use Core\Swoole\MessageInterface;
@@ -32,19 +33,22 @@ class MessageListener implements MessageInterface
      */
     public function onMessage(Server $server, Frame $frame): void
     {
+        $registerBucket = false;
         CLog::info("fd:{$frame->fd} data:{$frame->data}");
         try {
             $data = $frame->data;
             $data = json_decode($data, 1);
             if (!$data)
-                throw new HandshakeException("require token",0);
+                throw new \Exception("require token",0);
 
             //step 1
             $this->checkAuth($data);
 
             //step 2
-            $this->registerLogic($data);
+            [$mid,$key,$roomId,$accepts,$heartbeat] = $this->registerLogic($data);
 
+            Bucket::put($roomId,$key,$frame->fd);
+            $registerBucket = true;
         } catch (\Throwable $e) {
             $file = $e->getFile();
             $line = $e->getLine();
@@ -53,6 +57,8 @@ class MessageListener implements MessageInterface
             $msg = $e->getMessage();
             $returnData = ['code' => $code,'msg' => $msg];
             CLog::error("file:".$file." line:$line code:$code msg:$exception");
+            if($registerBucket)
+                Bucket::del($roomId,$key,$frame->fd);
             $server->push($frame->fd,json_encode($returnData));
             $server->close($frame->fd);
         }
@@ -76,7 +82,7 @@ class MessageListener implements MessageInterface
     /**
      * token check '{"mid":123, "room_id":"live://1000", "platform":"web", "accepts":[1000,1001,1002]}'
      * @param array $data
-     * @return ConnectReply
+     * @return array
      * @throws \Exception
      */
     public function registerLogic(array $data)
@@ -94,7 +100,7 @@ class MessageListener implements MessageInterface
         if(!$rpy){
             throw new \Exception("grpc to logic failed",0);
         }
-        return $rpy;
+        return [$rpy->getMid(),$rpy->getKey(),$rpy->getRoomID(),$rpy->getAccepts(),$rpy->getRoomID(),$rpy->getHeartbeat()];
 
     }
 

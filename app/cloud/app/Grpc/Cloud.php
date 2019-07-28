@@ -16,6 +16,8 @@ use Core\Context\Context;
 use Grpc\Parser;
 use Im\Cloud\BroadcastReply;
 use Im\Cloud\BroadcastReq;
+use Im\Cloud\BroadcastRoomReply;
+use Im\Cloud\BroadcastRoomReq;
 use Im\Cloud\PushMsgReply;
 use Im\Cloud\PushMsgReq;
 use Im\Logic\CloseReply;
@@ -89,6 +91,17 @@ class Cloud
     }
     public function broadcastRoom()
     {
+        $broadroomRpy = Parser::serializeMessage(new BroadcastRoomReply());
+        /** @var BroadcastRoomReq $broadroomReq */
+        $broadroomReq = Parser::deserializeMessage(
+            [BroadcastRoomReq::class,null],
+            request()->getRawBody()
+        );
+        CLog::info("broadcastRoom req:".json_encode($broadroomReq));
+        if(empty($broadroomReq->getProto()) || empty($broadroomReq->getRoomID())){
+            return response()->withContent($broadroomRpy);
+        }
+
 
     }
 }

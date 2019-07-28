@@ -10,6 +10,7 @@ namespace App\Tcp;
 
 
 use App\Lib\LogicClient;
+use App\Service\Dao\Bucket;
 use App\Websocket\Exception\RequireArgException;
 use Core\Swoole\ReceiveInterface;
 use Im\Logic\ConnectReply;
@@ -27,6 +28,7 @@ class ReceiveListener implements ReceiveInterface
      */
     public function onReceive(Server $server, int $fd, int $reactorId, string $data): void
     {
+        $registerBucket = false;
         try
         {
             $data = json_decode($data, true);
@@ -37,7 +39,10 @@ class ReceiveListener implements ReceiveInterface
             $this->checkAuth($data);
 
             //step 2
-            $this->registerLogic($data);
+            [$mid,$key,$roomId,$accepts,$heartbeat] = $this->registerLogic($data);
+
+            Bucket::put($roomId,$key,$fd);
+            $registerBucket = true;
 
         }catch (\Throwable $e)
         {
@@ -48,6 +53,8 @@ class ReceiveListener implements ReceiveInterface
             $msg = $e->getMessage();
             $returnData = ['code' => $code,'msg' => $msg];
             CLog::error("file:".$file." line:$line code:$code msg:$exception");
+            if($registerBucket)
+                Bucket::del($roomId,$key,$fd);
             $server->send($fd,json_encode($returnData));
             $server->close($fd);
         }
@@ -70,7 +77,7 @@ class ReceiveListener implements ReceiveInterface
     /**
      * token check '{"mid":123, "room_id":"live://1000", "platform":"web", "accepts":[1000,1001,1002]}'
      * @param array $data
-     * @return ConnectReply
+     * @return array
      * @throws \Exception
      */
     public function registerLogic(array $data)
@@ -88,7 +95,7 @@ class ReceiveListener implements ReceiveInterface
         if(!$rpy){
             throw new \Exception("grpc to logic failed",0);
         }
-        return $rpy;
+        return [$rpy->getMid(),$rpy->getKey(),$rpy->getRoomID(),$rpy->getAccepts(),$rpy->getRoomID(),$rpy->getHeartbeat()];
 
     }
 
