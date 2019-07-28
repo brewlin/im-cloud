@@ -30,5 +30,5 @@ return [
     //监听websocket 事件
     SwooleEvent::MESSAGE     => new MessageListener(),
     //websocket握手事件
-    SwooleEvent::OPEN        => new HandshakeListener(),
+    SwooleEvent::HANDSHAKE        => new HandshakeListener(),
 ];

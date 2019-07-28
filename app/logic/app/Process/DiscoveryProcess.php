@@ -12,6 +12,7 @@ namespace App\Process;
 use App\Lib\LogicClient;
 use Core\Cloud;
 use Core\Processor\ProcessorInterface;
+use Log\Helper\CLog;
 use Process\Contract\AbstractProcess;
 use Process\Process;
 use Process\ProcessInterface;
@@ -27,7 +28,7 @@ class DiscoveryProcess extends AbstractProcess
 {
     public function __construct()
     {
-        $this->name = "discovery";
+        $this->name = "im-logic-discovery";
     }
 
     public function check(): bool
@@ -45,6 +46,10 @@ class DiscoveryProcess extends AbstractProcess
         while (true){
             $services = provider()->select()->getServiceList("grpc-im-cloud-node");
             var_dump($services);
+            if(empty($services)){
+                CLog::error("not find any instance node:grpc-im-cloud-node");
+                goto SLEEP;
+            }
             for($i = 0; $i < (int)env("WORKER_NUM",4);$i++)
             {
 
@@ -53,17 +58,8 @@ class DiscoveryProcess extends AbstractProcess
                 Cloud::server()->getSwooleServer()->sendMessage($sync,$i);
 
             }
-//            $this->updateServices($services);
+SLEEP:
             sleep(10);
         }
-    }
-
-    /**
-     * update service list
-     * @param array $services
-     */
-    public function updateServices(array $services)
-    {
-       //do sth
     }
 }

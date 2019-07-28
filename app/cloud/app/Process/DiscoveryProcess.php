@@ -11,6 +11,7 @@ namespace App\Process;
 
 use Core\Cloud;
 use Core\Processor\ProcessorInterface;
+use Log\Helper\CLog;
 use Process\Contract\AbstractProcess;
 use Process\Process;
 use Process\ProcessInterface;
@@ -26,7 +27,7 @@ class DiscoveryProcess extends AbstractProcess
 {
     public function __construct()
     {
-        $this->name = "discovery";
+        $this->name = "im-cloud-discovery";
     }
 
     public function check(): bool
@@ -42,24 +43,20 @@ class DiscoveryProcess extends AbstractProcess
     {
         provider()->select()->registerService();
         $config = config("discovery");
+        $discovery = $config["consul"]["discovery"]["name"];
         while (true){
-            $services = provider()->select()->getServiceList($config["discovery"]["name"]);
+            $services = provider()->select()->getServiceList($discovery);
+            if(empty($services)){
+                CLog::error("not find any instance node:$discovery");
+                goto SLEEP;
+            }
             for($i = 0; $i < (int)env("WORKER_NUM",4);$i++)
             {
                 //将可以用的服务同步到所有的worker进程
                 Cloud::server()->getSwooleServer()->sendMessage($services,$i);
             }
-//            $this->updateServices($services);
+SLEEP:
             sleep(10);
         }
-    }
-
-    /**
-     * update service list
-     * @param array $services
-     */
-    public function updateServices(array $services)
-    {
-       //do sth
     }
 }

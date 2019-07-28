@@ -9,7 +9,6 @@ HttpRouter::post('/im.logic.Logic/Ping', '/Grpc/Logic/ping');
 HttpRouter::post('/im.logic.Logic/Close', '/Grpc/Logic/close');
 HttpRouter::post('/im.logic.Logic/Connect', '/Grpc/Logic/connect');
 HttpRouter::post('/im.logic.Logic/Disconnect', '/Grpc/Logic/disConnect');
-HttpRouter::post('/im.logic.Logic/Connect', '/Grpc/Logic/connect');
 HttpRouter::post('/im.logic.Logic/Heartbeat', '/Grpc/Logic/heartBeat');
 HttpRouter::post('/im.logic.Logic/RenewOnline', '/Grpc/Logic/renewOnline');
 

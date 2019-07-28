@@ -13,6 +13,7 @@
         "php": ">=7.0",
         "swoole/etcd-client": "^1.0",
         "brewlin/log": "@dev",
+        "brewlin/stdlib":"@dev",
         "nikic/fast-route": "^1.3",
         "vlucas/phpdotenv": "^2.5",
         "swoft/swoole-ide-helper": "dev-master",
@@ -22,8 +23,7 @@
         "brewlin/im-core":"@dev",
         "brewlin/im-discovery":"@dev",
         "brewlin/im-process":"@dev",
-        "brewlin/im-redis":"@dev"
-
+        "brewlin/im-queue":"@dev"
 
     },
     "autoload": {
@@ -50,11 +50,19 @@
         },
         "4":{
             "type":"path",
-            "url":"../../package/im-redis"
+            "url":"../../package/im-queue"
+        },
+        "5":{
+            "type":"path",
+            "url":"../../package/im-log"
+        },
+        "6":{
+            "type":"path",
+            "url":"../../package/im-stdlib"
         },
         "packagist": {
             "type": "composer",
-            "url": "https://packagist.laravel-china.org"
+            "url": "https://mirrors.aliyun.com/composer/"
         }
     }
 }

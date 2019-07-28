@@ -105,9 +105,14 @@ class ConsulProvider implements ProviderInterface
      */
     public function getServiceList(string $serviceName, ...$params)
     {
+        $this->initService(config("discovery"));
         $url        = $this->getDiscoveryUrl($serviceName);
-        $result = SaberGM::get(sprintf("http://%s:%d%s",$this->address,$this->port,$url));
-        $services = $result->getParsedJsonArray();
+        try{
+            $result = SaberGM::get(sprintf("http://%s:%d%s",$this->address,$this->port,$url));
+            $services = $result->getParsedJsonArray();
+        }catch (\Throwable $e){
+            return [];
+        }
 
         // 数据格式化
         $nodes = [];
@@ -140,9 +145,7 @@ class ConsulProvider implements ProviderInterface
      */
     public function registerService(...$params)
     {
-
-        $this->initService(...$params);
-
+        $this->initService(config("discovery"));
         try{
             $res = SaberGM::put(
                 sprintf("%s:%d%s",$this->address,$this->port,self::REGISTER_PATH),
