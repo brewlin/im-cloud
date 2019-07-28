@@ -56,7 +56,22 @@ class Bucket
         }
         //ip count --
         Redis::hIncrBy(self::IpCounts,env("GRPC_HOST","127.0.0.1"),-1);
-
     }
 
+    /**
+     * @return array
+     */
+    public static function buckets()
+    {
+        return Redis::sMembers(self::BucketsRoom);
+    }
+
+    /**
+     * @param string $roomId
+     * @return array
+     */
+    public static function roomfds(string $roomId)
+    {
+        return Redis::sMembers(sprintf(self::RoomFds,$roomId));
+    }
 }

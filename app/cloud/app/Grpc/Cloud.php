@@ -10,7 +10,9 @@ namespace App\GRpc;
 
 
 use App\Lib\Broadcast;
+use App\Service\Dao\Bucket;
 use App\Service\Dao\Push;
+use App\Service\Dao\Room;
 use Core\Co;
 use Core\Context\Context;
 use Grpc\Parser;
@@ -20,6 +22,7 @@ use Im\Cloud\BroadcastRoomReply;
 use Im\Cloud\BroadcastRoomReq;
 use Im\Cloud\PushMsgReply;
 use Im\Cloud\PushMsgReq;
+use Im\Cloud\RoomsReply;
 use Im\Logic\CloseReply;
 use Im\Logic\PingReply;
 use Log\Helper\CLog;
@@ -89,6 +92,10 @@ class Cloud
         //使用 grpc 包根据probuf 格式进行序列化
         return response()->withContent($broadcastRpy);
     }
+
+    /**
+     * @return \Core\Http\Response\Response|static
+     */
     public function broadcastRoom()
     {
         $broadroomRpy = Parser::serializeMessage(new BroadcastRoomReply());
@@ -101,7 +108,26 @@ class Cloud
         if(empty($broadroomReq->getProto()) || empty($broadroomReq->getRoomID())){
             return response()->withContent($broadroomRpy);
         }
+        //go coroutine
+        Co::create(function()use($broadroomReq){
+            foreach(Bucket::buckets() as $roomId){
+                Room::push($roomId,$broadroomReq);
+            }
+        },false);
 
 
+    }
+    /**
+     * @return \Core\Http\Response\Response|static
+     */
+    public function rooms()
+    {
+        $roomRpy = new RoomsReply();
+        $roomids = Bucket::buckets();
+        $roomRpy->setRooms($roomids);
+        return Context::get()->getResponse()
+                             ->withContent(
+                                 $roomRpy->serializeToJsonString()
+                             );
     }
 }

@@ -7,6 +7,10 @@
 cd cloud
 composer install
 ```
+## 进度
+- 完成grpc接口
+- 完成tcp  websocket 注册链接
+- 完成主流程
 
 ## @[job](./job)
 > 消费中心节点
