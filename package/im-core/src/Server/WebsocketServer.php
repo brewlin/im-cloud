@@ -52,7 +52,7 @@ class WebsocketServer extends Server
     public function setPanel()
     {
         //console log
-        if(env("ENABLE_HTTP",false) || env("ENABLE_GRPC",false)) {
+        if(env("ENABLE_HTTP",false)) {
             $this->panel["HTTP"] = [
                 'listen' => env("WS_HOST") . ':' . env("WS_PORT"),
                 'type' => "HTTP",
@@ -62,14 +62,14 @@ class WebsocketServer extends Server
         }
         if(env("ENABLE_GRPC",false)){
             $this->panel["GRPC"] = [
-                'listen' => env("HTTP_HOST") . ':' . env("HTTP_PORT"),
+                'listen' => env("GRPC_HOST") . ':' . env("GRPC_PORT"),
                 'type'   => "HTTP2",
                 'mode'   => env("HTTP_MODE","process"),
                 'worker' => env("WORKER_NUM"),
             ];
         }
             $this->panel["WEBSOCKET"] = [
-                'listen' => env("HTTP_HOST") . ':' . env("HTTP_PORT"),
+                'listen' => env("WS_HOST") . ':' . env("WS_PORT"),
                 'type'   => "WEBSOCKET",
                 'mode'   => env("HTTP_MODE","process"),
                 'worker' => env("WORKER_NUM"),

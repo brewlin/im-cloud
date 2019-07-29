@@ -11,7 +11,7 @@ return [
             'Name'              => 'grpc-im-cloud-node',
             'Tags'              => [],
             'enableTagOverride'=> false,
-            'Address'           => env("GRPC_HOST","127.0.0.1"),
+            'Address'           => env("APP_HOST","127.0.0.1"),
             'Port'              => (int)env("GRPC_PORT",9500),
             'Check'             => [
                 'id'       => '',

@@ -307,18 +307,19 @@ class Server
         }
 
         show($this->panel,env("APP_NAME"));
+        if(env("ENABLE_HTTP",false))
         Console::write("<success>HTTP server {$this->panel['HTTP']['listen']} start success !</success>");
         if(env("ENABLE_WS",false)){
-            Console::write("<success>WEBSOCKET server {$this->panel['HTTP']['listen']} start success !</success>");
+            Console::write("<success>WEBSOCKET server {$this->panel['WEBSOCKET']['listen']} start success !</success>");
         }
         if(env("ENABLE_GRPC",false)){
-            Console::write("<success>GRPC server {$this->panel['HTTP']['listen']} start success !</success>");
+            Console::write("<success>GRPC server {$this->panel['GRPC']['listen']} start success !</success>");
         }
         foreach ($this->listener as $name => $listener) {
             if (!$listener instanceof ServerInterface) {
                 continue;
             }
-            Console::write("<success>{$name} server {$this->panel['HTTP']['listen']} start success !</success>");
+            Console::write("<success>{$name} server {$listener->getPort()} start success !</success>");
         }
     }
 }

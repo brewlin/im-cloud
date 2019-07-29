@@ -108,6 +108,7 @@ class ConsulProvider implements ProviderInterface
         $this->initService(config("discovery"));
         $url        = $this->getDiscoveryUrl($serviceName);
         try{
+            var_dump(sprintf("http://%s:%d%s",$this->address,$this->port,$url));
             $result = SaberGM::get(sprintf("http://%s:%d%s",$this->address,$this->port,$url));
             $services = $result->getParsedJsonArray();
         }catch (\Throwable $e){
