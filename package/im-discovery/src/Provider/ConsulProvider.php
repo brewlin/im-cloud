@@ -2,6 +2,7 @@
 
 namespace Discovery\Provider;
 
+use Core\Co;
 use Core\Console\Console;
 use Core\Container\Mapping\Bean;
 use Swlib\Saber;
@@ -108,9 +109,15 @@ class ConsulProvider implements ProviderInterface
         $this->initService(config("discovery"));
         $url        = $this->getDiscoveryUrl($serviceName);
         try{
-            var_dump(sprintf("http://%s:%d%s",$this->address,$this->port,$url));
-            $result = SaberGM::get(sprintf("http://%s:%d%s",$this->address,$this->port,$url));
-            $services = $result->getParsedJsonArray();
+                $cli = new Client($this->address,$this->port);
+                $cli->setHeaders([
+                ]);
+                $cli->get($url);
+                $services = $cli->body;
+                $cli->close();
+                $services = json_decode($services,true);
+//            $result = SaberGM::get(sprintf("http://%s:%d%s",$this->address,$this->port,$url));
+//            $services = $result->getParsedJsonArray();
         }catch (\Throwable $e){
             return [];
         }

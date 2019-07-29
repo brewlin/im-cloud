@@ -30,13 +30,6 @@ class Stream implements StreamInterface
      * @var string
      */
     protected $contents = '';
-    public static $instance;
-    public static function getInstance(){
-        if(!isset(self::$instance)){
-            self::$instance = new self();
-        }
-        return self::$instance;
-    }
 
     /**
      * Create stream replace of constructor.
@@ -47,7 +40,8 @@ class Stream implements StreamInterface
      */
     public static function new(string $contents): self
     {
-        $instance = self::getInstance();
+        /** @var Stream $instance */
+        $instance = \bean(static::class);
 
         $instance->contents = $contents;
         $instance->size     = strlen($instance->contents);

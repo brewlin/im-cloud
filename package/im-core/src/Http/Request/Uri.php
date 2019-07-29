@@ -130,13 +130,6 @@ class Uri implements UriInterface
      * ]
      */
     private $params = [];
-    public static $instance;
-    public static function getInstance():Uri{
-        if(!isset(self::$instance)){
-            self::$instance = new self();
-        }
-        return self::$instance;
-    }
 
     /**
      * Create Url replace for constructor
@@ -150,7 +143,7 @@ class Uri implements UriInterface
     public static function new(string $uri = '', array $params = []): self
     {
         /** @var Uri $instance */
-        $instance = self::getInstance();
+        $instance = \bean(static::class);
 
         // Save some params
         $instance->params = $params;

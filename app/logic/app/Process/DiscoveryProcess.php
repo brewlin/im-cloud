@@ -45,7 +45,6 @@ class DiscoveryProcess extends AbstractProcess
         provider()->select()->registerService();
         while (true){
             $services = provider()->select()->getServiceList("grpc-im-cloud-node");
-            var_dump($services);
             if(empty($services)){
                 CLog::error("not find any instance node:grpc-im-cloud-node");
                 goto SLEEP;
