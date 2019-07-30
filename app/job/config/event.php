@@ -14,11 +14,13 @@ use \Core\Swoole\SwooleEvent;
 use \App\Event\WorkerStopListener;
 use \App\Event\ShutdownListener;
 use \App\Event\WorkerStartListener;
+use \App\Event\PipeMessageListener;
 
 return [
     //监听onpipmessage事件
     SwooleEvent::WORKER_STOP => new WorkerStopListener(),
     SwooleEvent::SHUTDOWN    => new ShutdownListener(),
     //监听websocket 事件
-    SwooleEvent::WORKER_START => new WorkerStartListener()
+    SwooleEvent::WORKER_START => new WorkerStartListener(),
+    SwooleEvent::PIPE_MESSAGE => new PipeMessageListener()
 ];

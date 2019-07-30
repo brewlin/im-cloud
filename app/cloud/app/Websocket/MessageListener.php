@@ -17,6 +17,7 @@ use Core\Swoole\MessageInterface;
 use Im\Logic\ConnectReply;
 use Im\Logic\ConnectReq;
 use Log\Helper\CLog;
+use function Swlib\Http\str;
 use Swoole\Websocket\Frame;
 use Swoole\Websocket\Server;
 
@@ -34,10 +35,11 @@ class MessageListener implements MessageInterface
     public function onMessage(Server $server, Frame $frame): void
     {
         $registerBucket = false;
-        CLog::info("fd:{$frame->fd} data:{$frame->data}");
+//        CLog::info("fd:{$frame->fd} data:{$frame->data}");
         try {
-            $data = $frame->data;
+            $data = substr($frame->data,5,strlen($frame->data) - 1);
             $data = json_decode($data, 1);
+            var_dump($data);
             if (!$data)
                 throw new \Exception("require token",0);
 
