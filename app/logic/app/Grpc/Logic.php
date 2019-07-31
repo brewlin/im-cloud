@@ -54,20 +54,24 @@ class Logic
     public function connect()
     {
         /**
-         * @var ConnectReq
          */
+        /** @var ConnectReq $req */
         $req = Parser::deserializeMessage([ConnectReq::class,null],request()->getRawBody());
         $res = container()->get(LogicConnection::class)
                     ->connection(
                         $req->getServer(),
                         $req->getCookie(),
-                        $req->getToken()
+                        json_decode($req->getToken(),true)
                     );
         $rpy = new ConnectReply();
+        if(!$res){
+            return response()->withContent(Parser::serializeMessage($rpy));
+        }
         $rpy->setMid($res["mid"]);
         $rpy->setKey($res["key"]);
         $rpy->setRoomID($res["roomID"]);
         $rpy->setAccepts($res["accepts"]);
+
         return Context::get()
                         ->getResponse()
                         ->withContent(Parser::serializeMessage($rpy));

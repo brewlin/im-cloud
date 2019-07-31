@@ -4,6 +4,7 @@ namespace Core\Http\Request;
 
 use function array_map;
 use function array_merge;
+use Core\Container\Mapping\Bean;
 use Core\Http\Stream;
 use function implode;
 use InvalidArgumentException;
@@ -303,7 +304,7 @@ trait MessageTrait
     public function getBody(): StreamInterface
     {
         if (!$this->stream) {
-            $this->stream = Stream::getInstance();
+            $this->stream = \bean(Stream::class);
         }
 
         return $this->stream;

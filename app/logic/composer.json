@@ -23,7 +23,8 @@
         "brewlin/im-core":"@dev",
         "brewlin/im-discovery":"@dev",
         "brewlin/im-process":"@dev",
-        "brewlin/im-queue":"@dev"
+        "brewlin/im-queue":"@dev",
+        "brewlin/im-redis":"@dev"
 
     },
     "autoload": {
@@ -59,6 +60,10 @@
         "6":{
             "type":"path",
             "url":"../../package/im-stdlib"
+        },
+        "7":{
+            "type":"path",
+            "url":"../../package/im-redis"
         },
         "packagist": {
             "type": "composer",

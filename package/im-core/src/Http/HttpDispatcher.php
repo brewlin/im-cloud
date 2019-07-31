@@ -27,9 +27,7 @@ class HttpDispatcher
         $context = HttpContext::new($request,$response);
         Context::set($context);
         CLog::info("http method:%s ,http url:%s",$request->getMethod(),$request->getUriPath());
-        /**
-         * @var Dispatcher
-         */
+        /** @var Dispatcher $dispatcher */
         $dispatcher = Container::getInstance()->get(HttpRouter::class)->dispatcher;
         $routeInfo = $dispatcher->dispatch($request->getMethod(),$request->getUriPath());
         $response = self::process($response,$routeInfo);
@@ -58,7 +56,7 @@ class HttpDispatcher
                 $response->withStatus(405)->withContent(self::METHOD_NOT_ALLOWED);
                 break;
             case Dispatcher::FOUND: // 找到对应的方法
-                try{
+//                try{
                     $handler = explode("/","/App".$routeInfo[1]); // 获得处理函数
                     $action = array_pop($handler);
                     $classname = implode($handler,"\\");
@@ -68,11 +66,11 @@ class HttpDispatcher
                     }else{
                         $response->withContent(json_encode($rsp));
                     }
-                }catch (\Throwable $e){
-                    CLog::info("router dispatcher is error:".$e->getMessage());
-                    $response->withStatus(500)
-                        ->withContent($e->getMessage());
-                }
+//                }catch (\Throwable $e){
+//                    CLog::info("router dispatcher is error:".$e->getMessage());
+//                    $response->withStatus(500)
+//                        ->withContent($e->getMessage());
+//                }
                 break;
         }
         return $response;

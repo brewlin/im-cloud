@@ -108,10 +108,10 @@ class RedisDb
      */
     protected $connections = [];
 
-    public  function __construct()
+    public  function init(array $redisConfig)
     {
-        $redisConfig = config("redis");
         $this->setConfig($redisConfig);
+        return $this;
     }
 
     /**

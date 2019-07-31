@@ -8,4 +8,7 @@
 return [
     "host" => "127.0.0.1",
     "port" => 6379,
+    "timeout" => 8,
+    "retry_interval" => 8,
+    "read_timeout" => 0
 ];

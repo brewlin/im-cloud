@@ -12,6 +12,7 @@ namespace App\Lib;
 use App\Service\Dao\RedisDao;
 use App\Service\Model\Online;
 use Core\Container\Mapping\Bean;
+use Log\Helper\CLog;
 
 /**
  * Class LogicConnection
@@ -29,8 +30,9 @@ class LogicConnection
      */
     public function connection(string $server,string $cookie,$token)
     {
+        CLog::info("logic node token:".json_encode($token));
+        $tokenKey = ['mid','room_id','platform','accepts'];
 
-        $tokenKey = ['mid','key','room_id','platform','accepts'];
         foreach ($tokenKey as $k){
             if(!isset($token[$k])){
                 return;

@@ -34,6 +34,7 @@ class RedisConnectionPool implements PoolConnectionInterface
         $this->config = $config;
 //        $this->connection =  new Connection($this);
         $this->name = RedisConnectionPool::class;
+        return $this;
     }
 
     public function getName(): string
@@ -44,7 +45,7 @@ class RedisConnectionPool implements PoolConnectionInterface
         return $this->config;
     }
 
-    public function createConnection(): PhpRedisConnector
+    public function createConnection(): \Redis
     {
         if(!$this->connection)
             $this->connection = (new PhpRedisConnector())->connect($this->config,[]);
@@ -64,10 +65,10 @@ class RedisConnectionPool implements PoolConnectionInterface
 
         $poolSize = (int)env("REDIS_POOL_SIZE",10);
         /** @var RedisDb $config */
-        $config = \bean(RedisDb::class);
+//        $config = \bean(RedisDb::class)->init(config("redis"));
         $chan = new Channel($poolSize);
         for($i = 0 ; $i < $poolSize; $i++){
-            $chan->push((new RedisConnectionPool())->init($config->getConfig()));
+            $chan->push((new RedisConnectionPool())->init(config("redis")));
         }
         $pool->registerPool(RedisConnectionPool::class,$chan);
     }
