@@ -10,6 +10,7 @@ namespace App\Websocket;
 
 
 use App\Lib\LogicClient;
+use App\Packet\Packet;
 use App\Service\Dao\Bucket;
 use App\Websocket\Exception\HandshakeException;
 use App\Websocket\Exception\RequireArgException;
@@ -35,11 +36,10 @@ class MessageListener implements MessageInterface
     public function onMessage(Server $server, Frame $frame): void
     {
         $registerBucket = false;
-//        CLog::info("fd:{$frame->fd} data:{$frame->data}");
+        CLog::info("fd:{$frame->fd} data:{$frame->data}");
         try {
-            $data = substr($frame->data,5,strlen($frame->data) - 1);
+            $data = bean(Packet::class)->unpack($frame->data);
             $data = json_decode($data, 1);
-            var_dump($data);
             if (!$data)
                 throw new \Exception("require token",0);
 
@@ -99,6 +99,8 @@ class MessageListener implements MessageInterface
 
         /** @var ConnectReply $rpy */
         $rpy = $rpcClient->Connect($connectReq);
+        if(!is_object($rpy))
+            throw new \Exception("grpc to logic failed");
         if(!$rpy){
             throw new \Exception("grpc to logic failed",0);
         }

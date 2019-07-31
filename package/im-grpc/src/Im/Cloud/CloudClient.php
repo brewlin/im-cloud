@@ -36,9 +36,9 @@ class CloudClient extends \Grpc\BaseStub {
      * @param array $metadata metadata
      * @param array $options call options
      */
-    public function CloseC(\Im\Cloud\PBEmpty $argument,
+    public function CClose(\Im\Cloud\PBEmpty $argument,
       $metadata = [], $options = []) {
-        return $this->_simpleRequest('/im.cloud.Cloud/CloseC',
+        return $this->_simpleRequest('/im.cloud.Cloud/CClose',
         $argument,
         ['\Im\Cloud\PBEmpty', 'decode'],
         $metadata, $options);

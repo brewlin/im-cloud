@@ -36,9 +36,11 @@ class LogicClient
      * @throws \Exception
      */
     public static function getLogicClient(){
+        if(empty(self::$serviceList))
+            throw new \Exception("not logic node find",0);
         $node = Container::getInstance()->get(RandomBalancer::class)->select(self::$serviceList);
         $client = new \Im\Logic\LogicClient($node,[
-            'credentials' => ChannelCredentials::createInsecure()
+//            'credentials' => ChannelCredentials::createInsecure()
         ]);
         $client->start();
         return $client;

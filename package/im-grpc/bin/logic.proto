@@ -109,7 +109,7 @@ service Logic {
     // Ping Service
     rpc Ping(PingReq) returns(PingReply);
     // Close Service
-    rpc Close(CloseReq) returns(CloseReply);
+    rpc CClose(CloseReq) returns(CloseReply);
     // Connect
     rpc Connect(ConnectReq) returns (ConnectReply);
     // Disconnect

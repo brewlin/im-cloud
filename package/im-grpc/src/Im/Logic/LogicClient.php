@@ -36,9 +36,9 @@ class LogicClient extends \Grpc\BaseStub {
      * @param array $metadata metadata
      * @param array $options call options
      */
-    public function Close(\Im\Logic\CloseReq $argument,
+    public function CClose(\Im\Logic\CloseReq $argument,
       $metadata = [], $options = []) {
-        return $this->_simpleRequest('/im.logic.Logic/Close',
+        return $this->_simpleRequest('/im.logic.Logic/CClose',
         $argument,
         ['\Im\Logic\CloseReply', 'decode'],
         $metadata, $options);

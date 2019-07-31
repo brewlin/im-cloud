@@ -49,7 +49,7 @@ service Cloud {
     // Ping Service
     rpc Ping(Empty) returns(Empty);
     // Close Service
-    rpc CloseC(Empty) returns(Empty);
+    rpc CClose(Empty) returns(Empty);
     //PushMsg push by key or mid
     rpc PushMsg(PushMsgReq) returns (PushMsgReply);
     // Broadcast send to every enrity

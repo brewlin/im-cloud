@@ -8,13 +8,14 @@
 
 namespace App\Packet;
 use Core\Container\Mapping\Bean;
+use Core\Contract\PackerInterface;
 
 /**
  * Class Packet
  * @package App\Packet
  * @Bean()
  */
-class Packet
+class Packet implements PackerInterface
 {
     const MaxBodySize = 1 << 12;
 	// size
@@ -34,7 +35,7 @@ class Packet
     const   _seqOffset    = self::_opOffset + self::_opSize;
 	const   _heartOffset  = self::_seqOffset + self::_seqSize;
 
-    public function pack()
+    public function pack($data):string
     {
 
     }
@@ -42,9 +43,25 @@ class Packet
     /**
      * @param string $buf
      */
-    public function unpack(string &$buf)
+    public function unpack(string $buf)
     {
-
+        if(strlen($buf) < self::_rawHeaderSize)
+            throw new PacketException("packet error hearder not enough",0);
+        //big endian int32
+        $packlen = unpack("N",substr($buf,self::_packOffset,self::_headerOffset))[1];
+        //big endian int16
+        $headerlen = unpack("n",substr($buf,self::_headerOffset,self::_verOffset))[1];
+        //big endian int16
+        $ver = unpack("n",substr($buf,self::_verOffset,self::_opOffset))[1];
+        //big endian int32
+        $op = unpack("N",substr($buf,self::_opOffset,self::_seqOffset))[1];
+        //big endian int32
+        $seq = unpack("N",substr($buf,self::_seqOffset,self::_heartOffset))[1];
+        if($packlen > self::_maxPackSize)
+            throw new PacketException("packet body too max");
+        if($headerlen != self::_rawHeaderSize)
+            return false;
+        return substr($buf,$headerlen,$packlen);
     }
 
 }
