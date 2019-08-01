@@ -92,13 +92,13 @@ class MessageListener implements MessageInterface
         $rpcClient = LogicClient::getLogicClient();
         $connectReq = new ConnectReq();
 
-        $serverId = env("GRPC_HOST","127.0.0.1").":".env("GRPC_PORT",9500);
+        $serverId = env("APP_HOST","127.0.0.1").":".env("GRPC_PORT",9500);
         $connectReq->setServer($serverId);
         $connectReq->setCookie("");
         $connectReq->setToken(json_encode($data));
 
         /** @var ConnectReply $rpy */
-        $rpy = $rpcClient->Connect($connectReq);
+        $rpy = $rpcClient->Connect($connectReq)[0];
         if(!is_object($rpy))
             throw new \Exception("grpc to logic failed");
         if(!$rpy){

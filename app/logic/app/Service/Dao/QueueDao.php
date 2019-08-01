@@ -10,9 +10,15 @@ namespace App\Service\Dao;
 
 
 use App\Lib\Producer;
+use Core\Container\Mapping\Bean;
 use Im\Cloud\Proto;
 use Im\Logic\PushMsg;
 
+/**
+ * Class QueueDao
+ * @package App\Service\Dao
+ * @Bean()
+ */
 class QueueDao
 {
     /**
@@ -23,16 +29,16 @@ class QueueDao
      * @param $msg
      * @throws \Throwable
      */
-    public function pushMsg(int $op,string $server,array $keys, $msg)
+    public function pushMsg(int $operation,string $server,array $keys, $msg)
     {
         $pushmsg = new PushMsg();
         $pushmsg->setType(PushMsg\Type::PUSH);
-        $pushmsg->setOperation($op);
+        $pushmsg->setOperation($operation);
         $pushmsg->setServer($server);
         $pushmsg->setKeys($keys);
         $pushmsg->setMsg($msg);
         //发送到队列里
-        producer()->produce(new Producer($pushmsg));
+        producer()->produce(new Producer(compact("operation","server","keys","msg")));
     }
 
     /**

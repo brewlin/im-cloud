@@ -12,6 +12,7 @@ namespace App\Api;
 use App\Api\MsgEnum;
 use App\Lib\LogicPush;
 use Core\Context\Context;
+use Log\Helper\CLog;
 use Swoft\Log\Helper\Log;
 
 class PushMidController extends BaseController
@@ -24,13 +25,14 @@ class PushMidController extends BaseController
         }
         $arg = [
             "op" => $post["operation"],
-            "keys" => $post["mids"],
-            "msg" => $post[""]
+            "mids" => is_array($post["mids"])?$post["mids"]:[$post["mids"]],
+            "msg" => $post["msg"]
         ];
+        CLog::info("push mids post data:".json_encode($arg));
         /**
          * @var LogicPush
          */
-        container()->get(LogicPush::class)->pushMids($arg["op"],$arg["keys"],$arg["msg"]);
+        container()->get(LogicPush::class)->pushMids($arg["op"],$arg["mids"],$arg["msg"]);
         return $this->success();
     }
 

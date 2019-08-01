@@ -8,11 +8,14 @@
 
 namespace App\Lib;
 
+use Core\Container\Mapping\Bean;
 use Im\Logic\PushMsg;
+use Log\Helper\CLog;
 
 /**
  * Class Job
  * @package App\Lib
+ * @Bean()
  */
 class Job
 {
@@ -22,6 +25,7 @@ class Job
      */
     public function push($pushmsg)
     {
+        CLog::info("job node push msg:".$pushmsg->getType());
         switch ($pushmsg->getType())
         {
             case PushMsg\Type::PUSH:

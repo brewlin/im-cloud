@@ -80,7 +80,6 @@ class RedisDao
      */
     public function serverOnline(string $server)
     {
-        CLog::info("serverOnline $server ");
         $key = $this->keyServerOnline($server);
         $online = new Online();
 

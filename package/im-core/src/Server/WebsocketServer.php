@@ -29,11 +29,15 @@ class WebsocketServer extends Server
     }
     public function defaultSetting():array
     {
-        return [
+        $serverConfig = config("server");
+        $default = [
             'daemonize' => (int)env("DAEMONIZE", 0),
             'worker_num' => (int)env("WORKER_NUM", 4),
             'open_http2_protocol' => (bool)env("ENABLE_GRPC",false),
         ];
+        if(!empty($serverConfig['setting']))
+            $default = array_merge($default,$serverConfig['setting']);
+        return $default;
     }
     /**
      * start http server
