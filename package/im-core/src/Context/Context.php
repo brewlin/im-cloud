@@ -32,6 +32,15 @@ class Context
      * ]
      */
     private static $context = [];
+    /**
+     * @var array
+     * @example
+     * [
+     *      'key' => $value,
+     *      'key2' => $value2
+     * ]
+     */
+    private static $contextArg = [];
 
     /**
      * Get context
@@ -72,6 +81,26 @@ class Context
     }
 
     /**
+     * @param string $key
+     * @param $value
+     */
+    public static function withValue(string $key,$value):void
+    {
+        $tid = Co::tid();
+        self::$contextArg[$tid][$key] = $value;
+    }
+
+    /**
+     * @param string $key
+     * @return mixed
+     */
+    public static function value(string $key)
+    {
+        $tid = Co::tid();
+        return self::$contextArg[$tid][$key];
+    }
+
+    /**
      * Get context wait group
      *
      * @return ContextWaitGroup
@@ -97,6 +126,7 @@ class Context
             // clear self data.
             self::$context[$tid]->clear();
             unset(self::$context[$tid]);
+            unset(self::$contextArg[$tid]);
         }
     }
     /**

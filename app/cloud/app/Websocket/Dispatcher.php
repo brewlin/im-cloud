@@ -11,6 +11,7 @@ namespace App\Websocket;
 use App\Packet\Packet;
 use App\Packet\Protocol;
 use App\Service\Service\Auth;
+use App\Service\Service\Heartbeat;
 use Core\Container\Mapping\Bean;
 use Core\Context\Context;
 
@@ -21,7 +22,11 @@ use Core\Context\Context;
  */
 class Dispatcher
 {
-    public function dispatch(Packet $packet,int $fd)
+    /**
+     * @param Packet $packet
+     * @param int $fd
+     */
+    public function dispatch(Packet $packet)
     {
         switch ($packet->getOperation())
         {
@@ -30,6 +35,10 @@ class Dispatcher
                            ->auth($packet->getBody());
                 break;
             case Protocol::Heartbeat:
+                container()->get(Heartbeat::class)
+                           ->heartbeat();
+                break;
+            default:
         }
     }
 

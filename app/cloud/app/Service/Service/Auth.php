@@ -9,11 +9,16 @@
 namespace App\Service\Service;
 
 use App\Lib\LogicClient;
+use App\Packet\Packet;
+use App\Packet\Protocol;
 use App\Service\Dao\Bucket;
 use App\Websocket\Exception\RequireArgException;
+use Core\Cloud;
 use Core\Container\Mapping\Bean;
+use Core\Context\Context;
 use Im\Logic\ConnectReply;
 use Im\Logic\ConnectReq;
+use Log\Helper\CLog;
 
 /**
  * Class Auth
@@ -22,18 +27,32 @@ use Im\Logic\ConnectReq;
  */
 class Auth
 {
+    /**
+     * connect event
+     * @param array $body
+     * @param int $fd
+     * @throws \Exception
+     */
     public function auth(array $body)
     {
-        $registerBucket = true;
+        $fd = Context::value("fd");
         //check data
         $this->checkAuth($body);
         //grpc - register to logic node
-        [$mid,$key,$roomId,$accepts,$heartbeat] = $this->registerLogic($body);
-        Bucket::put($roomId,$key,$fd);
-        if($registerBucket)
+        try{
+            //step 1
+            [$mid,$key,$roomId,$accepts,$heartbeat] = $this->registerLogic($body);
+            //step 2
+            Bucket::put($roomId,$key,$fd);
+            //step 3
+            $this->registerSuccess();
+        }catch (\Throwable $e){
+            CLog::error("auth error fd:$fd {$e->getMessage()}");
             Bucket::del($roomId,$key,$fd);
+        }
     }
     /**
+     * step 1
      * token check '{"mid":123, "room_id":"live://1000", "platform":"web", "accepts":[1000,1001,1002]}'
      * @param array $data
      * @throws \Exception
@@ -49,6 +68,7 @@ class Auth
 
     }
     /**
+     * step 2
      * token check '{"mid":123, "room_id":"live://1000", "platform":"web", "accepts":[1000,1001,1002]}'
      * @param array $data
      * @return array
@@ -72,6 +92,20 @@ class Auth
         }
         return [$rpy->getMid(),$rpy->getKey(),$rpy->getRoomID(),$rpy->getAccepts(),$rpy->getHeartbeat()];
 
+    }
+
+    /**
+     * step 3
+     */
+    public function registerSuccess()
+    {
+        $fd = Context::value("fd");
+        /** @var Packet $packet */
+        $packet = \bean(Packet::class);
+        $packet->setOperation(Protocol::AuthReplyOk);
+        $buf = $packet->pack(json_encode(["ok" => "yes"]));
+        Cloud::server()->getSwooleServer()->push($fd,$buf);
+        CLog::info("register success reply client buf:".$buf);
     }
 
 }

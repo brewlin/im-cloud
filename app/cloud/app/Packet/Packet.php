@@ -10,6 +10,7 @@ namespace App\Packet;
 use Core\Container\Mapping\Bean;
 use Core\Contract\PackerInterface;
 use Im\Cloud\Proto;
+use Log\Helper\CLog;
 
 /**
  * Class Packet
@@ -21,7 +22,7 @@ class Packet implements PackerInterface
     /**
      * @var int
      */
-	private $ver;
+	private $ver = 1;
     /**
      * @var int
      */
@@ -33,15 +34,21 @@ class Packet implements PackerInterface
     /**
      * @var int
      */
-	private $seq;
+	private $seq = 1;
 
     /**
      * @param $data
      * @return string
      */
-    public function pack($data):string
+    public function pack($buf):string
     {
-
+        if(empty($buf)){
+            CLog::error("pack error buf is none");
+        }
+        $packLen = Protocol::_rawHeaderSize + strlen($buf);
+	    $header = pack("NnnNN",$packLen,Protocol::_rawHeaderSize,$this->ver,$this->op,$this->seq);
+	    $buf = $header.$buf;
+	    return $buf;
     }
 
 
@@ -71,7 +78,6 @@ class Packet implements PackerInterface
 
         if($headerlen != Protocol::_rawHeaderSize)
             return false;
-
         $body = substr($buf,$headerlen,$packlen);
         $this->body = json_decode($body,true);
         return $this;

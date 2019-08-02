@@ -15,6 +15,7 @@ use App\Packet\Protocol;
 use App\Service\Dao\Bucket;
 use App\Websocket\Exception\HandshakeException;
 use App\Websocket\Exception\RequireArgException;
+use Core\Context\Context;
 use Core\Swoole\MessageInterface;
 use Im\Logic\ConnectReply;
 use Im\Logic\ConnectReq;
@@ -30,7 +31,7 @@ use Swoole\Websocket\Server;
  */
 class MessageListener implements MessageInterface
 {
-    const MisToken = "require token";
+    const MisBody = "require data";
     /**
      * @param Server $server
      * @param Frame $frame
@@ -43,12 +44,12 @@ class MessageListener implements MessageInterface
             $packet = bean(Packet::class)->unpack($frame->data);
             $data = $packet->getBody();
             if (!$data)
-                throw new \Exception(self::MisToken,0);
-
+                throw new \Exception(self::MisBody,0);
+            Context::withValue("fd",$frame->fd);
+            Context::withValue("body",$data);
+            //dispatch
             container()->get(Dispatcher::class)
-                       ->dispatch($packet,$frame->fd);
-
-
+                       ->dispatch($packet);
         } catch (\Throwable $e) {
             $file = $e->getFile();
             $line = $e->getLine();
@@ -57,10 +58,10 @@ class MessageListener implements MessageInterface
             $msg = $e->getMessage();
             $returnData = ['code' => $code,'msg' => $msg];
             CLog::error("file:".$file." line:$line code:$code msg:$exception");
-
-            $server->push($frame->fd,json_encode($returnData));
+//            $server->push($frame->fd,json_encode($returnData));
             $server->close($frame->fd);
         }
+        Context::compelete();
     }
 
 }

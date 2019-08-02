@@ -12,14 +12,19 @@ namespace App\Packet;
 class Protocol
 {
     /**
+     * heartbeat
+     */
+    const Heartbeat = 2;
+    /**
      * auth to connect the server
      */
     const Auth = 7;
     /**
-     * heartbeat
+     * auth
      */
-    const Heartbeat = 2;
+    const AuthReplyOk = 8;
 
+    //max size
     const MaxBodySize = 1 << 12;
     // size
     const	 _packSize      = 4;
