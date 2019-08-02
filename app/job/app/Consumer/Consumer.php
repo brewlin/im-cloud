@@ -10,8 +10,10 @@ namespace App\Consumer;
 
 
 use App\Lib\Job;
+use Co\Client;
 use Im\Logic\PushMsg;
 use ImQueue\Amqp\Message\ConsumerMessage;
+use Log\Helper\CLog;
 
 /**
  * Class Consumer
@@ -33,9 +35,20 @@ class Consumer extends ConsumerMessage
      */
     public function consume($data): string
     {
+        CLog::info("job node consume data:".json_encode($data));
         /** @var Job $job */
         $job = container()->get(Job::class);
-        $job->push($data);
+        $pushMsg = new PushMsg($data);
+        foreach ($data as $key => $value){
+            $method = 'set'.ucfirst($key);
+            if(method_exists($pushMsg,$method)){
+                $pushMsg->{$method}($value);
+            }else{
+                CLog::error("pushmsg not exist method:".$method);
+                return '';
+            }
+        }
+        $job->push($pushMsg);
     }
 
 }

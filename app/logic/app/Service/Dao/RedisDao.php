@@ -124,6 +124,11 @@ class RedisDao
         Redis::expire($this->keyKeyServer($key),self::$redisExpire);
         CLog::info("addMapping set $mid $key $server");
     }
+
+    /**
+     * @param int $mid
+     * @param string $key
+     */
     public function expireMapping(int $mid,string $key)
     {
         if($mid > 0){

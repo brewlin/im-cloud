@@ -9,5 +9,6 @@ return [
     'setting' => [
         'daemonize' => (int)env("DAEMONIZE", 0),
         'worker_num' => (int)env("WORKER_NUM", 4),
+        'http_parse_post' => true,
     ]
 ];

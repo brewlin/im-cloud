@@ -104,7 +104,7 @@ class MessageListener implements MessageInterface
         if(!$rpy){
             throw new \Exception("grpc to logic failed",0);
         }
-        return [$rpy->getMid(),$rpy->getKey(),$rpy->getRoomID(),$rpy->getAccepts(),$rpy->getRoomID(),$rpy->getHeartbeat()];
+        return [$rpy->getMid(),$rpy->getKey(),$rpy->getRoomID(),$rpy->getAccepts(),$rpy->getHeartbeat()];
 
     }
 

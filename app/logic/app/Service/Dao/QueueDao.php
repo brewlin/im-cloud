@@ -13,6 +13,7 @@ use App\Lib\Producer;
 use Core\Container\Mapping\Bean;
 use Im\Cloud\Proto;
 use Im\Logic\PushMsg;
+use Log\Helper\CLog;
 
 /**
  * Class QueueDao
@@ -31,14 +32,11 @@ class QueueDao
      */
     public function pushMsg(int $operation,string $server,array $keys, $msg)
     {
-        $pushmsg = new PushMsg();
-        $pushmsg->setType(PushMsg\Type::PUSH);
-        $pushmsg->setOperation($operation);
-        $pushmsg->setServer($server);
-        $pushmsg->setKeys($keys);
-        $pushmsg->setMsg($msg);
+        $type = PushMsg\Type::PUSH;
+        $pushmsg = compact("type","operation","server","keys","msg");
+        CLog::info("push msg to job node data:".json_encode($pushmsg));
         //发送到队列里
-        producer()->produce(new Producer(compact("operation","server","keys","msg")));
+        producer()->produce(new Producer($pushmsg));
     }
 
     /**
@@ -47,13 +45,12 @@ class QueueDao
      * @param string $room
      * @param $msg
      */
-    public function broadcastRoomMsg(int $op,string $room,$msg)
+    public function broadcastRoomMsg(int $operation,string $room,$msg)
     {
-        $pushmsg = new PushMsg();
-        $pushmsg->setType(PushMsg\Type::ROOM);
-        $pushmsg->setMsg($msg);
-        $pushmsg->setOperation($op);
-        $pushmsg->setRoom($room);
+
+        $type = PushMsg\Type::ROOM;
+        $pushmsg = compact("type","operation","room","msg");
+        CLog::info("push msg to job node data:".json_encode($pushmsg));
         //发送到队列里
         producer()->produce(new Producer($pushmsg));
     }
@@ -64,12 +61,11 @@ class QueueDao
      * @param int $peed
      * @param $msg
      */
-    public function broadcastMsg(int $op,int $speed,$msg)
+    public function broadcastMsg(int $operation,int $speed,$msg)
     {
-        $pushmsg = new PushMsg();
-        $pushmsg->setOperation($op);
-        $pushmsg->setSpeed($speed);
-        $pushmsg->setMsg($msg);
+        $type = PushMsg\Type::BROADCAST;
+        $pushmsg = compact("type","operation","speed","msg");
+        CLog::info("push msg to job node data:".json_encode($pushmsg));
         //发送到队列里
         \producer()->produce(new Producer($pushmsg));
     }

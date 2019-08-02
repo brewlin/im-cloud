@@ -21,6 +21,12 @@ use Core\Container\Mapping\Bean;
  */
 class LogicPush
 {
+    /**
+     * @param int $op
+     * @param array $keys
+     * @param $msg
+     * @throws \Exception
+     */
     public function pushKeys(int $op,array $keys,$msg)
     {
         /** @var RedisDao $servers */
@@ -36,6 +42,13 @@ class LogicPush
             \container()->get(QueueDao::class)->pushMsg($op,$server,$pushKeys[$server],$msg);
         }
     }
+
+    /**
+     * @param int $op
+     * @param array $mids
+     * @param $msg
+     * @throws \Exception
+     */
     public function pushMids(int $op,array $mids,$msg)
     {
         /** @var RedisDao $servers */

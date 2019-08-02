@@ -11,6 +11,8 @@ namespace App\Api;
 
 use App\Api\MsgEnum;
 use App\Lib\LogicPush;
+use Co\Client;
+use Core\Cloud;
 use Core\Context\Context;
 use Log\Helper\CLog;
 use Swoft\Log\Helper\Log;
@@ -20,7 +22,7 @@ class PushMidController extends BaseController
     public function mids()
     {
         $post  = Context::get()->getRequest()->input();
-        if(empty($post["operation"]) || empty($post["mids"])){
+        if(empty($post["operation"]) || empty($post["mids"]) ||empty($post["msg"])){
             return $this->error("缺少参数");
         }
         $arg = [

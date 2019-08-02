@@ -23,9 +23,9 @@ class Job
      * 消费 队列数据后分发
      * @param $pushmsg PushMsg
      */
-    public function push($pushmsg)
+    public function push(PushMsg $pushmsg)
     {
-        CLog::info("job node push msg:".$pushmsg->getType());
+        CLog::info("job node push msgType:".$pushmsg->getType());
         switch ($pushmsg->getType())
         {
             case PushMsg\Type::PUSH:
@@ -35,6 +35,7 @@ class Job
                     $pushmsg->getKeys(),
                     $pushmsg->getMsg()
                 );
+                break;
             case PushMsg\Type::ROOM:
                 container()->get(PushRoom::class)->push(
                     $pushmsg->getRoom(),
@@ -42,6 +43,7 @@ class Job
                     $pushmsg->getMsg()
 
                 );
+                break;
             case PushMsg\Type::BROADCAST:
                 container()->get(Broadcast::class)->push(
                     $pushmsg->getOperation(),
