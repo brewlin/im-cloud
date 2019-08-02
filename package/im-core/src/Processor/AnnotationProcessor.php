@@ -47,7 +47,7 @@ class AnnotationProcessor extends Processor
     {
         switch ($type) {
             case 'excludeNs':
-                CLog::debug('Exclude namespace %s', $target);
+//                CLog::debug('Exclude namespace %s', $target);
                 break;
             case 'noLoaderFile':
                 CLog::debug('No autoloader on %s', $target);
@@ -56,13 +56,13 @@ class AnnotationProcessor extends Processor
                 CLog::debug('Autoloader class not exist %s', $target);
                 break;
             case 'findLoaderClass':
-                CLog::debug('Find autoloader %s', $target);
+//                CLog::debug('Find autoloader %s', $target);
                 break;
             case 'addLoaderClass':
                 CLog::debug('Parse autoloader %s', $target);
                 break;
             case 'noExistClass':
-                CLog::debug('Not exist class %s', $target);
+//                CLog::debug('Not exist class %s', $target);
                 break;
         }
     }

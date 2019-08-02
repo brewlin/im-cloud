@@ -9,6 +9,7 @@
 namespace App\Packet;
 use Core\Container\Mapping\Bean;
 use Core\Contract\PackerInterface;
+use Im\Cloud\Proto;
 
 /**
  * Class Packet
@@ -17,51 +18,110 @@ use Core\Contract\PackerInterface;
  */
 class Packet implements PackerInterface
 {
-    const MaxBodySize = 1 << 12;
-	// size
-    const	 _packSize      = 4;
-	const   _headerSize    = 2;
-	const   _verSize       = 2;
-	const   _opSize        = 4;
-	const   _seqSize       = 4;
-	const   _heartSize     = 4;
-	const   _rawHeaderSize = self::_packSize + self::_headerSize + self::_verSize + self::_opSize + self::_seqSize;
-    const   _maxPackSize   = self::MaxBodySize + self::_rawHeaderSize;
-	// offset
-	const   _packOffset   = 0;
-	const   _headerOffset = self::_packOffset + self::_packSize;
-	const   _verOffset    = self::_headerOffset + self::_headerSize;
-	const _opOffset     = self::_verOffset + self::_verSize;
-    const   _seqOffset    = self::_opOffset + self::_opSize;
-	const   _heartOffset  = self::_seqOffset + self::_seqSize;
+    /**
+     * @var int
+     */
+	private $ver;
+    /**
+     * @var int
+     */
+	private $op;
+    /**
+     * @var array
+     */
+	private $body;
+    /**
+     * @var int
+     */
+	private $seq;
 
+    /**
+     * @param $data
+     * @return string
+     */
     public function pack($data):string
     {
 
     }
 
+
     /**
      * @param string $buf
+     * @return $this|bool
+     * @throws PacketException
      */
     public function unpack(string $buf)
     {
-        if(strlen($buf) < self::_rawHeaderSize)
+        if(strlen($buf) < Protocol::_rawHeaderSize)
             throw new PacketException("packet error hearder not enough",0);
+
         //big endian int32
-        $packlen = unpack("N",substr($buf,self::_packOffset,self::_headerOffset))[1];
+        $packlen = unpack("N",substr($buf,Protocol::_packOffset,Protocol::_headerOffset))[1];
         //big endian int16
-        $headerlen = unpack("n",substr($buf,self::_headerOffset,self::_verOffset))[1];
+        $headerlen = unpack("n",substr($buf,Protocol::_headerOffset,Protocol::_verOffset))[1];
         //big endian int16
-        $ver = unpack("n",substr($buf,self::_verOffset,self::_opOffset))[1];
+        $this->ver = unpack("n",substr($buf,Protocol::_verOffset,Protocol::_opOffset))[1];
         //big endian int32
-        $op = unpack("N",substr($buf,self::_opOffset,self::_seqOffset))[1];
+        $this->op = unpack("N",substr($buf,Protocol::_opOffset,Protocol::_seqOffset))[1];
         //big endian int32
-        $seq = unpack("N",substr($buf,self::_seqOffset,self::_heartOffset))[1];
-        if($packlen > self::_maxPackSize)
+        $this->seq = unpack("N",substr($buf,Protocol::_seqOffset,Protocol::_heartOffset))[1];
+
+        if($packlen > Protocol::_maxPackSize)
             throw new PacketException("packet body too max");
-        if($headerlen != self::_rawHeaderSize)
+
+        if($headerlen != Protocol::_rawHeaderSize)
             return false;
-        return substr($buf,$headerlen,$packlen);
+
+        $body = substr($buf,$headerlen,$packlen);
+        $this->body = json_decode($body,true);
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOperation()
+    {
+        return $this->op;
+    }
+
+    /**
+     * @param int $op
+     */
+    public function setOperation(int $op)
+    {
+        $this->op = $op;
+    }
+    /**
+     * @return int
+     */
+    public function getVer()
+    {
+        return $this->ver;
+    }
+
+    /**
+     * @param int $ver
+     */
+    public function setVer(int $ver)
+    {
+        $this->ver = $ver;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBody()
+    {
+        return $this->body;
+    }
+
+    /**
+     * @param array $body
+     */
+    public function setBody(array $body)
+    {
+        $this->body = $body;
     }
 
 }
