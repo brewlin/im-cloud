@@ -24,11 +24,12 @@ class Push
      * @param int $fd
      * @param $data
      */
-    public function push(int $fd,$data)
+    public function push(string $key,$data)
     {
-        CLog::info("Cloud push:$fd  data:".json_encode($data));
+        CLog::info("Cloud push:{$key}  data:".json_encode($data));
+        if(!($fd = Bucket::fd($key))) return;
         if(!($clientinfo = Cloud::server()->getSwooleServer()->getClientInfo($fd))){
-            CLog::info("连接 fd:$fd 不存在,待发送数据:".json_encode($data));
+            CLog::info("连接 fd:{$fd} 不存在,待发送数据:".json_encode($data));
            return;
         }
         //判断为websocket连接且已经握手完毕

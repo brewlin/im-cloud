@@ -10,6 +10,7 @@ namespace App\Service\Dao;
 
 
 use ImRedis\Redis;
+use Log\Helper\CLog;
 
 class Bucket
 {
@@ -29,7 +30,7 @@ class Bucket
     public static function put(string $roomId = "",string $key,int $fd)
     {
         //ip ++
-        Redis::hIncrBy(self::IpCounts,env("GRPC_HOST","127.0.0.1"),1);
+        Redis::hIncrBy(self::IpCounts,env("APP_HOST","127.0.0.1"),1);
         //bind key to fd
         Redis::set(sprintf(self::KeyToFd,$key),$fd);
         if(empty($roomId)){
@@ -55,7 +56,7 @@ class Bucket
             Redis::sRem(sprintf(self::RoomFds,$roomId),$fd);
         }
         //ip count --
-        Redis::hIncrBy(self::IpCounts,env("GRPC_HOST","127.0.0.1"),-1);
+        Redis::hIncrBy(self::IpCounts,env("APP_HOST","127.0.0.1"),-1);
     }
 
     /**
@@ -73,5 +74,18 @@ class Bucket
     public static function roomfds(string $roomId)
     {
         return Redis::sMembers(sprintf(self::RoomFds,$roomId));
+    }
+
+    /**
+     * @param string $key
+     * @return bool|mixed
+     */
+    public static function fd(string $key){
+        $fd = Redis::get(sprintf(self::KeyToFd,$key));
+        if(empty($fd)){
+            CLog::error("key to fd :not find key:$key");
+        }
+        return $fd;
+
     }
 }

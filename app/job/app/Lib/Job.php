@@ -26,13 +26,17 @@ class Job
     public function push(PushMsg $pushmsg)
     {
         CLog::info("job node push msgType:".$pushmsg->getType());
+        $keys = [];
+        foreach ($pushmsg->getKeys()->getIterator() as $v){
+            $keys[] = $v;
+        }
         switch ($pushmsg->getType())
         {
             case PushMsg\Type::PUSH:
                 container()->get(PushKey::class)->push(
                     $pushmsg->getOperation(),
                     $pushmsg->getServer(),
-                    $pushmsg->getKeys(),
+                    $keys,
                     $pushmsg->getMsg()
                 );
                 break;

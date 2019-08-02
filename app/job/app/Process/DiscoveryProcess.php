@@ -42,6 +42,7 @@ class DiscoveryProcess extends AbstractProcess
      */
     public function run(Process $process)
     {
+        CLog::info("discvoery process start");
         //job节点无需注册 服务中心
         $config = config("discovery");
         $discoveryname = $config["consul"]["discovery"]["name"];
@@ -54,8 +55,8 @@ class DiscoveryProcess extends AbstractProcess
             for($i = 0; $i < (int)env("WORKER_NUM",4);$i++)
             {
                 //将可以用的服务同步到所有的worker进程
-                $sync = ["call" => [LogicClient::class,"updateService"],"arg" => [$services]];
-                Cloud::server()->getSwooleServer()->sendMessage($sync,$i);
+//                $sync = ["call" => [LogicClient::class,"updateService"],"arg" => [$services]];
+                Cloud::server()->getSwooleServer()->sendMessage($services,$i);
             }
             //独立子进程直接sleep阻塞即可
 SLEEP:

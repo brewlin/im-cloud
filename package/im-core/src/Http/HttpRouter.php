@@ -27,7 +27,7 @@ class HttpRouter
      * @var Dispatcher
      */
     public $dispatcher;
-    public static $router;
+    public static $router = [];
 
     /**
      * @param $name

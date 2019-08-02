@@ -13,6 +13,7 @@ use App\Lib\Job;
 use Co\Client;
 use Im\Logic\PushMsg;
 use ImQueue\Amqp\Message\ConsumerMessage;
+use ImQueue\Amqp\Result;
 use Log\Helper\CLog;
 
 /**
@@ -45,10 +46,20 @@ class Consumer extends ConsumerMessage
                 $pushMsg->{$method}($value);
             }else{
                 CLog::error("pushmsg not exist method:".$method);
-                return '';
+                return Result::DROP;
             }
         }
         $job->push($pushMsg);
+        return Result::ACK;
+    }
+
+    /**
+     * 重新排队
+     * @return bool
+     */
+    public function isRequeue(): bool
+    {
+        return true;
     }
 
 }

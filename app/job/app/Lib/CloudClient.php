@@ -12,6 +12,7 @@ namespace App\Lib;
 use Core\Container\Container;
 use Discovery\Balancer\RandomBalancer;
 use Grpc\ChannelCredentials;
+use Log\Helper\CLog;
 
 class CloudClient
 {
@@ -30,13 +31,18 @@ class CloudClient
      * @throws \Exception
      */
     public static function getCloudClient($serverId = ""){
+        //push
         if($serverId)
-            $node = self::$serviceList[$serverId];
-        else
+            if(in_array($serverId,self::$serviceList))
+                $node  = $serverId;
+        else//broadcast && broadcastroom
             $node = Container::getInstance()->get(RandomBalancer::class)->select(self::$serviceList);
-        if(empty($node))return null;
+        if(empty($node)){
+            CLog::error("serverid:$serverId not find any node instance");
+            return null;
+        }
         $client = new \Im\Cloud\CloudClient($node,[
-            'credentials' => ChannelCredentials::createInsecure()
+//            'credentials' => ChannelCredentials::createInsecure()
         ]);
         $client->start();
         return $client;
