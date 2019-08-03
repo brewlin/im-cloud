@@ -26,14 +26,18 @@ class Dispatcher
      * @param Packet $packet
      * @param int $fd
      */
-    public function dispatch(Packet $packet)
+    public function dispatch()
     {
+        /** @var Packet $packet */
+        $packet = Context::value(Packet::class);
         switch ($packet->getOperation())
         {
+            //register
             case Protocol::Auth:
                 container()->get(Auth::class)
-                           ->auth($packet->getBody());
+                           ->auth();
                 break;
+            //heartbeat
             case Protocol::Heartbeat:
                 container()->get(Heartbeat::class)
                            ->heartbeat();

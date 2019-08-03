@@ -48,7 +48,7 @@ class Packet implements PackerInterface
         $packLen = Protocol::_rawHeaderSize + strlen($buf);
 	    $header = pack("NnnNN",$packLen,Protocol::_rawHeaderSize,$this->ver,$this->op,$this->seq);
 	    $buf = $header.$buf;
-	    return $buf;
+        return $buf;
     }
 
 

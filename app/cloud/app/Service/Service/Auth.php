@@ -27,17 +27,19 @@ use Log\Helper\CLog;
  */
 class Auth
 {
+    const MisBody = "require data";
     /**
      * connect event
-     * @param array $body
-     * @param int $fd
      * @throws \Exception
      */
-    public function auth(array $body)
+    public function auth()
     {
         $fd = Context::value("fd");
+        /** @var Packet $packet */
+        $packet = Context::value(Packet::class);
+        $body = $packet->getBody();
         //check data
-        $this->checkAuth($body);
+        $this->checkAuth($packet);
         //grpc - register to logic node
         try{
             //step 1
@@ -57,8 +59,11 @@ class Auth
      * @param array $data
      * @throws \Exception
      */
-    public function checkAuth(array $data)
+    public function checkAuth(Packet $packet)
     {
+        $data = $packet->getBody();
+        if (empty($data))
+            throw new \Exception(self::MisBody,0);
         $keyField = ['mid','room_id','platform','accepts'];
         foreach ($keyField as $key){
             if(!isset($data[$key])){
@@ -95,6 +100,7 @@ class Auth
     }
 
     /**
+     * websocket 针对前段js 需要设置websocket_opcode_binary 二进制流传输
      * step 3
      */
     public function registerSuccess()
@@ -104,7 +110,7 @@ class Auth
         $packet = \bean(Packet::class);
         $packet->setOperation(Protocol::AuthReplyOk);
         $buf = $packet->pack(json_encode(["ok" => "yes"]));
-        Cloud::server()->getSwooleServer()->push($fd,$buf);
+        Cloud::server()->getSwooleServer()->push($fd,$buf,WEBSOCKET_OPCODE_BINARY);
         CLog::info("register success reply client buf:".$buf);
     }
 

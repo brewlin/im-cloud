@@ -7,7 +7,11 @@
  */
 
 namespace App\Service\Service;
+use App\Packet\Packet;
+use App\Packet\Protocol;
+use Core\Cloud;
 use Core\Container\Mapping\Bean;
+use Core\Context\Context;
 
 /**
  * Class Heartbeat
@@ -16,8 +20,19 @@ use Core\Container\Mapping\Bean;
  */
 class Heartbeat
 {
-    public function heartbeat()
+    const HeartBeatReply = '{"hreart":"ok"}';
+    /**
+     * heartbeat
+     * @return void
+     */
+    public function heartbeat():void
     {
+        $fd = Context::value("fd");
+        /** @var Packet $packet */
+        $packet = \bean(Packet::class);
+        $packet->setOperation(Protocol::HeartbeatReplyOk);
+        $buf = $packet->pack(self::HeartBeatReply);
+        Cloud::server()->getSwooleServer()->push($fd,$buf,WEBSOCKET_OPCODE_BINARY);
 
     }
 

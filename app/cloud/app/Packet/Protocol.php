@@ -16,6 +16,10 @@ class Protocol
      */
     const Heartbeat = 2;
     /**
+     * heartbeat reply
+     */
+    const HeartbeatReplyOk = 3;
+    /**
      * auth to connect the server
      */
     const Auth = 7;
