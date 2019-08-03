@@ -41,7 +41,7 @@ class LogicConnection
         $mid = $token['mid'];
         $roomID = $token["room_id"];
         $accepts = $token["accepts"];
-        $key = $token["key"];
+        $key = isset($token["key"])?$token["key"]:"";
         if(empty($key)){
             mt_srand();
             $key = md5(uniqid(mt_rand()));

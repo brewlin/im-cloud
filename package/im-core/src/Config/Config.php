@@ -13,7 +13,6 @@ use Stdlib\Helper\ArrayHelper;
 
 /**
  * Class Config
- * @Bean()
  */
 class Config extends Collection
 {

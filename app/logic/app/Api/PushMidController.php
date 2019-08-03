@@ -19,6 +19,9 @@ use Swoft\Log\Helper\Log;
 
 class PushMidController extends BaseController
 {
+    /**
+     * @return \Core\Http\Response\Response|static
+     */
     public function mids()
     {
         $post  = Context::get()->getRequest()->input();

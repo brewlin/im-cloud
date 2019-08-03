@@ -45,6 +45,9 @@ class Packet implements PackerInterface
         if(empty($buf)){
             CLog::error("pack error buf is none");
         }
+        if(!is_string($buf)){
+            $buf = json_encode($buf);
+        }
         $packLen = Protocol::_rawHeaderSize + strlen($buf);
 	    $header = pack("NnnNN",$packLen,Protocol::_rawHeaderSize,$this->ver,$this->op,$this->seq);
 	    $buf = $header.$buf;

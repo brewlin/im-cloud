@@ -53,8 +53,6 @@ class Logic
      */
     public function connect()
     {
-        /**
-         */
         /** @var ConnectReq $req */
         $req = Parser::deserializeMessage([ConnectReq::class,null],request()->getRawBody());
         $res = container()->get(LogicConnection::class)

@@ -9,6 +9,8 @@
 namespace App\Service\Dao;
 
 
+use App\Packet\Packet;
+use App\Packet\Protocol;
 use Core\Cloud;
 use Core\Container\Mapping\Bean;
 use Log\Helper\CLog;
@@ -34,7 +36,11 @@ class Push
         }
         //判断为websocket连接且已经握手完毕
         if(isset($clientinfo['websocket_status']) && $clientinfo['websocket_status'] == WEBSOCKET_STATUS_FRAME){
-            Cloud::server()->getSwooleServer()->push($fd,$data);
+            /** @var Packet $packet */
+            $packet = \bean(Packet::class);
+            $packet->setOperation(Protocol::PushClient);
+            $buf = $packet->pack($data);
+            Cloud::server()->getSwooleServer()->push($fd,$buf,WEBSOCKET_OPCODE_BINARY);
             return;
         }
         Cloud::server()->getSwooleServer()->send($fd,$data);

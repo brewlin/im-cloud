@@ -28,6 +28,15 @@ class Protocol
      */
     const AuthReplyOk = 8;
 
+    /**
+     * push to client
+     */
+    const PushClient = 9;
+    /**
+     * batch push
+     */
+    const BatchPushClient = 10;
+
     //max size
     const MaxBodySize = 1 << 12;
     // size
