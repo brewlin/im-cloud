@@ -13,8 +13,7 @@
         "psr-4":{
             "Im\\":"src/Im",
             "GPBMetadata\\":"src/GPBMetadata",
-            "Grpc\\Pool\\":"src/Pool",
-            "Grpc\\Client\\":"src/Client"
+            "Grpc\\":"src"
         }
 
     },

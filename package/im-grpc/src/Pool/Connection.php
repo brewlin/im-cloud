@@ -100,7 +100,7 @@ class Connection implements ConnectionInterface
     protected function initConnection():void
     {
         $this->connection = new $this->clientType($this->serverId,[
-            'credentials' => ChannelCredentials::createInsecure()
+//            'credentials' => ChannelCredentials::createInsecure()
         ]);
     }
 

@@ -28,6 +28,14 @@ class GrpcCloudClient
         $connectionPool = $pool->getPool(CloudConnectionPool::class);
         return $connectionPool;
     }
+
+    /**
+     * @param string $serverId
+     * @param \Im\Cloud\PushMsgReq $argument
+     * @param array $metadata
+     * @param array $options
+     * @return array|\Google\Protobuf\Internal\Message[]|\Grpc\StringifyAble[]|\swoole_http2_response[]
+     */
     public static function PushMsg(string $serverId,\Im\Cloud\PushMsgReq $argument, $metadata = [], $options = [])
     {
         $pool = self::connection($serverId);

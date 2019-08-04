@@ -9,6 +9,7 @@
 namespace App\Lib;
 
 use Core\Container\Mapping\Bean;
+use Grpc\Client\GrpcCloudClient;
 use Im\Cloud\Proto;
 use Im\Cloud\PushMsgReq;
 use Log\Helper\CLog;
@@ -39,13 +40,12 @@ class PushKey
         $pushMsg->setProto($proto);
         $pushMsg->setProtoOp($operation);
 
-        $client = CloudClient::getCloudClient($server);
-        CLog::info("server: $server  discovery serverlist:".json_encode(CloudClient::$serviceList));
-        if(empty($client)){
+        $serverId = CloudClient::getCloudClient($server);
+        if(empty($serverId)){
             CLog::error("pushkey not exist grpc client server: $server ");
             return;
         }
-        $client->PushMsg($pushMsg);
+        GrpcCloudClient::PushMsg($serverId,$pushMsg);
     }
 
 }

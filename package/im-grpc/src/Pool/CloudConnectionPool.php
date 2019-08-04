@@ -75,9 +75,9 @@ class CloudConnectionPool implements PoolConnectionInterface
         $poolSize = (int)env("GRPC_POOL_SIZE",10);
         $chan = new Channel($poolSize);
         for($i = 0 ; $i < $poolSize; $i++){
-            $obj = new LogicConnectionPool();
+            $obj = new CloudConnectionPool();
             $chan->push($obj);
         }
-        $pool->registerPool(LogicConnectionPool::class,$chan);
+        $pool->registerPool(CloudConnectionPool::class,$chan);
     }
 }

@@ -16,6 +16,7 @@ use App\Websocket\Exception\RequireArgException;
 use Core\Cloud;
 use Core\Container\Mapping\Bean;
 use Core\Context\Context;
+use Grpc\Client\GrpcLogicClient;
 use Im\Logic\ConnectReply;
 use Im\Logic\ConnectReq;
 use Log\Helper\CLog;
@@ -41,17 +42,17 @@ class Auth
         //check data
         $this->checkAuth($packet);
         //grpc - register to logic node
-        try{
+//        try{
             //step 1
             [$mid,$key,$roomId,$accepts,$heartbeat] = $this->registerLogic($body);
             //step 2
             Bucket::put($roomId,$key,$fd);
             //step 3
             $this->registerSuccess();
-        }catch (\Throwable $e){
-            CLog::error("auth error fd:$fd {$e->getMessage()}");
-            Bucket::del($roomId,$key,$fd);
-        }
+//        }catch (\Throwable $e){
+//            CLog::error("auth error fd:$fd {$e->getMessage()}");
+//            Bucket::del($roomId,$key,$fd);
+//        }
     }
     /**
      * step 1
@@ -81,15 +82,18 @@ class Auth
      */
     public function registerLogic(array $data)
     {
-        $rpcClient = LogicClient::getLogicClient();
+        $server = LogicClient::getLogicClient();
+        if(empty($server))
+            throw  new \Exception("not find any logic node");
         $connectReq = new ConnectReq();
-
+        /** @var \Im\Logic\LogicClient $rpcClient */
+        $rpcClient  = null;
         $serverId = env("APP_HOST","127.0.0.1").":".env("GRPC_PORT",9500);
         $connectReq->setServer($serverId);
         $connectReq->setCookie("");
         $connectReq->setToken(json_encode($data));
         /** @var ConnectReply $rpy */
-        $rpy = $rpcClient->Connect($connectReq)[0];
+        $rpy = GrpcLogicClient::Connect($server,$connectReq)[0];
         if(!is_object($rpy))
             throw new \Exception("grpc to logic failed");
         if(!$rpy){

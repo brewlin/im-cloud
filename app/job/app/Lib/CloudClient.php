@@ -27,25 +27,20 @@ class CloudClient
 
     /**
      * 返回一个可用的grpc 客户端 和logic 节点进行交互
-     * @return \Im\Cloud\CloudClient
+     * @return mixed|null
      * @throws \Exception
      */
     public static function getCloudClient($serverId = ""){
         //push
         if($serverId)
-            if(isset(self::$serviceList[$serverId]))
-                $node = self::$serviceList[$serverId];
+            $node = self::$serviceList[$serverId];
         else//broadcast && broadcastroom
             $node = Container::getInstance()->get(RandomBalancer::class)->select(array_keys(self::$serviceList));
         if(empty($node)){
             CLog::error("serverid:$serverId not find any node instance");
             return null;
         }
-        $client = new \Im\Cloud\CloudClient($node,[
-//            'credentials' => ChannelCredentials::createInsecure()
-        ]);
-        $client->start();
-        return $client;
+        return $node;
     }
 
     /**

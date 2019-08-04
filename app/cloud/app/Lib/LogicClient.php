@@ -32,18 +32,14 @@ class LogicClient
 
     /**
      * 返回一个可用的grpc 客户端 和logic 节点进行交互
-     * @return \Im\Logic\LogicClient
+     * @return mixed|null
      * @throws \Exception
      */
     public static function getLogicClient(){
         if(empty(self::$serviceList))
             throw new \Exception("not logic node find",0);
         $node = Container::getInstance()->get(RandomBalancer::class)->select(array_keys(self::$serviceList));
-        $client = new \Im\Logic\LogicClient($node,[
-//            'credentials' => ChannelCredentials::createInsecure()
-        ]);
-        $client->start();
-        return $client;
+        return $node;
     }
 
     /**
