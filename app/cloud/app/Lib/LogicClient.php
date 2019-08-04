@@ -38,11 +38,28 @@ class LogicClient
     public static function getLogicClient(){
         if(empty(self::$serviceList))
             throw new \Exception("not logic node find",0);
-        $node = Container::getInstance()->get(RandomBalancer::class)->select(self::$serviceList);
+        $node = Container::getInstance()->get(RandomBalancer::class)->select(array_keys(self::$serviceList));
         $client = new \Im\Logic\LogicClient($node,[
 //            'credentials' => ChannelCredentials::createInsecure()
         ]);
         $client->start();
         return $client;
+    }
+
+    /**
+     * @param array $server
+     */
+    public static function updateService(array $server)
+    {
+        foreach ($server as $ser) {
+            if (!isset(self::$serviceList[$ser])) {
+                self::$serviceList[$ser] = $ser;
+            }
+        }
+        foreach (self::$serviceList as $k => $ser) {
+            if (!in_array($ser, $server)) {
+                unset(self::$serviceList[$k]);
+            }
+        }
     }
 }

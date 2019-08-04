@@ -30,7 +30,8 @@ class LogicClient
      * @throws \Exception
      */
     public static function getLogicClient(){
-        $node = Container::getInstance()->get(RandomBalancer::class)->select(self::$serviceList);
+        $ser = array_keys(self::$serviceList);
+        $node = Container::getInstance()->get(RandomBalancer::class)->select($ser);
         $client = new \Im\Logic\LogicClient($node,[
             'credentials' => ChannelCredentials::createInsecure()
         ]);
@@ -43,6 +44,17 @@ class LogicClient
      */
     public static function updateService($server)
     {
-        self::$serviceList = $server;
+//        self::$serviceList = $server;
+        foreach ($server as $ser){
+            if(!isset(self::$serviceList[$ser])){
+                self::$serviceList[$ser] = $ser;
+            }
+        }
+        foreach (self::$serviceList as $k => $ser){
+            if(!in_array($ser,$server)){
+                unset(self::$serviceList[$k]);
+            }
+        }
     }
+
 }

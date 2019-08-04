@@ -20,6 +20,24 @@ class PoolFactory
 
     /**
      * @param string $name
+     * @return bool
+     */
+    public function check(string $name){
+        if(!isset($this->pools[$name])){
+            return false;
+        }
+        return true;
+    }
+    public function pop(string $name)
+    {
+        return $this->pools[$name]->pop();
+    }
+    public function push(string $name,ConnectionInterface $connection)
+    {
+        $this->pools[$name]->push($connection);
+    }
+    /**
+     * @param string $name
      * @return PoolConnectionInterface
      */
     public  function getPool(string $name)

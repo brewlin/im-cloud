@@ -26,7 +26,8 @@ class PipeMessageListener implements PipeMessageInterface
     public function onPipeMessage(Server $server, int $srcWorkerId, $message): void
     {
         //将grpc调用的可用服务更新
-        CloudClient::$serviceList = $message;
+        CloudClient::updateService($message);
+//        CloudClient::$serviceList = $message;
     }
 
 }

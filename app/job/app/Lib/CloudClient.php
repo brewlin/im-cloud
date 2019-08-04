@@ -19,7 +19,7 @@ class CloudClient
     /**
      * servicelist
      * [
-     *      "127.0.0.1:9500"
+     *      "127.0.0.1:9500" => "127.0.1:9500"
      * ]
      * @var array
      */
@@ -33,10 +33,10 @@ class CloudClient
     public static function getCloudClient($serverId = ""){
         //push
         if($serverId)
-            if(in_array($serverId,self::$serviceList))
-                $node  = $serverId;
+            if(isset(self::$serviceList[$serverId]))
+                $node = self::$serviceList[$serverId];
         else//broadcast && broadcastroom
-            $node = Container::getInstance()->get(RandomBalancer::class)->select(self::$serviceList);
+            $node = Container::getInstance()->get(RandomBalancer::class)->select(array_keys(self::$serviceList));
         if(empty($node)){
             CLog::error("serverid:$serverId not find any node instance");
             return null;
@@ -51,8 +51,18 @@ class CloudClient
     /**
      * @param $server
      */
-    public static function updateService($server)
+    public static function updateService(array $server)
     {
-        self::$serviceList = $server;
+        foreach ($server as $ser){
+            if(!isset(self::$serviceList[$ser])){
+                self::$serviceList[$ser] = $ser;
+            }
+        }
+        foreach (self::$serviceList as $k => $ser){
+            if(!in_array($ser,$server)){
+               unset(self::$serviceList[$k]);
+            }
+        }
+//        self::$serviceList = $server;
     }
 }
