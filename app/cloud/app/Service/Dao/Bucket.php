@@ -22,6 +22,11 @@ class Bucket
 
     const KeyToFd =     "im-cloud-key:%s-to-fd";
 
+    public static $ipCounts = [];
+    public static $keyToFd = [];
+    public static $bucketsRoom = [];
+    public static $roomFds = [];
+
     /**
      * @param string $roomId
      * @param string $key
@@ -30,18 +35,24 @@ class Bucket
     public static function put(string $roomId = "",string $key,int $fd)
     {
         //ip ++
-        Redis::hIncrBy(self::IpCounts,env("APP_HOST","127.0.0.1"),1);
+//        Redis::hIncrBy(self::IpCounts,env("APP_HOST","127.0.0.1"),1);
+        self::$ipCounts[env("APP_HOST","127.0.0.1")] ++;
         //bind key to fd
-        Redis::set(sprintf(self::KeyToFd,$key),$fd);
+//        Redis::set(sprintf(self::KeyToFd,$key),$fd);
+        self::$keyToFd[$key] = $fd;
         if(empty($roomId)){
             return;
         }
         //check buckets exist roomid
-        if(!Redis::sIsMember(self::BucketsRoom,$roomId)){
-            Redis::sAdd(self::BucketsRoom,$roomId);
+//        if(!Redis::sIsMember(self::BucketsRoom,$roomId)){
+//            Redis::sAdd(self::BucketsRoom,$roomId);
+//        }
+        if(!isset(self::$bucketsRoom[$roomId])){
+            self::$bucketsRoom[$roomId] = $roomId;
         }
         //add fd to room
-        Redis::sAdd(sprintf(self::RoomFds,$roomId),$fd);
+//        Redis::sAdd(sprintf(self::RoomFds,$roomId),$fd);
+        self::$roomFds[$roomId][$fd] = $fd;
     }
 
     /**
@@ -50,13 +61,16 @@ class Bucket
     public static function del(string $roomId = "",string $key,int $fd)
     {
         //del key to fd
-        Redis::del(sprintf(self::KeyToFd,$key));
+//        Redis::del(sprintf(self::KeyToFd,$key));
+        unset(self::$keyToFd[$key]);
         if(!empty($roomId)){
             //del set room - fd
-            Redis::sRem(sprintf(self::RoomFds,$roomId),$fd);
+//            Redis::sRem(sprintf(self::RoomFds,$roomId),$fd);
+            unset(self::$roomFds[$roomId][$fd]);
         }
         //ip count --
-        Redis::hIncrBy(self::IpCounts,env("APP_HOST","127.0.0.1"),-1);
+//        Redis::hIncrBy(self::IpCounts,env("APP_HOST","127.0.0.1"),-1);
+        self::$ipCounts[env("APP_HOST","127.0.0.1")] --;
     }
 
     /**
@@ -81,7 +95,8 @@ class Bucket
      * @return bool|mixed
      */
     public static function fd(string $key){
-        $fd = Redis::get(sprintf(self::KeyToFd,$key));
+//        $fd = Redis::get(sprintf(self::KeyToFd,$key));
+        $fd = self::$keyToFd[$key];
         if(empty($fd)){
             CLog::error("key to fd :not find key:$key");
         }

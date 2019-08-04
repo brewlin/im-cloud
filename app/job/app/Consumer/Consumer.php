@@ -10,7 +10,7 @@ namespace App\Consumer;
 
 
 use App\Lib\Job;
-use Co\Client;
+use Core\Co;
 use Im\Logic\PushMsg;
 use ImQueue\Amqp\Message\ConsumerMessage;
 use ImQueue\Amqp\Result;
@@ -39,7 +39,8 @@ class Consumer extends ConsumerMessage
         CLog::info("job node consume data:".json_encode($data));
         /** @var Job $job */
         $job = container()->get(Job::class);
-        $pushMsg = new PushMsg($data);
+        /** @var PushMsg $pushMsg */
+        $pushMsg = new PushMsg();
         foreach ($data as $key => $value){
             $method = 'set'.ucfirst($key);
             if(method_exists($pushMsg,$method)){
@@ -49,7 +50,9 @@ class Consumer extends ConsumerMessage
                 return Result::DROP;
             }
         }
-        $job->push($pushMsg);
+        Co::create(function()use($job,$pushMsg){
+            $job->push($pushMsg);
+        },false);
         return Result::ACK;
     }
 

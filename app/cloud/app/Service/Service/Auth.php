@@ -11,6 +11,7 @@ namespace App\Service\Service;
 use App\Lib\LogicClient;
 use App\Packet\Packet;
 use App\Packet\Protocol;
+use App\Packet\Task;
 use App\Service\Dao\Bucket;
 use App\Websocket\Exception\RequireArgException;
 use Core\Cloud;
@@ -41,18 +42,27 @@ class Auth
         $body = $packet->getBody();
         //check data
         $this->checkAuth($packet);
+        /** @var Task $task */
+        $task = \bean(Task::class);
+        $task->setClass(Bucket::class);
         //grpc - register to logic node
-//        try{
+        try{
             //step 1
             [$mid,$key,$roomId,$accepts,$heartbeat] = $this->registerLogic($body);
             //step 2
-            Bucket::put($roomId,$key,$fd);
+            $task->setMethod("put");
+            $task->setArg([$roomId,$key,$fd]);
+            $task->exec();
+//            Bucket::put($roomId,$key,$fd);
             //step 3
             $this->registerSuccess();
-//        }catch (\Throwable $e){
-//            CLog::error("auth error fd:$fd {$e->getMessage()}");
+        }catch (\Throwable $e){
+            CLog::error("auth error fd:$fd {$e->getMessage()}");
+            $task->setMethod("del");
+            $task->setArg([$roomId,$key,$fd]);
+            $task->exec();
 //            Bucket::del($roomId,$key,$fd);
-//        }
+        }
     }
     /**
      * step 1

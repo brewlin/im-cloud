@@ -7,5 +7,7 @@
  */
 use Process\ProcessManager;
 use App\Process\DiscoveryProcess;
+use App\Process\TaskProcess;
 
 ProcessManager::register("im-cloud-discovery",new DiscoveryProcess());
+ProcessManager::register(TaskProcess::Name,new TaskProcess());

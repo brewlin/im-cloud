@@ -44,6 +44,21 @@ class ProcessManager
     }
 
     /**
+     * @param string $name
+     * @return bool|\Swoole\Process
+     */
+    public static function getProcesses(string $name)
+    {
+        if(!isset(self::$processPool[$name])){
+            CLog::error("proessname $name isn't exist");
+            return false;
+        }
+        /** @var Process $process */
+        $process = self::$processPool[$name];
+        return $process->getProcess();
+    }
+
+    /**
      * @param string $processName
      * @throws \Exception
      * @return AbstractProcess

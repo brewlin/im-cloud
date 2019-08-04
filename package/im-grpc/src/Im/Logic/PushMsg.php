@@ -4,12 +4,14 @@
 
 namespace Im\Logic;
 
+use Core\Container\Mapping\Bean;
 use Google\Protobuf\Internal\GPBType;
 use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
  * Generated from protobuf message <code>im.logic.PushMsg</code>
+ * @Bean()
  */
 class PushMsg extends \Google\Protobuf\Internal\Message
 {

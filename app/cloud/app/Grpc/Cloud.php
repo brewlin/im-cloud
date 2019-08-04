@@ -10,6 +10,7 @@ namespace App\GRpc;
 
 
 use App\Lib\Broadcast;
+use App\Packet\Task;
 use App\Service\Dao\Bucket;
 use App\Service\Dao\Push;
 use App\Service\Dao\Room;
@@ -66,7 +67,13 @@ class Cloud
         //coroutine do
         Co::create(function ()use($keys,$data){
             foreach ($keys as $key){
-                bean(Push::class)->push($key,$data);
+                /** @var Task $task */
+                $task = \bean(Task::class);
+                $task->setClass(Push::class);
+                $task->setMethod("push");
+                $task->setArg([$key,$data]);
+                $task->exec();
+//                bean(Push::class)->push($key,$data);
             }
         },false);
         return response()->withContent($pushMsgRpy);

@@ -13,6 +13,7 @@ use App\Api\MsgEnum;
 use App\Lib\LogicPush;
 use Co\Client;
 use Core\Cloud;
+use Core\Co;
 use Core\Context\Context;
 use Log\Helper\CLog;
 use Swoft\Log\Helper\Log;
@@ -37,7 +38,9 @@ class PushMidController extends BaseController
         /**
          * @var LogicPush
          */
-        container()->get(LogicPush::class)->pushMids($arg["op"],$arg["mids"],$arg["msg"]);
+        Co::create(function ()use($arg){
+            container()->get(LogicPush::class)->pushMids($arg["op"],$arg["mids"],$arg["msg"]);
+        },false);
         return $this->success();
     }
 
