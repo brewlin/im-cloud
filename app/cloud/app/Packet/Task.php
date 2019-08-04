@@ -57,6 +57,20 @@ class Task implements PackerInterface
     }
 
     /**
+     * @param string $class
+     * @param string $method
+     * @param array $arg
+     * @return $this
+     */
+    public function dispatch(string $class,string $method,array $arg)
+    {
+        $this->setClass($class);
+        $this->setMethod($method);
+        $this->setArg($arg);
+        return $this;
+    }
+
+    /**
      * @param $data
      * @return string
      */

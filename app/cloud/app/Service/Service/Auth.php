@@ -42,26 +42,25 @@ class Auth
         $body = $packet->getBody();
         //check data
         $this->checkAuth($packet);
-        /** @var Task $task */
-        $task = \bean(Task::class);
-        $task->setClass(Bucket::class);
         //grpc - register to logic node
         try{
             //step 1
             [$mid,$key,$roomId,$accepts,$heartbeat] = $this->registerLogic($body);
             //step 2
-            $task->setMethod("put");
-            $task->setArg([$roomId,$key,$fd]);
+            /** @var Task $task */
+            $task = container()->get(Task::class)->dispatch(Bucket::class,"put",[$roomId,$key,$fd]);
             $task->exec();
-//            Bucket::put($roomId,$key,$fd);
             //step 3
             $this->registerSuccess();
         }catch (\Throwable $e){
             CLog::error("auth error fd:$fd {$e->getMessage()}");
+            /** @var Task $task */
+            $task = \bean(Task::class);
+            $task->setClass(Bucket::class);
+            //del fd
             $task->setMethod("del");
             $task->setArg([$roomId,$key,$fd]);
             $task->exec();
-//            Bucket::del($roomId,$key,$fd);
         }
     }
     /**
