@@ -24,7 +24,8 @@
         "brewlin/im-discovery":"@dev",
         "brewlin/im-process":"@dev",
         "brewlin/im-queue":"@dev",
-        "brewlin/im-redis":"@dev"
+        "brewlin/im-redis":"@dev",
+        "brewlin/im-task":"@dev"
 
     },
     "autoload": {
@@ -64,6 +65,10 @@
         "7":{
             "type":"path",
             "url":"../../package/im-redis"
+        },
+        "8":{
+            "type":"path",
+            "url":"../../package/im-task"
         },
         "packagist": {
             "type": "composer",

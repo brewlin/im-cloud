@@ -87,6 +87,7 @@ class Server
      */
     public function defaultEvents(): array
     {
+        //check task worker enable coroutinue;
         return [
             SwooleEvent::START         => [$this, 'onStart'],
             SwooleEvent::SHUTDOWN      => [$this, 'onShutdown'],
@@ -96,7 +97,9 @@ class Server
             SwooleEvent::WORKER_STOP   => [$this, 'onWorkerStop'],
             SwooleEvent::WORKER_ERROR  => [$this, 'onWorkerError'],
             SwooleEvent::FINISH        => [bean(TaskEventListener::class),'onFinish'],
-            SwooleEvent::TASK          => [bean(TaskEventListener::class),'onTask']
+            SwooleEvent::TASK          => [
+                bean(TaskEventListener::class),
+                env("TASK_ENABLE_COROUTINE",false)?"onCoTask":'onTask']
         ];
     }
     /**

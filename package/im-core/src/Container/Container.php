@@ -49,7 +49,7 @@ class Container implements ContainerInterface
     }
     public function has($id)
     {
-        if (isset($this->singletonPool[$id])) {
+        if (isset($this->singlePool[$id])) {
             return true;
         }
         return false;

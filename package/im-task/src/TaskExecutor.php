@@ -30,14 +30,12 @@ class TaskExecutor
         $logid  = $data['logid'] ?? uniqid('', true);
         $spanid = $data['spanid'] ?? 0;
 
-
         if(!container()->has($name)){
             return false;
         }
 
 //        list(, $coroutine) = $collector['task'][$name];
         $task = \bean($name);
-
         if ($type == Task::TYPE_CO) {
             $result = $this->runCoTask($task, $method, $params, $logid, $spanid, $name, $type);
         } else {
@@ -61,7 +59,7 @@ class TaskExecutor
     private function runSyncTask($task, string $method, array $params, string $logid, int $spanid, string $name, string $type)
     {
         $this->beforeTask($logid, $spanid, $name, $method, $type, get_parent_class($task));
-        $result = PhpHelper::call([$task, $method], $params);
+        $result = PhpHelper::call([$task, $method], ...$params);
         $this->afterTask($type);
 
         return $result;
@@ -82,7 +80,7 @@ class TaskExecutor
     {
         return Coroutine::create(function () use ($task, $method, $params, $logid, $spanid, $name, $type) {
             $this->beforeTask($logid, $spanid, $name, $method, $type, get_parent_class($task));
-            PhpHelper::call([$task, $method], $params);
+            PhpHelper::call([$task, $method], ...$params);
             $this->afterTask($type);
         });
     }

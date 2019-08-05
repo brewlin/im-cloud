@@ -47,6 +47,7 @@ class Task
         }
 
         $server = App::server();
+        return $server->task($data);
         // Delier coroutine task
         if ($type == self::TYPE_CO) {
             $tasks[0]  = $data;

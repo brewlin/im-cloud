@@ -23,8 +23,8 @@
         "brewlin/im-core":"@dev",
         "brewlin/im-discovery":"@dev",
         "brewlin/im-process":"@dev",
-        "brewlin/im-queue":"@dev"
-
+        "brewlin/im-queue":"@dev",
+        "brewlin/im-task":"@dev"
     },
     "autoload": {
         "psr-4":{
@@ -59,6 +59,10 @@
         "6":{
             "type":"path",
             "url":"../../package/im-stdlib"
+        },
+        "7":{
+            "type":"path",
+            "url":"../../package/im-task"
         },
         "packagist": {
             "type": "composer",

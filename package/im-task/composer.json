@@ -10,7 +10,7 @@
     "description": "microservice framework base on swoole",
     "license": "Apache-2.0",
     "require-dev": {
-        "eaglewu/swoole-ide-helper": "dev-master",
+        "eaglewu/swoole-ide-helper": "dev-master"
     },
     "autoload": {
         "psr-4": {

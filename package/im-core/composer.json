@@ -21,49 +21,6 @@
         "swoole/etcd-client": "^1.0",
         "psr/container": "^1.0",
         "doctrine/annotations": "^1.4",
-        "php-di/phpdoc-reader": "^2.0",
-        "brewlin/im-redis":"@dev"
-    },
-    "repositories": {
-        "0":{
-            "type":"path",
-            "url":"../im-grpc"
-        },
-        "1":{
-            "type":"path",
-            "url":"../im-core"
-        },
-        "2":{
-            "type":"path",
-            "url":"../im-discovery"
-        },
-        "3":{
-            "type":"path",
-            "url":"../im-process"
-        },
-        "4":{
-            "type":"path",
-            "url":"../im-queue"
-        },
-        "5":{
-            "type":"path",
-            "url":"../im-log"
-        },
-        "6":{
-            "type":"path",
-            "url":"../im-stdlib"
-        },
-        "7":{
-            "type":"path",
-            "url":"../im-redis"
-        },
-        "8": {
-            "type": "path",
-            "url": "../im-task"
-        },
-        "packagist": {
-            "type": "composer",
-            "url": "https://mirrors.aliyun.com/composer/"
-        }
+        "php-di/phpdoc-reader": "^2.0"
     }
 }

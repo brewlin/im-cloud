@@ -35,23 +35,17 @@ class Bucket
     public static function put(string $roomId = "",string $key,int $fd)
     {
         //ip ++
-//        Redis::hIncrBy(self::IpCounts,env("APP_HOST","127.0.0.1"),1);
         self::$ipCounts[env("APP_HOST","127.0.0.1")] ++;
         //bind key to fd
-//        Redis::set(sprintf(self::KeyToFd,$key),$fd);
         self::$keyToFd[$key] = $fd;
         if(empty($roomId)){
             return;
         }
         //check buckets exist roomid
-//        if(!Redis::sIsMember(self::BucketsRoom,$roomId)){
-//            Redis::sAdd(self::BucketsRoom,$roomId);
-//        }
         if(!isset(self::$bucketsRoom[$roomId])){
             self::$bucketsRoom[$roomId] = $roomId;
         }
         //add fd to room
-//        Redis::sAdd(sprintf(self::RoomFds,$roomId),$fd);
         self::$roomFds[$roomId][$fd] = $fd;
     }
 
@@ -61,15 +55,12 @@ class Bucket
     public static function del(string $roomId = "",string $key,int $fd)
     {
         //del key to fd
-//        Redis::del(sprintf(self::KeyToFd,$key));
         unset(self::$keyToFd[$key]);
         if(!empty($roomId)){
             //del set room - fd
-//            Redis::sRem(sprintf(self::RoomFds,$roomId),$fd);
             unset(self::$roomFds[$roomId][$fd]);
         }
         //ip count --
-//        Redis::hIncrBy(self::IpCounts,env("APP_HOST","127.0.0.1"),-1);
         self::$ipCounts[env("APP_HOST","127.0.0.1")] --;
     }
 
@@ -78,7 +69,7 @@ class Bucket
      */
     public static function buckets()
     {
-        return Redis::sMembers(self::BucketsRoom);
+        return self::$bucketsRoom;
     }
 
     /**
@@ -87,7 +78,7 @@ class Bucket
      */
     public static function roomfds(string $roomId)
     {
-        return Redis::sMembers(sprintf(self::RoomFds,$roomId));
+        return self::$roomFds[$roomId];
     }
 
     /**

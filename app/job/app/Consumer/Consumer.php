@@ -39,23 +39,12 @@ class Consumer extends ConsumerMessage
     public function consume($data): string
     {
         CLog::info("job node consume data:".json_encode($data));
-        /** @var PushMsg $pushMsg */
-        $pushMsg = new PushMsg();
-        foreach ($data as $key => $value){
-            $method = 'set'.ucfirst($key);
-            if(method_exists($pushMsg,$method)){
-                $pushMsg->{$method}($value);
-            }else{
-                CLog::error("pushmsg not exist method:".$method);
-                return Result::DROP;
-            }
-        }
-        Co::create(function()use($pushMsg){
+        Co::create(function()use($data){
             if(empty(CloudClient::$serviceList)){
                 Clog::error("cancle task deliver discovery cloud node is empty");
                 return;
             }
-            Task::deliver(Job::class,"push",[CloudClient::$serviceList,$pushMsg]);
+            Task::deliver(Job::class,"push",[CloudClient::$serviceList,$data]);
         },false);
         return Result::ACK;
     }

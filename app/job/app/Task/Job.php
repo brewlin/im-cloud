@@ -25,8 +25,19 @@ class Job
      * 消费 队列数据后分发
      * @param $pushmsg PushMsg
      */
-    public function push(array $serverList ,PushMsg $pushmsg)
+    public function push(array $serverList ,array $data)
     {
+        /** @var PushMsg $pushMsg */
+        $pushmsg = new PushMsg();
+        foreach ($data as $key => $value){
+            $method = 'set'.ucfirst($key);
+            if(method_exists($pushmsg,$method)){
+                $pushmsg->{$method}($value);
+            }else{
+                CLog::error("pushmsg not exist method:".$method);
+                return;
+            }
+        }
         CLog::info("job node push msgType:".$pushmsg->getType());
         $keys = [];
         foreach ($pushmsg->getKeys()->getIterator() as $v){
