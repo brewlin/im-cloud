@@ -87,6 +87,7 @@ class Bucket
      */
     public static function fd(string $key){
 //        $fd = Redis::get(sprintf(self::KeyToFd,$key));
+        var_dump(self::$keyToFd);
         $fd = self::$keyToFd[$key];
         if(empty($fd)){
             CLog::error("key to fd :not find key:$key");

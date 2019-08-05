@@ -38,6 +38,7 @@ class Task
     public static function deliver(string $taskName, string $methodName, array $params = [], string $type = self::TYPE_CO, $timeout = 3)
     {
         $data   = TaskHelper::pack($taskName, $methodName, $params, $type);
+
         if(!App::isWorkerStatus() && !App::isCoContext()){
             return self::deliverByQueue($data);
         }
@@ -47,7 +48,6 @@ class Task
         }
 
         $server = App::server();
-        return $server->task($data);
         // Delier coroutine task
         if ($type == self::TYPE_CO) {
             $tasks[0]  = $data;

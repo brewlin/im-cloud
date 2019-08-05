@@ -36,7 +36,7 @@ class QueueDao
         $pushmsg = compact("type","operation","server","keys","msg");
         CLog::info("push msg to job node data:".json_encode($pushmsg));
         //发送到队列里
-        producer()->produce(new Producer($pushmsg));
+        var_dump(producer()->produce(new Producer($pushmsg)));
     }
 
     /**

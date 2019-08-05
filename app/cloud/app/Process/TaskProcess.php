@@ -39,10 +39,11 @@ class TaskProcess extends AbstractProcess
             $body = $process->read();
             try{
                 /** @var Task $task */
-                $task = container()->get(Task::class)->unpack($body);
-                Co::create(function ()use($task){
+//                $task = container()->get(Task::class)->unpack($body);
+                $task = (new Task())->unpack($body);
+//                Co::create(function ()use($task){
                     $task->getClass()::{$task->getMethod()}(...$task->getArg());
-                },false);
+//                },false);
             }catch (\Throwable $e)
             {
                CLog::debug($e->getMessage());

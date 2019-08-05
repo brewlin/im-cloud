@@ -65,17 +65,17 @@ class Cloud
         $keys = $pushMsgReq->getKeys();
         $data = $pushMsgReq->getProtoOp();
         //coroutine do
-        Co::create(function ()use($keys,$data){
-            foreach ($keys as $key){
-                /** @var Task $task */
-                $task = \bean(Task::class);
-                $task->setClass(Push::class);
-                $task->setMethod("push");
-                $task->setArg([$key,$data]);
-                $task->exec();
-//                bean(Push::class)->push($key,$data);
-            }
-        },false);
+        foreach ($keys as $key){
+            Co::create(function ()use($key,$data){
+                    /** @var Task $task */
+                    $task = \bean(Task::class);
+                    $task->setClass(Push::class);
+                    $task->setMethod("push");
+                    $task->setArg([$key,$data]);
+                    $task->exec();
+    //                bean(Push::class)->push($key,$data);
+            },false);
+        }
         return response()->withContent($pushMsgRpy);
 
     }
