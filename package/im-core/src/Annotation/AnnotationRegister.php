@@ -128,13 +128,9 @@ class AnnotationRegister
      */
     public static function load(array $config = []): void
     {
-        $beanfile = ROOT."/config/bean.php";
-        $scanNs = [];
-        if(file_exists($beanfile)){
-            $scanNs = require $beanfile;
-        }
+        $scanNs = config("server")['scan'];
         $resource = new AnnotationResource($config);
-        $resource->setOnlyNamespaces(array_merge([
+        $resource->setOnlyNamespaces(array_merge($scanNs,[
             "App\\",
             "Core\\",
             "Process\\",
@@ -142,8 +138,9 @@ class AnnotationRegister
             "Discovery\\",
             "ImQueue\\",
             "Grpc\\",
-            "Im\\"
-        ],$scanNs));
+            "Im\\",
+            "Task\\"
+        ]));
         $resource->load();
     }
 

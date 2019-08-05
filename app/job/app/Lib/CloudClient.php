@@ -17,6 +17,10 @@ use Log\Helper\CLog;
 class CloudClient
 {
     /**
+     * @var string
+     */
+    const ServerList = "im-job-serverlist";
+    /**
      * servicelist
      * [
      *      "127.0.0.1:9500" => "127.0.1:9500"

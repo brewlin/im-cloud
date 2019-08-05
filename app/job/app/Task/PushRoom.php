@@ -6,9 +6,11 @@
  * Time: 下午 2:49
  */
 
-namespace App\Lib;
+namespace App\Task;
 
+use App\Lib\CloudClient;
 use Core\Container\Mapping\Bean;
+use Grpc\Client\GrpcCloudClient;
 use Im\Cloud\BroadcastRoomReq;
 use Im\Cloud\Proto;
 use Log\Helper\CLog;
@@ -26,7 +28,7 @@ class PushRoom
      * @param int $operation
      * @param $msg
      */
-    public function push(string $room,int $operation,$msg)
+    public function push(array $serviceList,string $room,int $operation,$msg)
     {
         $proto = new Proto();
         $proto->setVer(1);
@@ -36,10 +38,9 @@ class PushRoom
         $arg = new BroadcastRoomReq();
         $arg->setRoomID($room);
         $arg->setProto($proto);
-        foreach (CloudClient::$serviceList as $server) {
-            $client = CloudClient::getCloudClient($server);
+        foreach ($serviceList as $server) {
             CLog::info("brocatroom roomid:$room servicd:$server");
-            $client->BroadcastRoom($arg);
+            GrpcCloudClient::BroadcastRoom($server,$arg);
         }
 
     }

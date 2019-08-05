@@ -48,8 +48,7 @@ class Auth
             [$mid,$key,$roomId,$accepts,$heartbeat] = $this->registerLogic($body);
             //step 2
             /** @var Task $task */
-            $task = container()->get(Task::class)->dispatch(Bucket::class,"put",[$roomId,$key,$fd]);
-            $task->exec();
+            \bean(Task::class)->deliver(Bucket::class,"put",[$roomId,$key,$fd]);
             //step 3
             $this->registerSuccess();
         }catch (\Throwable $e){

@@ -6,8 +6,9 @@
  * Time: 下午 2:49
  */
 
-namespace App\Lib;
+namespace App\Task;
 
+use App\Lib\CloudClient;
 use Core\Container\Mapping\Bean;
 use Grpc\Client\GrpcCloudClient;
 use Im\Cloud\Proto;
@@ -28,7 +29,7 @@ class PushKey
      * @param array $subkey
      * @param $body
      */
-    public function push(int $operation ,string $server , array $subkey , $body)
+    public function push(array $serviceList ,int $operation ,string $server , array $subkey , $body)
     {
         $proto = new Proto();
         $proto->setOp($operation);
@@ -39,8 +40,7 @@ class PushKey
         $pushMsg->setKeys($subkey);
         $pushMsg->setProto($proto);
         $pushMsg->setProtoOp($operation);
-
-        $serverId = CloudClient::getCloudClient($server);
+        $serverId = $serviceList[$server];
         if(empty($serverId)){
             CLog::error("pushkey not exist grpc client server: $server ");
             return;

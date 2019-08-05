@@ -9,12 +9,14 @@
 namespace App\Consumer;
 
 
-use App\Lib\Job;
+use App\Lib\CloudClient;
+use App\Task\Job;
 use Core\Co;
 use Im\Logic\PushMsg;
 use ImQueue\Amqp\Message\ConsumerMessage;
 use ImQueue\Amqp\Result;
 use Log\Helper\CLog;
+use Task\Task;
 
 /**
  * Class Consumer
@@ -37,8 +39,6 @@ class Consumer extends ConsumerMessage
     public function consume($data): string
     {
         CLog::info("job node consume data:".json_encode($data));
-        /** @var Job $job */
-        $job = container()->get(Job::class);
         /** @var PushMsg $pushMsg */
         $pushMsg = new PushMsg();
         foreach ($data as $key => $value){
@@ -50,8 +50,12 @@ class Consumer extends ConsumerMessage
                 return Result::DROP;
             }
         }
-        Co::create(function()use($job,$pushMsg){
-            $job->push($pushMsg);
+        Co::create(function()use($pushMsg){
+            if(empty(CloudClient::$serviceList)){
+                Clog::error("cancle task deliver discovery cloud node is empty");
+                return;
+            }
+            Task::deliver(Job::class,"push",[CloudClient::$serviceList,$pushMsg]);
         },false);
         return Result::ACK;
     }

@@ -17,6 +17,7 @@ use Log\Helper\CLog;
 use Stdlib\Helper\Dir;
 use Stdlib\Helper\Sys;
 use Swoole\Server as SwooleServer;
+use Task\Listeners\TaskEventListener;
 
 class Server
 {
@@ -94,6 +95,8 @@ class Server
             SwooleEvent::WORKER_START  => [$this, 'onWorkerStart'],
             SwooleEvent::WORKER_STOP   => [$this, 'onWorkerStop'],
             SwooleEvent::WORKER_ERROR  => [$this, 'onWorkerError'],
+            SwooleEvent::FINISH        => [bean(TaskEventListener::class),'onFinish'],
+            SwooleEvent::TASK          => [bean(TaskEventListener::class),'onTask']
         ];
     }
     /**

@@ -45,6 +45,39 @@ class GrpcCloudClient
         self::release($pool,$connection);
         return $res;
     }
+    /**
+     * Broadcast send to every enrity
+     * @param \Im\Cloud\BroadcastReq $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     */
+    public static function Broadcast(string $serverId,\Im\Cloud\BroadcastReq $argument, $metadata = [], $options = []) {
+        $pool = self::connection($serverId);
+        $connection = $pool->getConnection($serverId);
+        $client = $connection->getActiveConnection();
+        $res = $client->Broadcast($argument,$metadata,$options);
+        self::release($pool,$connection);
+        return $res;
+    }
+    /**
+     * BroadcastRoom broadcast to one room
+     * @param \Im\Cloud\BroadcastRoomReq $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     */
+    public static function BroadcastRoom(string $serverId,\Im\Cloud\BroadcastRoomReq $argument,
+                                  $metadata = [], $options = []) {
+        $pool = self::connection($serverId);
+        $connection = $pool->getConnection($serverId);
+        $client = $connection->getActiveConnection();
+        $res = $client->BroadcastRoom($argument,$metadata,$options);
+        self::release($pool,$connection);
+        return $res;
+    }
+    /**
+     * @param CloudConnectionPool $pool
+     * @param Connection $con
+     */
     public static function release(CloudConnectionPool $pool,Connection $con)
     {
         $pool->release($pool);

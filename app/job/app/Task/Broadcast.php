@@ -6,9 +6,11 @@
  * Time: 下午 2:49
  */
 
-namespace App\Lib;
+namespace App\Task;
 
+use App\Lib\CloudClient;
 use Core\Container\Mapping\Bean;
+use Grpc\Client\GrpcCloudClient;
 use Im\Cloud\BroadcastReq;
 use Im\Cloud\Proto;
 use Log\Helper\CLog;
@@ -25,7 +27,7 @@ class Broadcast
      * @param $body
      * @param int $speed
      */
-    public function push(int $operation,$body,int $speed)
+    public function push(array $serviceList,int $operation,$body,int $speed)
     {
         $proto = new Proto();
         $proto->setVer(1);
@@ -36,11 +38,9 @@ class Broadcast
         $broadcastReq->setSpeed($speed);
         $broadcastReq->setProtoOp($operation);
         $broadcastReq->setProto($proto);
-
-        foreach (CloudClient::$serviceList as $server) {
-            $client = CloudClient::getCloudClient($server);
+        foreach ($serviceList as $server) {
             CLog::info("brocast servicd:$server");
-            $client->Broadcast($broadcastReq);
+            GrpcCloudClient::Broadcast($server,$broadcastReq);
         }
     }
 
