@@ -10,7 +10,7 @@ namespace App\Event;
 
 
 use Core\Swoole\WorkerStopInterface;
-use Swoft\Log\Helper\CLog;
+use Log\Helper\Log;
 use Swoole\Coroutine;
 use Swoole\Server as SwooleServer;
 
@@ -18,7 +18,7 @@ class WorkerStopListener implements WorkerStopInterface
 {
     public function onWorkerStop(SwooleServer $server, int $workerId): void
     {
-        CLog::info("workerid:".$workerId." is stop");
+        Log::info("workerid:".$workerId." is stop");
     }
 
 }

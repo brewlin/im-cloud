@@ -13,7 +13,7 @@ use App\Lib\Producer;
 use Core\Container\Mapping\Bean;
 use Im\Cloud\Proto;
 use Im\Logic\PushMsg;
-use Log\Helper\CLog;
+use Log\Helper\Log;
 
 /**
  * Class QueueDao
@@ -34,7 +34,7 @@ class QueueDao
     {
         $type = PushMsg\Type::PUSH;
         $pushmsg = compact("type","operation","server","keys","msg");
-        CLog::info("push msg to job node data:".json_encode($pushmsg));
+        Log::info("push msg to job node data:".json_encode($pushmsg));
         //发送到队列里
         producer()->produce(new Producer($pushmsg));
     }
@@ -50,7 +50,7 @@ class QueueDao
 
         $type = PushMsg\Type::ROOM;
         $pushmsg = compact("type","operation","room","msg");
-        CLog::info("push msg to job node data:".json_encode($pushmsg));
+        Log::info("push msg to job node data:".json_encode($pushmsg));
         //发送到队列里
         producer()->produce(new Producer($pushmsg));
     }
@@ -65,7 +65,7 @@ class QueueDao
     {
         $type = PushMsg\Type::BROADCAST;
         $pushmsg = compact("type","operation","speed","msg");
-        CLog::info("push msg to job node data:".json_encode($pushmsg));
+        Log::info("push msg to job node data:".json_encode($pushmsg));
         //发送到队列里
         \producer()->produce(new Producer($pushmsg));
     }

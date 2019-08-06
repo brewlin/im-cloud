@@ -10,7 +10,6 @@ namespace App\Event;
 
 
 use App\Lib\CloudClient;
-use Log\Helper\CLog;
 use Core\Swoole\PipeMessageInterface;
 use Swoole\Server;
 

@@ -12,7 +12,7 @@ namespace App\Websocket;
 use App\Packet\Packet;
 use Core\Context\Context;
 use Core\Swoole\MessageInterface;
-use Log\Helper\CLog;
+use Log\Helper\Log;
 use Swoole\Websocket\Frame;
 use Swoole\Websocket\Server;
 
@@ -29,7 +29,7 @@ class MessageListener implements MessageInterface
      */
     public function onMessage(Server $server, Frame $frame): void
     {
-        CLog::info("fd:{$frame->fd} data:{$frame->data}");
+        Log::info("fd:{$frame->fd} data:{$frame->data}");
         try {
             /** @var Packet $packet */
             $packet = bean(Packet::class)->unpack($frame->data);
@@ -44,7 +44,7 @@ class MessageListener implements MessageInterface
             $line = $e->getLine();
             $code = $e->getCode();
             $exception = $e->getMessage();
-            CLog::error("file:".$file." line:$line code:$code msg:$exception");
+            Log::error("file:".$file." line:$line code:$code msg:$exception");
             $server->close($frame->fd);
         }
         //destory context

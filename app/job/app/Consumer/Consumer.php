@@ -15,7 +15,7 @@ use Core\Co;
 use Im\Logic\PushMsg;
 use ImQueue\Amqp\Message\ConsumerMessage;
 use ImQueue\Amqp\Result;
-use Log\Helper\CLog;
+use Log\Helper\Log;
 use Task\Task;
 
 /**
@@ -38,10 +38,10 @@ class Consumer extends ConsumerMessage
      */
     public function consume($data): string
     {
-        CLog::info("job node consume data:".json_encode($data));
+        Log::info("job node consume data:".json_encode($data));
         Co::create(function()use($data){
             if(empty(CloudClient::$serviceList)){
-                Clog::error("cancle task deliver discovery cloud node is empty");
+                Log::error("cancle task deliver discovery cloud node is empty");
                 return;
             }
             Task::deliver(Job::class,"push",[CloudClient::$serviceList,$data]);

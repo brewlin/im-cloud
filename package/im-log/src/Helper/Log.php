@@ -9,18 +9,33 @@ use ReflectionException;
 use function sprintf;
 use Log\Logger;
 
+/**
+ * Class Log
+ * @package Log\Helper
+ */
 class Log
 {
+    /**
+     * @var string stdout to console
+     */
+    const TypeConsole = "console";
+    /**
+     * @var  string log to file
+     */
+    const TypeFile = "file";
+
     /**
      * @param string $message
      * @param array  $params
      *
      * @return bool
      * @throws ReflectionException
-     * @throws ContainerException
      */
-    public static function emergency(string $message, ...$params): bool
+    public static function emergency(string $message, ...$params)
     {
+        if(env("LOG_TYPE") == self::TypeConsole){
+            return CLog::warning($message,...$params);
+        }
         return self::getLogger()->emergency(sprintf($message, ...$params));
     }
 
@@ -30,14 +45,16 @@ class Log
      *
      * @return bool
      * @throws ReflectionException
-     * @throws ContainerException
      */
-    public static function debug(string $message, ...$params): bool
+    public static function debug(string $message, ...$params)
     {
         if (APP_DEBUG) {
+            if(env("LOG_TYPE") == self::TypeConsole){
+                return CLog::debug($message,...$params);
+            }
             return self::getLogger()->debug(sprintf($message, ...$params));
         }
-        
+
         return true;
     }
 
@@ -47,10 +64,12 @@ class Log
      *
      * @return bool
      * @throws ReflectionException
-     * @throws ContainerException
      */
-    public static function alert(string $message, ...$params): bool
+    public static function alert(string $message, ...$params)
     {
+        if(env("LOG_TYPE") == self::TypeConsole){
+            return CLog::warning($message,...$params);
+        }
         return self::getLogger()->alert(sprintf($message, ...$params));
     }
 
@@ -60,10 +79,12 @@ class Log
      *
      * @return bool
      * @throws ReflectionException
-     * @throws ContainerException
      */
-    public static function info(string $message, ...$params): bool
+    public static function info(string $message, ...$params)
     {
+        if(env("LOG_TYPE") == self::TypeConsole){
+            return CLog::info($message,...$params);
+        }
         return self::getLogger()->info(sprintf($message, ...$params));
     }
 
@@ -73,10 +94,12 @@ class Log
      *
      * @return bool
      * @throws ReflectionException
-     * @throws ContainerException
      */
-    public static function warning(string $message, ...$params): bool
+    public static function warning(string $message, ...$params)
     {
+        if(env("LOG_TYPE") == self::TypeConsole){
+            return CLog::warning($message,...$params);
+        }
         return self::getLogger()->warning(sprintf($message, ...$params));
     }
 
@@ -86,12 +109,15 @@ class Log
      *
      * @return bool
      * @throws ReflectionException
-     * @throws ContainerException
      */
-    public static function error(string $message, ...$params): bool
+    public static function error(string $message, ...$params)
     {
+        if(env("LOG_TYPE") == self::TypeConsole){
+            return CLog::error($message,...$params);
+        }
         return self::getLogger()->error(sprintf($message, ...$params));
     }
+
 
     /**
      * Push log
@@ -100,9 +126,8 @@ class Log
      * @param mixed  $val
      *
      * @throws ReflectionException
-     * @throws ContainerException
      */
-    public static function pushLog(string $key, $val): void
+    public static function pushLog(string $key, $val)
     {
         self::getLogger()->pushLog($key, $val);
     }

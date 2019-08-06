@@ -20,7 +20,7 @@ use Core\Context\Context;
 use Grpc\Client\GrpcLogicClient;
 use Im\Logic\ConnectReply;
 use Im\Logic\ConnectReq;
-use Log\Helper\CLog;
+use Log\Helper\Log;
 
 /**
  * Class Auth
@@ -52,7 +52,7 @@ class Auth
             //step 3
             $this->registerSuccess();
         }catch (\Throwable $e){
-            CLog::error("auth error fd:$fd {$e->getMessage()}");
+            Log::error("auth error fd:$fd {$e->getMessage()}");
             /** @var Task $task */
             $task = \bean(Task::class);
             $task->setClass(Bucket::class);
@@ -123,7 +123,7 @@ class Auth
         $packet->setOperation(Protocol::AuthReplyOk);
         $buf = $packet->pack(json_encode(["ok" => "yes"]));
         Cloud::server()->getSwooleServer()->push($fd,$buf,WEBSOCKET_OPCODE_BINARY);
-        CLog::info("register success reply client buf:".$buf);
+        Log::info("register success reply client buf:".$buf);
     }
 
 }

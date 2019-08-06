@@ -13,7 +13,7 @@ use Core\Container\Mapping\Bean;
 use Grpc\Client\GrpcCloudClient;
 use Im\Cloud\BroadcastRoomReq;
 use Im\Cloud\Proto;
-use Log\Helper\CLog;
+use Log\Helper\Log;
 
 /**
  * Class PushRoom
@@ -39,7 +39,7 @@ class PushRoom
         $arg->setRoomID($room);
         $arg->setProto($proto);
         foreach ($serviceList as $server) {
-            CLog::info("brocatroom roomid:$room servicd:$server");
+            Log::info("brocatroom roomid:$room servicd:$server");
             GrpcCloudClient::BroadcastRoom($server,$arg);
         }
 

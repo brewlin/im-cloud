@@ -10,7 +10,7 @@ namespace App\Packet;
 use App\Process\TaskProcess;
 use Core\Container\Mapping\Bean;
 use Core\Contract\PackerInterface;
-use Log\Helper\CLog;
+use Log\Helper\Log;
 use Process\ProcessManager;
 
 /**
@@ -77,7 +77,7 @@ class Task implements PackerInterface
     public function pack($data): string
     {
         if(empty($this->class) || empty($this->method) || empty($this->arg)){
-            CLog::error("rquire class | method |arg");
+            Log::error("rquire class | method |arg");
             return '';
         }
         $class = $this->getClass();

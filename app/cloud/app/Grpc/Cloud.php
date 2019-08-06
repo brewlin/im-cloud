@@ -26,7 +26,7 @@ use Im\Cloud\PushMsgReq;
 use Im\Cloud\RoomsReply;
 use Im\Logic\CloseReply;
 use Im\Logic\PingReply;
-use Log\Helper\CLog;
+use Log\Helper\Log;
 
 class Cloud
 {
@@ -58,7 +58,7 @@ class Cloud
         $pushMsgReq = Parser::deserializeMessage([PushMsgReq::class,null],request()->getRawBody());
 
         if(empty($pushMsgReq->getKeys()) || empty($pushMsgReq->getProto())){
-            CLog::error("cloud grpc pushmsg keys proto is empty raw data:".json_encode($pushMsgReq));
+            Log::error("cloud grpc pushmsg keys proto is empty raw data:".json_encode($pushMsgReq));
             return response()->withContent($pushMsgRpy);
         }
         /** @var array $keys */
@@ -111,7 +111,7 @@ class Cloud
             [BroadcastRoomReq::class,null],
             request()->getRawBody()
         );
-        CLog::info("broadcastRoom req:".json_encode($broadroomReq));
+        Log::info("broadcastRoom req:".json_encode($broadroomReq));
         if(empty($broadroomReq->getProto()) || empty($broadroomReq->getRoomID())){
             return response()->withContent($broadroomRpy);
         }

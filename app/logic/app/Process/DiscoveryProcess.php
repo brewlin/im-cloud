@@ -12,7 +12,7 @@ namespace App\Process;
 use App\Lib\LogicClient;
 use Core\Cloud;
 use Core\Processor\ProcessorInterface;
-use Log\Helper\CLog;
+use Log\Helper\Log;
 use Process\Contract\AbstractProcess;
 use Process\Process;
 use Process\ProcessInterface;
@@ -46,7 +46,7 @@ class DiscoveryProcess extends AbstractProcess
         while (true){
             $services = provider()->select()->getServiceList("grpc-im-cloud-node");
             if(empty($services)){
-                CLog::error("not find any instance node:grpc-im-cloud-node");
+                Log::error("not find any instance node:grpc-im-cloud-node");
                 goto SLEEP;
             }
             for($i = 0; $i < (int)env("WORKER_NUM",4);$i++)

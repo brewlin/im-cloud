@@ -13,7 +13,7 @@ use Core\Container\Mapping\Bean;
 use Grpc\Client\GrpcCloudClient;
 use Im\Cloud\BroadcastReq;
 use Im\Cloud\Proto;
-use Log\Helper\CLog;
+use Log\Helper\Log;
 
 /**
  * Class Broadcast
@@ -39,7 +39,7 @@ class Broadcast
         $broadcastReq->setProtoOp($operation);
         $broadcastReq->setProto($proto);
         foreach ($serviceList as $server) {
-            CLog::info("brocast servicd:$server");
+            Log::info("brocast servicd:$server");
             GrpcCloudClient::Broadcast($server,$broadcastReq);
         }
     }

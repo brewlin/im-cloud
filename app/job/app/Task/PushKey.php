@@ -13,7 +13,7 @@ use Core\Container\Mapping\Bean;
 use Grpc\Client\GrpcCloudClient;
 use Im\Cloud\Proto;
 use Im\Cloud\PushMsgReq;
-use Log\Helper\CLog;
+use Log\Helper\Log;
 
 /**
  * @Bean()
@@ -42,7 +42,7 @@ class PushKey
         $pushMsg->setProtoOp($operation);
         $serverId = $serviceList[$server];
         if(empty($serverId)){
-            CLog::error("pushkey not exist grpc client server: $server ");
+            Log::error("pushkey not exist grpc client server: $server ");
             return;
         }
         GrpcCloudClient::PushMsg($serverId,$pushMsg);

@@ -12,7 +12,7 @@ namespace App\Lib;
 use Core\Container\Container;
 use Discovery\Balancer\RandomBalancer;
 use Grpc\ChannelCredentials;
-use Log\Helper\CLog;
+use Log\Helper\Log;
 
 class CloudClient
 {
@@ -41,7 +41,7 @@ class CloudClient
         else//broadcast && broadcastroom
             $node = Container::getInstance()->get(RandomBalancer::class)->select(array_keys(self::$serviceList));
         if(empty($node)){
-            CLog::error("serverid:$serverId not find any node instance");
+            Log::error("serverid:$serverId not find any node instance");
             return null;
         }
         return $node;

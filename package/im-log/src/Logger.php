@@ -142,6 +142,7 @@ class Logger extends \Monolog\Logger
      */
     public function __construct()
     {
+        $this->name = env("APP_NAME","im-cloud");
         parent::__construct($this->name);
     }
 
@@ -223,13 +224,15 @@ class Logger extends \Monolog\Logger
             'channel'    => $this->name,
             'datetime'   => $ts,
             'extra'      => $extra,
-            'event'      => context()->get('event'),
+            'event'      => context()?context()->get('event'):null,
             'tid'        => Co::tid(),
             'cid'        => Co::id(),
         ];
 
         // Customized items
         foreach ($this->items as $item) {
+            $context = context();
+            if(empty($context))break;
             $record[$item] = context()->get($item, '');
         }
 

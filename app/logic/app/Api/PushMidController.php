@@ -16,7 +16,6 @@ use Core\App;
 use Core\Cloud;
 use Core\Co;
 use Core\Context\Context;
-use Log\Helper\CLog;
 use Log\Helper\Log;
 use Task\Task;
 
@@ -27,7 +26,6 @@ class PushMidController extends BaseController
      */
     public function mids()
     {
-        Log::error("sdfs");
         $post  = Context::get()->getRequest()->input();
         if(empty($post["operation"]) || empty($post["mids"]) ||empty($post["msg"])){
             return $this->error("缺少参数");
@@ -37,7 +35,7 @@ class PushMidController extends BaseController
             "mids" => is_array($post["mids"])?$post["mids"]:[$post["mids"]],
             "msg" => $post["msg"]
         ];
-        CLog::info("push mids post data:".json_encode($arg));
+        Log::info("push mids post data:".json_encode($arg));
         /**
          * @var LogicPush
          */

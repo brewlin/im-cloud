@@ -11,7 +11,7 @@ use App\Service\Dao\Push;
 use Core\Cloud;
 use Core\Container\Mapping\Bean;
 use Im\Cloud\Proto;
-use Log\Helper\CLog;
+use Log\Helper\Log;
 
 /**
  * Class Broadcast
@@ -25,7 +25,7 @@ class Broadcast
      */
     public static function push(Proto $proto,int $op)
     {
-        CLog::info("Cloud broadcast op:$op data:".json_encode($proto));
+        Log::info("Cloud broadcast op:$op data:".json_encode($proto));
 
         $start_fd = 0;
         while(true)

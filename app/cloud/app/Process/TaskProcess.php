@@ -9,7 +9,7 @@
 namespace App\Process;
 use App\Packet\Task;
 use Core\Co;
-use Log\Helper\CLog;
+use Log\Helper\Log;
 use Process\Contract\AbstractProcess;
 use Process\Process;
 
@@ -46,7 +46,7 @@ class TaskProcess extends AbstractProcess
 //                },false);
             }catch (\Throwable $e)
             {
-               CLog::debug($e->getMessage());
+               Log::debug($e->getMessage());
             }
         }
     }

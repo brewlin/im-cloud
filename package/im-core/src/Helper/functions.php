@@ -135,7 +135,7 @@ if (!function_exists('context')) {
      * Get current context
      *
      */
-    function context(): ContextInterface
+    function context(): ?ContextInterface
     {
         return Context::get();
     }

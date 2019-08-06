@@ -10,7 +10,7 @@ namespace App\Service\Dao;
 
 
 use ImRedis\Redis;
-use Log\Helper\CLog;
+use Log\Helper\Log;
 
 class Bucket
 {
@@ -88,7 +88,7 @@ class Bucket
     public static function fd(string $key){
         $fd = self::$keyToFd[$key];
         if(empty($fd)){
-            CLog::error("key to fd :not find key:$key");
+            Log::error("key to fd :not find key:$key");
         }
         return $fd;
 

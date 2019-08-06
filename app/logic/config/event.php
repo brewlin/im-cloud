@@ -22,7 +22,5 @@ return [
     SwooleEvent::PIPE_MESSAGE => new PipeMessageListener(),
     SwooleEvent::WORKER_STOP => new WorkerStopListener(),
     SwooleEvent::SHUTDOWN    => new ShutdownListener(),
-    //监听websocket 事件
-    SwooleEvent::MESSAGE     => new MessageListener(),
     SwooleEvent::WORKER_START => new WorkerStartListener()
 ];

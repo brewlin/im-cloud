@@ -12,7 +12,7 @@ use Core\Co;
 use Core\Container\Mapping\Bean;
 use Core\Context\Context;
 use Im\Logic\PushMsg;
-use Log\Helper\CLog;
+use Log\Helper\Log;
 
 /**
  * Class Job
@@ -34,11 +34,11 @@ class Job
             if(method_exists($pushmsg,$method)){
                 $pushmsg->{$method}($value);
             }else{
-                CLog::error("pushmsg not exist method:".$method);
+                Log::error("pushmsg not exist method:".$method);
                 return;
             }
         }
-        CLog::info("job node push msgType:".$pushmsg->getType());
+        Log::info("job node push msgType:".$pushmsg->getType());
         $keys = [];
         foreach ($pushmsg->getKeys()->getIterator() as $v){
             $keys[] = $v;

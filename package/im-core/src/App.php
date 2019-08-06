@@ -99,7 +99,10 @@ class App
     }
     public function initLog()
     {
-        $lineFormatter = new LineFormatter();
+//        $format = '%datetime% [%level_name%] [%channel%] [%event%] [tid:%tid%] [cid:%cid%] [traceid:%traceid%] [spanid:%spanid%] [parentid:%parentid%] %messages%';
+        $format = '%datetime% [%level_name%] [%channel%] %messages%';
+        $dateFormat = 'Y-m-d H:i:s';
+        $lineFormatter = new LineFormatter($format,$dateFormat);
         $noticeHandler = new FileHandler();
         $noticeHandler->setFormatter($lineFormatter);
         $noticeHandler->setLevels([

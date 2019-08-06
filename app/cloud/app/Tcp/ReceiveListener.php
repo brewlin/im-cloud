@@ -15,7 +15,7 @@ use App\Websocket\Exception\RequireArgException;
 use Core\Swoole\ReceiveInterface;
 use Im\Logic\ConnectReply;
 use Im\Logic\ConnectReq;
-use Log\Helper\CLog;
+use Log\Helper\Log;
 use Swoole\Server;
 
 class ReceiveListener implements ReceiveInterface
@@ -52,7 +52,7 @@ class ReceiveListener implements ReceiveInterface
             $exception = $e->getMessage();
             $msg = $e->getMessage();
             $returnData = ['code' => $code,'msg' => $msg];
-            CLog::error("file:".$file." line:$line code:$code msg:$exception");
+            Log::error("file:".$file." line:$line code:$code msg:$exception");
             if($registerBucket)
                 Bucket::del($roomId,$key,$fd);
             $server->send($fd,json_encode($returnData));

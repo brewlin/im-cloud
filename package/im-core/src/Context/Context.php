@@ -49,7 +49,6 @@ class Context
     public static function get(): ?ContextInterface
     {
         $tid = Co::tid();
-
         return self::$context[$tid] ?? null;
     }
 

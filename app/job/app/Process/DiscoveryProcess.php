@@ -12,7 +12,7 @@ namespace App\Process;
 use App\Lib\LogicClient;
 use Core\Cloud;
 use Core\Processor\ProcessorInterface;
-use Log\Helper\CLog;
+use Log\Helper\Log;
 use Process\Contract\AbstractProcess;
 use Process\Process;
 use Process\ProcessInterface;
@@ -42,14 +42,14 @@ class DiscoveryProcess extends AbstractProcess
      */
     public function run(Process $process)
     {
-        CLog::info("discvoery process start");
+        Log::info("discvoery process start");
         //job节点无需注册 服务中心
         $config = config("discovery");
         $discoveryname = $config["consul"]["discovery"]["name"];
         while (true){
             $services = provider()->select()->getServiceList($discoveryname);
             if(empty($services)){
-                CLog::error("not find instance node:$discoveryname");
+                Log::error("not find instance node:$discoveryname");
                 goto SLEEP;
             }
             for($i = 0; $i < (int)env("WORKER_NUM",4);$i++)

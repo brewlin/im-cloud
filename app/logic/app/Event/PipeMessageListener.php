@@ -10,7 +10,7 @@ namespace App\Event;
 
 
 use App\Lib\LogicClient;
-use Swoft\Log\Helper\CLog;
+use Log\Helper\Log;
 use Core\Swoole\PipeMessageInterface;
 use Swoole\Server;
 

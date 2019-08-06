@@ -12,7 +12,7 @@ namespace App\Service\Dao;
 use App\Service\Model\Online;
 use Core\Container\Mapping\Bean;
 use ImRedis\Redis;
-use Log\Helper\CLog;
+use Log\Helper\Log;
 
 /**
  * Class RedisDao
@@ -58,7 +58,7 @@ class RedisDao
             $arg[] = $this->keyKeyServer($v);
         }
         $res = Redis::mget($arg);
-        CLog::info("getServersByKeys mget input:".json_encode($keys)." output:".json_encode($res));
+        Log::info("getServersByKeys mget input:".json_encode($keys)." output:".json_encode($res));
         return $res;
     }
     /**
@@ -71,7 +71,7 @@ class RedisDao
         foreach($mids as $mid){
             $ress = array_merge($ress,Redis::hgetall($this->keyMidServer($mid)));
         }
-        CLog::info("getKeysByMids hgetall input:".json_encode($mids)." output:".json_encode($ress));
+        Log::info("getKeysByMids hgetall input:".json_encode($mids)." output:".json_encode($ress));
         return $ress;
     }
     /**
@@ -118,11 +118,11 @@ class RedisDao
         if($mid > 0){
             Redis::hSet($this->keyMidServer($mid),$key,$server);
             Redis::expire($this->keyMidServer($mid),self::$redisExpire);
-            CLog::info("addMapping hset $mid $key $server ");
+            Log::info("addMapping hset $mid $key $server ");
         }
         Redis::set($this->keyKeyServer($key),$server);
         Redis::expire($this->keyKeyServer($key),self::$redisExpire);
-        CLog::info("addMapping set $mid $key $server");
+        Log::info("addMapping set $mid $key $server");
     }
 
     /**
@@ -133,10 +133,10 @@ class RedisDao
     {
         if($mid > 0){
             Redis::expire($this->keyMidServer($mid),self::$redisExpire);
-            CLog::info("expiremapping $mid $key ".self::$redisExpire);
+            Log::info("expiremapping $mid $key ".self::$redisExpire);
         }
         Redis::expire($this->keyKeyServer($key),self::$redisExpire);
-        CLog::info("expiremapping $mid $key ".self::$redisExpire);
+        Log::info("expiremapping $mid $key ".self::$redisExpire);
 
     }
 
@@ -148,10 +148,10 @@ class RedisDao
     public function delMapping(int $mid,string $key,string $server)
     {
         if($mid > 0 ){
-            CLog::info("delMapping hdel $mid $key $server");
+            Log::info("delMapping hdel $mid $key $server");
             Redis::hDel($this->keyMidServer($mid),$key);
         }
-        CLog::info("delMapping del $key $mid $server");
+        Log::info("delMapping del $key $mid $server");
         Redis::del($this->keyKeyServer($key));
     }
 

@@ -11,7 +11,7 @@ namespace App\Process;
 
 use Core\Cloud;
 use Core\Processor\ProcessorInterface;
-use Log\Helper\CLog;
+use Log\Helper\Log;
 use Process\Contract\AbstractProcess;
 use Process\Process;
 use Process\ProcessInterface;
@@ -47,7 +47,7 @@ class DiscoveryProcess extends AbstractProcess
         while (true){
             $services = provider()->select()->getServiceList($discovery);
             if(empty($services)){
-                CLog::error("not find any instance node:$discovery");
+                Log::error("not find any instance node:$discovery");
                 goto SLEEP;
             }
             for($i = 0; $i < (int)env("WORKER_NUM",4);$i++)

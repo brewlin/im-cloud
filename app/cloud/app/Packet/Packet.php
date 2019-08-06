@@ -10,7 +10,7 @@ namespace App\Packet;
 use Core\Container\Mapping\Bean;
 use Core\Contract\PackerInterface;
 use Im\Cloud\Proto;
-use Log\Helper\CLog;
+use Log\Helper\Log;
 
 /**
  * Class Packet
@@ -43,7 +43,7 @@ class Packet implements PackerInterface
     public function pack($buf):string
     {
         if(empty($buf)){
-            CLog::error("pack error buf is none");
+            Log::error("pack error buf is none");
         }
         if(!is_string($buf)){
             $buf = json_encode($buf);
