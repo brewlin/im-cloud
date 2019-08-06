@@ -20,7 +20,7 @@ class GrpcLogicClient
      * @param string $serverId
      * @return LogicConnectionPool
      */
-    public static function connection(string $serverId){
+    public static function connection(){
         /** @var PoolFactory $pool */
         $pool = bean(PoolFactory::class);
         /** @var LogicConnectionPool $connectionPool */
@@ -33,16 +33,35 @@ class GrpcLogicClient
      * @param array $metadata metadata
      * @param array $options call options
      */
-    public static function Connect(string $serverId,\Im\Logic\ConnectReq $argument,
-                            $metadata = [], $options = []) {
+    public static function Connect(string $serverId,\Im\Logic\ConnectReq $argument, $metadata = [], $options = []) {
         if(empty($serverId))return;
-        $pool = self::connection($serverId);
+        $pool = self::connection();
         $connection = $pool->getConnection($serverId);
         $client = $connection->getActiveConnection();
         $res = $client->Connect($argument,$metadata,$options);
         self::release($pool,$connection);
         return $res;
     }
+    /**
+     * Heartbeat
+     * @param \Im\Logic\HeartbeatReq $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     */
+    public static function Heartbeat(string $serverId,\Im\Logic\HeartbeatReq $argument, $metadata = [], $options = []) {
+        if(empty($serverId))return;
+        $pool = self::connection();
+        $connection = $pool->getConnection($serverId);
+        $client = $connection->getActiveConnection();
+        $res = $client->Heartbeat($argument,$metadata,$options);
+        self::release($pool,$connection);
+        return $res;
+    }
+
+    /**
+     * @param LogicConnectionPool $pool
+     * @param Connection $con
+     */
     public static function release(LogicConnectionPool $pool,Connection $con)
     {
         $pool->release($pool);

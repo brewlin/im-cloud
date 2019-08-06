@@ -14,30 +14,27 @@ use Log\Helper\Log;
 
 class Bucket
 {
-    const IpCounts =    "im-cloud-ip-counts";
-
-    const BucketsRoom = "im-cloud-buckets-rooms";
-
-    const RoomFds =     "im-cloud-roomid:%s";
-
-    const KeyToFd =     "im-cloud-key:%s-to-fd";
 
     public static $ipCounts = [];
     public static $keyToFd = [];
+    public static $FdToKey = [];
     public static $bucketsRoom = [];
     public static $roomFds = [];
+    public static $FdToMid = [];
 
     /**
      * @param string $roomId
      * @param string $key
      * @param int $fd
      */
-    public static function put(string $roomId = "",string $key,int $fd)
+    public static function put(string $key,int $fd,string $mid,string $roomId = "")
     {
         //ip ++
         self::$ipCounts[env("APP_HOST","127.0.0.1")] ++;
         //bind key to fd
         self::$keyToFd[$key] = $fd;
+        self::$FdToKey[$fd] = $key;
+        self::$FdToMid[$fd] = $mid;
         if(empty($roomId)){
             return;
         }
@@ -52,13 +49,16 @@ class Bucket
     /**
      * @param string $key
      */
-    public static function del(string $roomId = "",string $key,int $fd)
+    public static function del(string $key,int $fd,string $roomId = "")
     {
         //del key to fd
         unset(self::$keyToFd[$key]);
+        unset(self::$FdToKey[$fd]);
+        unset(self::$FdToMid[$fd]);
         if(!empty($roomId)){
             //del set room - fd
             unset(self::$roomFds[$roomId][$fd]);
+
         }
         //ip count --
         self::$ipCounts[env("APP_HOST","127.0.0.1")] --;
@@ -86,11 +86,24 @@ class Bucket
      * @return bool|mixed
      */
     public static function fd(string $key){
-        $fd = self::$keyToFd[$key];
-        if(empty($fd)){
-            Log::error("key to fd :not find key:$key");
-        }
-        return $fd;
+        return self::$keyToFd[$key];
+    }
 
+    /**
+     * @param int $fd
+     * @return mixed
+     */
+    public static function key(int $fd)
+    {
+        return self::$FdToKey[$fd];
+    }
+
+    /**
+     * @param int $fd
+     * @return mixed
+     */
+    public static function mid(int $fd)
+    {
+        return self::$FdToMid[$fd];
     }
 }

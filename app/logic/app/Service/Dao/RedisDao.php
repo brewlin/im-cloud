@@ -10,6 +10,7 @@ namespace App\Service\Dao;
 
 
 use App\Service\Model\Online;
+use Core\Co;
 use Core\Container\Mapping\Bean;
 use ImRedis\Redis;
 use Log\Helper\Log;
@@ -68,10 +69,26 @@ class RedisDao
     public function getKeysByMids(array $mids)
     {
         $ress = [];
+        $offline = [];
         foreach($mids as $mid){
-            $ress = array_merge($ress,Redis::hgetall($this->keyMidServer($mid)));
+            $res = Redis::hGetAll($this->keyMidServer($mid));
+            foreach ($res as $key => $ser){
+                //check offline client
+                if(!Redis::exists($this->keyKeyServer($key))){
+                    $offline[$mid][] = $key;
+                    unset($res[$key]);
+                }
+            }
+            $ress = array_merge($ress,$res);
         }
-        Log::info("getKeysByMids hgetall input:".json_encode($mids)." output:".json_encode($ress));
+        Log::info("getKeysByMids hgetall input:%s output:%s",json_encode($mids),json_encode($ress));
+        if(empty($offline))return $ress;
+        Co::create(function()use($offline){
+            Log::info("offline client :%s",json_encode($offline));
+            foreach ($offline as $mid => $key) {
+                Redis::hDel($this->keyMidServer($mid),...$key);
+            }
+        },false);
         return $ress;
     }
     /**

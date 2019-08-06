@@ -48,7 +48,7 @@ class Auth
             [$mid,$key,$roomId,$accepts,$heartbeat] = $this->registerLogic($body);
             //step 2
             /** @var Task $task */
-            \bean(Task::class)->deliver(Bucket::class,"put",[$roomId,$key,$fd]);
+            \bean(Task::class)->deliver(Bucket::class,"put",[$key,$fd,$mid,$roomId]);
             //step 3
             $this->registerSuccess();
         }catch (\Throwable $e){
@@ -58,7 +58,7 @@ class Auth
             $task->setClass(Bucket::class);
             //del fd
             $task->setMethod("del");
-            $task->setArg([$roomId,$key,$fd]);
+            $task->setArg([$key,$fd,$roomId]);
             $task->exec();
         }
     }

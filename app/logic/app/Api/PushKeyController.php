@@ -7,7 +7,7 @@
  */
 
 namespace App\Api;
-use App\Lib\LogicPush;
+use App\Task\LogicPush;
 use Core\Context\Context;
 
 /**
