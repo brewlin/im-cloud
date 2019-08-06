@@ -78,7 +78,6 @@ class Log
      * @param array  $params
      *
      * @return bool
-     * @throws ReflectionException
      */
     public static function info(string $message, ...$params)
     {
@@ -93,7 +92,6 @@ class Log
      * @param array  $params
      *
      * @return bool
-     * @throws ReflectionException
      */
     public static function warning(string $message, ...$params)
     {
@@ -108,7 +106,6 @@ class Log
      * @param array  $params
      *
      * @return bool
-     * @throws ReflectionException
      */
     public static function error(string $message, ...$params)
     {
@@ -125,7 +122,6 @@ class Log
      * @param string $key
      * @param mixed  $val
      *
-     * @throws ReflectionException
      */
     public static function pushLog(string $key, $val)
     {
@@ -138,8 +134,6 @@ class Log
      * @param string $name
      * @param array  $params
      *
-     * @throws ReflectionException
-     * @throws ContainerException
      */
     public static function profileStart(string $name, ...$params): void
     {
@@ -151,8 +145,6 @@ class Log
      * @param int      $hit
      * @param int|null $total
      *
-     * @throws ReflectionException
-     * @throws ContainerException
      */
     public static function counting(string $name, int $hit, int $total = null): void
     {
@@ -164,9 +156,6 @@ class Log
      *
      * @param string $name
      * @param array  $params
-     *
-     * @throws ReflectionException
-     * @throws ContainerException
      */
     public static function profileEnd(string $name, ...$params): void
     {
@@ -175,8 +164,6 @@ class Log
 
     /**
      * @return Logger
-     * @throws ReflectionException
-     * @throws ContainerException
      */
     public static function getLogger(): Logger
     {
