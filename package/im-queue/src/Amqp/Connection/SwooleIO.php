@@ -99,9 +99,9 @@ class SwooleIO extends AbstractIO
         bool $keepalive = false,
         int $heartbeat = 0
     ) {
-        if ($heartbeat !== 0 && ($readWriteTimeout < ($heartbeat * 2))) {
-            throw new InvalidArgumentException('Argument readWriteTimeout must be at least 2x the heartbeat.');
-        }
+//        if ($heartbeat !== 0 && ($readWriteTimeout < ($heartbeat * 2))) {
+//            throw new InvalidArgumentException('Argument readWriteTimeout must be at least 2x the heartbeat.');
+//        }
         $this->host = $host;
         $this->port = $port;
         $this->connectionTimeout = $connectionTimeout;
@@ -164,7 +164,6 @@ class SwooleIO extends AbstractIO
             if (! $this->sock->connected) {
                 throw new AMQPRuntimeException('Broken pipe or closed connection');
             }
-
             $read_buffer = $this->sock->recv($this->readWriteTimeout ? $this->readWriteTimeout : -1);
             if ($read_buffer === false) {
                 throw new AMQPRuntimeException('Error receiving data, errno=' . $this->sock->errCode);

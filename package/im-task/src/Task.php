@@ -35,8 +35,38 @@ class Task
      * @return bool|array
      * @throws TaskException
      */
-    public static function deliver(string $taskName, string $methodName, array $params = [], string $type = self::TYPE_CO, $timeout = 3)
+    public static function deliver(string $taskName, string $methodName, array $params = [], string $type = self::TYPE_CO)
     {
+
+        $data   = TaskHelper::pack($taskName, $methodName, $params, $type);
+
+        if(!App::isWorkerStatus() && !App::isCoContext()){
+            return self::deliverByQueue($data);
+        }
+
+        if(!App::isWorkerStatus() && App::isCoContext()){
+            throw new TaskException('Please deliver task by http!');
+        }
+
+        $server = App::server();
+        // Deliver async task
+        return $server->task($data);
+    }
+    /**
+     * Deliver coroutine or async task
+     *
+     * @param string $taskName
+     * @param string $methodName
+     * @param array  $params
+     * @param string $type
+     * @param int    $timeout
+     *
+     * @return bool|array
+     * @throws TaskException
+     */
+    public static function Codeliver(string $taskName, string $methodName, array $params = [], string $type = self::TYPE_CO, $timeout = 3)
+    {
+
         $data   = TaskHelper::pack($taskName, $methodName, $params, $type);
 
         if(!App::isWorkerStatus() && !App::isCoContext()){
@@ -49,16 +79,12 @@ class Task
 
         $server = App::server();
         // Delier coroutine task
-        if ($type == self::TYPE_CO) {
-            $tasks[0]  = $data;
-            $prifleKey = 'task' . '.' . $taskName . '.' . $methodName;
-            $result = $server->taskCo($tasks, $timeout);
 
-            return $result;
-        }
+        $tasks[0]  = $data;
+        $prifleKey = 'task' . '.' . $taskName . '.' . $methodName;
+        $result = $server->taskCo($tasks, $timeout);
 
-        // Deliver async task
-        return $server->task($data);
+        return $result;
     }
 
     private static function deliverByQueue(string $data)

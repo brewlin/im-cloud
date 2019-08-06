@@ -71,7 +71,7 @@ class Co
      *
      * @return int If success, return coID
      */
-    public static function create(callable $callable, bool $wait = true): int
+    public static function create(callable $callable, bool $wait = false): int
     {
         $tid = self::tid();
 

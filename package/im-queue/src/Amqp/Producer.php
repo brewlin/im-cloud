@@ -8,6 +8,7 @@ namespace ImQueue\Amqp;
 use Core\Container\Mapping\Bean;
 use ImQueue\Amqp\Message\ProducerMessageInterface;
 use ImQueue\Pool\AmqpConnectionPool;
+use Log\Helper\Log;
 use PhpAmqpLib\Message\AMQPMessage;
 
 /**
@@ -40,6 +41,7 @@ class Producer extends Builder
         } catch (\Throwable $exception) {
             // Reconnect the connection before release.
             $connection->reconnect();
+            Log::error("produce error msg:%s",$exception->getMessage());
             throw $exception;
         } finally {
             $pool->release($pool);

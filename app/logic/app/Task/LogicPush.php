@@ -15,6 +15,7 @@ use App\Service\Model\Room;
 use Core\Co;
 use Core\Container\Container;
 use Core\Container\Mapping\Bean;
+use Swoole\Coroutine;
 
 /**
  * @package lib
@@ -64,7 +65,7 @@ class LogicPush
                 \container()->get(QueueDao::class)->pushMsg($op,$server,$key,$msg);
             }
 
-        },false);
+        });
 
     }
 
