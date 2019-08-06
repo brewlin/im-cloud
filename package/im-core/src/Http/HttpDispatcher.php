@@ -15,6 +15,7 @@ use Core\Http\Request\Request;
 use Core\Http\Response\Response;
 use FastRoute\Dispatcher;
 use Log\Helper\CLog;
+use Log\Helper\Log;
 
 class HttpDispatcher
 {
@@ -56,7 +57,7 @@ class HttpDispatcher
                 $response->withStatus(405)->withContent(self::METHOD_NOT_ALLOWED);
                 break;
             case Dispatcher::FOUND: // 找到对应的方法
-//                try{
+                try{
                     $handler = explode("/","/App".$routeInfo[1]); // 获得处理函数
                     $action = array_pop($handler);
                     $classname = implode($handler,"\\");
@@ -66,11 +67,11 @@ class HttpDispatcher
                     }else{
                         $response->withContent(json_encode($rsp));
                     }
-//                }catch (\Throwable $e){
-//                    CLog::info("router dispatcher is error:".$e->getMessage());
-//                    $response->withStatus(500)
-//                        ->withContent($e->getMessage());
-//                }
+                }catch (\Throwable $e){
+                    Log::error("router dispatcher is error  msg:%s file:%s line:%s",$e->getMessage(),$e->getFile(),$e->getLine());
+                    $response->withStatus(500)
+                        ->withContent($e->getMessage());
+                }
                 break;
         }
         return $response;

@@ -17,6 +17,7 @@ use ReflectionException;
 use Core\Co;
 use Log\Helper\Log;
 use Stdlib\Helper\JsonHelper;
+use Swoole\Coroutine;
 use UnexpectedValueException;
 
 /**
@@ -63,7 +64,6 @@ class FileHandler extends AbstractProcessingHandler
      *
      * @return void
      * @throws ReflectionException
-     * @throws ContainerException
      */
     public function handleBatch(array $records): void
     {
@@ -81,9 +81,8 @@ class FileHandler extends AbstractProcessingHandler
      * @param array $records
      *
      * @throws ReflectionException
-     * @throws ContainerException
      */
-    protected function write(array $records): void
+    protected function write(array $records)
     {
         if (Log::getLogger()->isJson()) {
             $records = array_map([$this, 'formatJson'], $records);
@@ -97,13 +96,14 @@ class FileHandler extends AbstractProcessingHandler
             throw new InvalidArgumentException('Write log file must be under Coroutine!');
         }
 
-        $res = Co::writeFile($this->logFile, $messageText, FILE_APPEND);
-
-        if ($res === false) {
-            throw new InvalidArgumentException(
-                sprintf('Unable to append to log file: %s', $this->logFile)
-            );
-        }
+        Coroutine::create(function ()use($messageText){
+            $res = Co::writeFile($this->logFile, $messageText, FILE_APPEND);
+            if ($res === false) {
+                throw new InvalidArgumentException(
+                    sprintf('Unable to append to log file: %s', $this->logFile)
+                );
+            }
+        });
     }
 
     /**
