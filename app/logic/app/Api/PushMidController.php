@@ -10,14 +10,14 @@ namespace App\Api;
 
 
 use App\Api\MsgEnum;
-use App\Lib\LogicPush;
+use App\Task\LogicPush;
 use Co\Client;
 use Core\App;
 use Core\Cloud;
 use Core\Co;
 use Core\Context\Context;
 use Log\Helper\CLog;
-use Swoft\Log\Helper\Log;
+use Log\Helper\Log;
 use Task\Task;
 
 class PushMidController extends BaseController
@@ -27,6 +27,7 @@ class PushMidController extends BaseController
      */
     public function mids()
     {
+        Log::error("sdfs");
         $post  = Context::get()->getRequest()->input();
         if(empty($post["operation"]) || empty($post["mids"]) ||empty($post["msg"])){
             return $this->error("缺少参数");

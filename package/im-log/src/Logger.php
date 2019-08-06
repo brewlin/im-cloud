@@ -102,7 +102,7 @@ class Logger extends \Monolog\Logger
     /**
      * @var bool
      */
-    protected $enable = false;
+    protected $enable = true;
 
     /**
      * @var bool

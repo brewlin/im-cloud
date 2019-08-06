@@ -4,7 +4,6 @@
 namespace Log\Handler;
 
 
-use function alias;
 use function array_column;
 use DateTime;
 use function dirname;
@@ -12,6 +11,7 @@ use function implode;
 use function in_array;
 use InvalidArgumentException;
 use function is_dir;
+use Log\Logger;
 use Monolog\Handler\AbstractProcessingHandler;
 use ReflectionException;
 use Core\Co;
@@ -31,7 +31,7 @@ class FileHandler extends AbstractProcessingHandler
      *
      * @var array
      */
-    protected $levels = [];
+    protected $levels =  [];
 
     /**
      * Write log file
@@ -45,8 +45,15 @@ class FileHandler extends AbstractProcessingHandler
      */
     public function init(): void
     {
-        $this->logFile = alias($this->logFile);
         $this->createDir();
+    }
+    public function setLevels(array $levels)
+    {
+        $this->levels = $levels;
+    }
+    public function setLogfile(string $file)
+    {
+        $this->logFile = $file;
     }
 
     /**

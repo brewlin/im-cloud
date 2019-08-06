@@ -4,6 +4,7 @@
 namespace Log\Helper;
 
 
+use Core\Container\Mapping\Bean;
 use ReflectionException;
 use function sprintf;
 use Log\Logger;
@@ -154,6 +155,6 @@ class Log
      */
     public static function getLogger(): Logger
     {
-        return BeanFactory::getBean('logger');
+        return container()->get(Logger::class);
     }
 }

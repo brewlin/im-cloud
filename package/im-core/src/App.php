@@ -9,15 +9,19 @@
 namespace Core;
 
 
+use Core\Container\Mapping\Bean;
 use Core\Processor\AnnotationProcessor;
 use Core\Processor\Container;
 use Core\Server\HttpServer;
-use Core\Log\Logger;
 use Core\Processor\AppProcessor;
 use Core\Processor\ConfigProcessor;
 use Core\Processor\EnvProcessor;
 use Core\Server\WebsocketServer;
+use Log\CLogger;
+use Log\Handler\FileHandler;
 use Log\Helper\CLog;
+use Log\Logger;
+use Monolog\Formatter\LineFormatter;
 use Swoole\Coroutine;
 use Swoole\Server;
 
@@ -37,7 +41,14 @@ class App
     {
         Cloud::$app = $this;
         //initLog
-        Logger::initLog();
+        $config = [
+            'name'    => 'im-cloud',
+            'enable'  => true,
+            'output'  => true,
+            'levels'  => [],
+            'logFile' => ''
+        ];
+        CLog::init($config);
         CLog::info('Swoole\Runtime::enableCoroutine');
         //set env path
         $this->setEnvFile();
@@ -65,6 +76,7 @@ class App
      */
     public function run(){
         $this->processor->handle();
+        $this->initLog();
         if(env("ENABLE_WS")){
             ( new WebsocketServer())->start();
         }
@@ -84,6 +96,33 @@ class App
      */
     public function getEnvFile():string {
        return $this->envFile;
+    }
+    public function initLog()
+    {
+        $lineFormatter = new LineFormatter();
+        $noticeHandler = new FileHandler();
+        $noticeHandler->setFormatter($lineFormatter);
+        $noticeHandler->setLevels([
+            Logger::NOTICE,
+            Logger::INFO,
+            Logger::DEBUG,
+            Logger::TRACE,
+        ]);
+        $noticeHandler->setLogfile(ROOT."/runtime/logs/notice.log");
+        $noticeHandler->init();
+
+        $appHandler = new FileHandler();
+        $appHandler->setFormatter($lineFormatter);
+        $appHandler->setLevels([
+            Logger::ERROR,
+            Logger::WARNING,
+        ]);
+        $appHandler->setLogfile(ROOT."/runtime/logs/error.log");
+        $appHandler->init();
+        /** @var \Log\Logger $logger */
+        $logger = \bean(\Log\Logger::class);
+        $logger->setHandlers([$noticeHandler,$appHandler]);
+
     }
 
     /**

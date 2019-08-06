@@ -6,12 +6,13 @@
  * Time: 23:05
  */
 
-namespace App\Lib;
+namespace App\Task;
 
 
 use App\Service\Dao\QueueDao;
 use App\Service\Dao\RedisDao;
 use App\Service\Model\Room;
+use Core\Co;
 use Core\Container\Container;
 use Core\Container\Mapping\Bean;
 
@@ -51,16 +52,19 @@ class LogicPush
      */
     public function pushMids(int $op,array $mids,$msg)
     {
-        /** @var RedisDao $servers */
-        $servers = \container()->get(RedisDao::class)->getKeysByMids($mids);
-        $keys = [];
-        foreach($servers as $key => $server){
-            $keys[$server][] = $key;
-        }
-        foreach($keys as $server => $key){
-            //丢到队列里去操做，让job去处理
-            \container()->get(QueueDao::class)->pushMsg($op,$server,$key,$msg);
-        }
+        Co::create(function ()use($op,$mids,$msg){
+            /** @var RedisDao $servers */
+            $servers = \container()->get(RedisDao::class)->getKeysByMids($mids);
+            $keys = [];
+            foreach($servers as $key => $server){
+                $keys[$server][] = $key;
+            }
+            foreach($keys as $server => $key){
+                //丢到队列里去操做，让job去处理
+                \container()->get(QueueDao::class)->pushMsg($op,$server,$key,$msg);
+            }
+
+        },false);
 
     }
 
