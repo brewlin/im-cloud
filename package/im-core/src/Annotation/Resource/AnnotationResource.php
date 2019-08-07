@@ -72,7 +72,7 @@ class AnnotationResource extends Resource
      * @var array
      */
     private $excludedFilenames = [
-        'Cloud.php' => 1,
+//        'Cloud.php' => 1,
     ];
 
     /**

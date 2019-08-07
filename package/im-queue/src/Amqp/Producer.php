@@ -42,7 +42,6 @@ class Producer extends Builder
             // Reconnect the connection before release.
             $connection->reconnect();
             Log::error("produce error msg:%s",$exception->getMessage());
-            throw $exception;
         } finally {
             $pool->release($pool);
         }

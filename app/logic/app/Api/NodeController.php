@@ -8,7 +8,13 @@
 
 namespace App\Api;
 
+use Core\Container\Mapping\Bean;
 
+/**
+ * Class NodeController
+ * @package App\Api
+ * @Bean()
+ */
 class NodeController
 {
 

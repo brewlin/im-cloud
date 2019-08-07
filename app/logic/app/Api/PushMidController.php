@@ -15,10 +15,17 @@ use Co\Client;
 use Core\App;
 use Core\Cloud;
 use Core\Co;
+use Core\Container\Mapping\Bean;
 use Core\Context\Context;
 use Log\Helper\Log;
+use Swoole\Coroutine;
 use Task\Task;
 
+/**
+ * Class PushMidController
+ * @package App\Api
+ * @Bean()
+ */
 class PushMidController extends BaseController
 {
     /**
@@ -26,6 +33,7 @@ class PushMidController extends BaseController
      */
     public function mids()
     {
+        $this->end();
         $post  = Context::get()->getRequest()->input();
         if(empty($post["operation"]) || empty($post["mids"]) ||empty($post["msg"])){
             return $this->error("缺少参数");
@@ -35,14 +43,11 @@ class PushMidController extends BaseController
             "mids" => is_array($post["mids"])?$post["mids"]:[$post["mids"]],
             "msg" => $post["msg"]
         ];
-        Log::info("push mids post data:".json_encode($arg));
+        Log::debug("push mids post data:".json_encode($arg));
         /**
          * @var LogicPush
          */
-        Co::create(function ()use($arg){
             Task::deliver(LogicPush::class,"pushMids",[(int)$arg["op"],$arg["mids"],$arg["msg"]]);
-//            container()->get(LogicPush::class)->pushMids($arg["op"],$arg["mids"],$arg["msg"]);
-        },false);
         return $this->success();
     }
 

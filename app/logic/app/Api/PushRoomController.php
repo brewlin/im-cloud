@@ -9,9 +9,15 @@
 namespace App\Api;
 
 
-use App\Lib\LogicPush;
+use App\Task\LogicPush;
+use Core\Container\Mapping\Bean;
 use Core\Context\Context;
 
+/**
+ * Class PushRoomController
+ * @package App\Api
+ * @Bean()
+ */
 class PushRoomController extends BaseController
 {
     public function room(){

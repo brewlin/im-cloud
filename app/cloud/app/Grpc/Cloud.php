@@ -6,7 +6,7 @@
  * Time: 11:15
  */
 
-namespace App\GRpc;
+namespace App\Grpc;
 
 
 use App\Lib\Broadcast;
@@ -15,6 +15,7 @@ use App\Service\Dao\Bucket;
 use App\Service\Dao\Push;
 use App\Service\Dao\Room;
 use Core\Co;
+use Core\Container\Mapping\Bean;
 use Core\Context\Context;
 use Grpc\Parser;
 use Im\Cloud\BroadcastReply;
@@ -28,6 +29,11 @@ use Im\Logic\CloseReply;
 use Im\Logic\PingReply;
 use Log\Helper\Log;
 
+/**
+ * Class Cloud
+ * @package App\Grpc
+ * @Bean()
+ */
 class Cloud
 {
     /**

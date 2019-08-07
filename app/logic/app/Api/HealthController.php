@@ -10,12 +10,14 @@ namespace App\Api;
 
 
 
+use Core\Container\Mapping\Bean;
 use Core\Context\Context;
 
 /**
  * 心跳的健康检查，在服务发现时配置的check接口
  * Class HealthController
  * @package App\Api
+ * @Bean()
  */
 class HealthController
 {

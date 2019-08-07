@@ -13,7 +13,7 @@ return [
         'locale' => 'en_US',
         'connection_timeout' => 3.0,
         //此参数针对logic节点性能至关重要，生产数据后无需获得结果
-        'read_write_timeout' => 0.1,
+        'read_write_timeout' => 6.0,
         'context' => null,
         'keepalive' => false,
         'heartbeat' => 3,

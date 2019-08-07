@@ -65,7 +65,7 @@ class LogicPush
                 \container()->get(QueueDao::class)->pushMsg($op,$server,$key,$msg);
             }
 
-        });
+        },true);
 
     }
 

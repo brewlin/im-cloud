@@ -600,6 +600,15 @@ class Logger extends \Monolog\Logger
     }
 
     /**
+     * @param bool $enable
+     * @return void
+     */
+    public function setEnable(bool $enable):void
+    {
+        $this->enable = $enable;
+    }
+
+    /**
      * @return bool
      */
     public function isJson(): bool

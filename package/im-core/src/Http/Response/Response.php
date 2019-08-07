@@ -3,6 +3,7 @@
 namespace Core\Http\Response;
 
 use Core\Concern\ContainerTrait;
+use Core\Context\Context;
 use Core\Http\ContentType;
 use Core\Http\Stream;
 use function implode;
@@ -20,7 +21,7 @@ use Core\Container\Mapping\Bean;
 class Response implements ResponseInterface
 {
     use MessageTrait;
-
+    const EndCheck = "response_is_end";
     /**
      * @var string
      */
@@ -152,6 +153,7 @@ class Response implements ResponseInterface
      */
     public function send(): void
     {
+        if(Context::value(self::EndCheck))return;
         // Is send file
         if ($this->filePath) {
             $this->coResponse->header(ContentType::KEY, $this->fileType);
@@ -161,6 +163,14 @@ class Response implements ResponseInterface
 
         // Prepare and send
         $this->quickSend($this->prepare());
+    }
+
+    /**
+     *
+     */
+    public function end():void
+    {
+        $this->send();
     }
 
     /**
@@ -190,6 +200,7 @@ class Response implements ResponseInterface
         // Set body
         $content = $response->getBody()->getContents();
         $this->coResponse->end($content);
+        Context::withValue(self::EndCheck,true);
     }
 
     /**

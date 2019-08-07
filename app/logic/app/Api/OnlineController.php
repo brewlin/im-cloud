@@ -9,10 +9,12 @@
 namespace App\Api;
 use App\Lib\Logic;
 use App\Lib\LogicOnline;
+use Core\Container\Mapping\Bean;
 use Core\Context\Context;
 
 /**
  * @package Online
+ * @Bean()
  */
 class OnlineController extends BaseController
 {

@@ -6,10 +6,11 @@
  * Time: 11:15
  */
 
-namespace App\GRpc;
+namespace App\Grpc;
 
 
 use App\Lib\LogicConnection;
+use Core\Container\Mapping\Bean;
 use Core\Context\Context;
 use Grpc\Parser;
 use Im\Logic\CloseReply;
@@ -23,8 +24,18 @@ use Im\Logic\OnlineReply;
 use Im\Logic\OnlineReq;
 use Im\Logic\PingReply;
 
+/**
+ * Class Logic
+ * @package App\GRpc
+ * @Bean()
+ */
 class Logic
 {
+    public function __construct()
+    {
+        var_dump(static::class);
+    }
+
     /**
      * @return \Core\Http\Response\Response
      */

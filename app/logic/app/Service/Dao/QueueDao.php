@@ -35,8 +35,11 @@ class QueueDao
         $type = PushMsg\Type::PUSH;
         $pushmsg = compact("type","operation","server","keys","msg");
         Log::info("push msg to job node data:".json_encode($pushmsg));
+        /** @var Producer $producers */
+        $producers = \bean(Producer::class);
+//        $producers = new Producer();
         //发送到队列里
-        producer()->produce(new Producer($pushmsg));
+        producer()->produce($producers->producer($pushmsg));
     }
 
     /**

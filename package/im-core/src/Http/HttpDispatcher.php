@@ -27,7 +27,7 @@ class HttpDispatcher
         //manager context
         $context = HttpContext::new($request,$response);
         Context::set($context);
-        CLog::info("http method:%s ,http url:%s",$request->getMethod(),$request->getUriPath());
+        Log::info("http method:%s ,http url:%s",$request->getMethod(),$request->getUriPath());
         /** @var Dispatcher $dispatcher */
         $dispatcher = Container::getInstance()->get(HttpRouter::class)->dispatcher;
         $routeInfo = $dispatcher->dispatch($request->getMethod(),$request->getUriPath());
@@ -58,16 +58,17 @@ class HttpDispatcher
                 break;
             case Dispatcher::FOUND: // 找到对应的方法
                 try{
-                    $handler = explode("/","/App".$routeInfo[1]); // 获得处理函数
+                    $handler = explode("/","App".$routeInfo[1]); // 获得处理函数
                     $action = array_pop($handler);
                     $classname = implode($handler,"\\");
-                    $rsp = (new $classname())->$action();
+                    $rsp = bean($classname)->$action();
                     if($rsp instanceof Response){
                         $response = $rsp;
                     }else{
                         $response->withContent(json_encode($rsp));
                     }
                 }catch (\Throwable $e){
+                    var_dump(Container::$instance);
                     Log::error("router dispatcher is error  msg:%s file:%s line:%s",$e->getMessage(),$e->getFile(),$e->getLine());
                     $response->withStatus(500)
                         ->withContent($e->getMessage());

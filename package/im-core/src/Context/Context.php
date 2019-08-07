@@ -96,7 +96,10 @@ class Context
     public static function value(string $key)
     {
         $tid = Co::tid();
-        return self::$contextArg[$tid][$key];
+        if(isset(self::$contextArg[$tid]) && isset(self::$contextArg[$tid][$key]))
+            return self::$contextArg[$tid][$key];
+        return false;
+
     }
 
     /**

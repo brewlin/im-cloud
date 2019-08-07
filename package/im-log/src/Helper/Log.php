@@ -33,6 +33,7 @@ class Log
      */
     public static function emergency(string $message, ...$params)
     {
+        if(!env("START_LOG","true"))return;
         if(env("LOG_TYPE") == self::TypeConsole){
             return CLog::warning($message,...$params);
         }
@@ -48,6 +49,7 @@ class Log
      */
     public static function debug(string $message, ...$params)
     {
+        if(!env("START_LOG","true"))return;
         if (APP_DEBUG) {
             if(env("LOG_TYPE") == self::TypeConsole){
                 return CLog::debug($message,...$params);
@@ -67,6 +69,7 @@ class Log
      */
     public static function alert(string $message, ...$params)
     {
+        if(!env("START_LOG","true"))return;
         if(env("LOG_TYPE") == self::TypeConsole){
             return CLog::warning($message,...$params);
         }
@@ -81,6 +84,7 @@ class Log
      */
     public static function info(string $message, ...$params)
     {
+        if(!env("START_LOG","true"))return;
         if(env("LOG_TYPE") == self::TypeConsole){
             return CLog::info($message,...$params);
         }
@@ -95,6 +99,7 @@ class Log
      */
     public static function warning(string $message, ...$params)
     {
+        if(!env("START_LOG","true"))return;
         if(env("LOG_TYPE") == self::TypeConsole){
             return CLog::warning($message,...$params);
         }
@@ -109,6 +114,7 @@ class Log
      */
     public static function error(string $message, ...$params)
     {
+        if(!env("START_LOG","true"))return;
         if(env("LOG_TYPE") == self::TypeConsole){
             return CLog::error($message,...$params);
         }

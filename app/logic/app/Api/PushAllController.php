@@ -10,9 +10,15 @@ namespace App\Api;
 
 
 use App\Lib\LogicPush;
+use Core\Container\Mapping\Bean;
 use Core\Context\Context;
 use ImQueue\Amqp\Consumer;
 
+/**
+ * Class PushAllController
+ * @package App\Api
+ * @Bean()
+ */
 class PushAllController extends BaseController
 {
     public function all()

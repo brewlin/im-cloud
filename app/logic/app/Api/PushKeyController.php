@@ -8,11 +8,13 @@
 
 namespace App\Api;
 use App\Task\LogicPush;
+use Core\Container\Mapping\Bean;
 use Core\Context\Context;
 
 /**
  * Class PushKeyController
  * @package App\logic\app\Api
+ * @Bean()
  */
 class PushKeyController extends BaseController
 {

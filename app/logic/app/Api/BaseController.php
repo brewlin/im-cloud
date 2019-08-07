@@ -38,5 +38,17 @@ class BaseController
                               ->withStatus($code)
                               ->withContent($data);
     }
+    public function end($data = [],$msg = "",$code = MsgEnum::Ok)
+    {
+        $data = [
+            "msg" => $msg,
+            "data" => $data,
+            "code" => $code
+        ];
+        Context::get()->getResponse()
+            ->withStatus($code)
+            ->withContent($data)
+            ->end();
+    }
 
 }
