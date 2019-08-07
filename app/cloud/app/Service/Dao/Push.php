@@ -26,24 +26,24 @@ class Push
      * @param int $fd
      * @param $data
      */
-    public function push(string $key,$data)
+    public function push(string $key,int $op,$body)
     {
-        Log::info("Cloud push:{$key}  data:".json_encode($data));
+        Log::info("Cloud push:{$key}  data:".json_encode($body));
         if(!($fd = Bucket::fd($key))) return;
         if(!($clientinfo = Cloud::server()->getSwooleServer()->getClientInfo($fd))){
-            Log::info("连接 fd:{$fd} 不存在,待发送数据:".json_encode($data));
+            Log::info("连接 fd:{$fd} 不存在,待发送数据:".json_encode($body));
            return;
         }
         //判断为websocket连接且已经握手完毕
         if(isset($clientinfo['websocket_status']) && $clientinfo['websocket_status'] == WEBSOCKET_STATUS_FRAME){
             /** @var Packet $packet */
             $packet = \bean(Packet::class);
-            $packet->setOperation(Protocol::PushClient);
-            $buf = $packet->pack($data);
+            $packet->setOperation($op);
+            $buf = $packet->pack($body);
             Cloud::server()->getSwooleServer()->push($fd,$buf,WEBSOCKET_OPCODE_BINARY);
             return;
         }
-        Cloud::server()->getSwooleServer()->send($fd,$data);
+        Log::error("fd{$fd} 未连接");
     }
 
 }

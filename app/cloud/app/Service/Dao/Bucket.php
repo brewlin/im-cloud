@@ -86,7 +86,8 @@ class Bucket
      * @return bool|mixed
      */
     public static function fd(string $key){
-        return self::$keyToFd[$key];
+        if(isset(self::$keyToFd[$key]))return self::$keyToFd[$key];
+        return false;
     }
 
     /**

@@ -38,9 +38,9 @@ class Task implements PackerInterface
      * @return $this
      * @throws \Exception
      */
-    public function unpack(string $data)
+    public function unpack(string $buf)
     {
-        $data = json_decode($data,true);
+        $data = json_decode($buf,true);
         if(!isset($data['class'])){
             throw new \Exception("class is not isset");
         }

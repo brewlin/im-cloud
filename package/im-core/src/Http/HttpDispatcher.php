@@ -68,7 +68,6 @@ class HttpDispatcher
                         $response->withContent(json_encode($rsp));
                     }
                 }catch (\Throwable $e){
-                    var_dump(Container::$instance);
                     Log::error("router dispatcher is error  msg:%s file:%s line:%s",$e->getMessage(),$e->getFile(),$e->getLine());
                     $response->withStatus(500)
                         ->withContent($e->getMessage());

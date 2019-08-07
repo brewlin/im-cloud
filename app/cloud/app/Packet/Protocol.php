@@ -11,32 +11,6 @@ namespace App\Packet;
 
 class Protocol
 {
-    /**
-     * heartbeat
-     */
-    const Heartbeat = 2;
-    /**
-     * heartbeat reply
-     */
-    const HeartbeatReplyOk = 3;
-    /**
-     * auth to connect the server
-     */
-    const Auth = 7;
-    /**
-     * auth
-     */
-    const AuthReplyOk = 8;
-
-    /**
-     * push to client
-     */
-    const PushClient = 9;
-    /**
-     * batch push
-     */
-    const BatchPushClient = 10;
-
     //max size
     const MaxBodySize = 1 << 12;
     // size

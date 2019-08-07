@@ -57,37 +57,37 @@ class Cloud
             ->getResponse()
             ->withContent($closeRp);
     }
+
+    /**
+     *
+     */
     public function pushMsg()
     {
         $pushMsgRpy = Parser::serializeMessage(new PushMsgReply());
         /** @var PushMsgReq $pushMsgReq */
         $pushMsgReq = Parser::deserializeMessage([PushMsgReq::class,null],request()->getRawBody());
+        response()->withContent($pushMsgRpy)->end();
 
         if(empty($pushMsgReq->getKeys()) || empty($pushMsgReq->getProto())){
             Log::error("cloud grpc pushmsg keys proto is empty raw data:".json_encode($pushMsgReq));
-            return response()->withContent($pushMsgRpy);
+            return;
         }
         /** @var array $keys */
         $keys = $pushMsgReq->getKeys();
-        $data = $pushMsgReq->getProtoOp();
+        $op = $pushMsgReq->getProtoOp();
+        $body = $pushMsgReq->getProto()->getBody();
         //coroutine do
         foreach ($keys as $key){
-            Co::create(function ()use($key,$data){
+            Co::create(function ()use($key,$body,$op){
                     /** @var Task $task */
-                    $task = \bean(Task::class);
-                    $task->setClass(Push::class);
-                    $task->setMethod("push");
-                    $task->setArg([$key,$data]);
-                    $task->exec();
-    //                bean(Push::class)->push($key,$data);
-            },false);
+                    \bean(Task::class)->deliver(Push::class,"push",[$key,$op,$body]);
+            });
         }
-        return response()->withContent($pushMsgRpy);
 
     }
 
     /**
-     * @return \Core\Http\Response\Response|static
+     * @return \Core\Http\Response\Response|static|void
      */
     public function broadcast(){
         $broadcastRpy = Parser::serializeMessage(new BroadcastReply());
@@ -96,18 +96,17 @@ class Cloud
                                                     [BroadcastReq::class,null],
                                                     Context::get()->getRequest()->getRawBody()
         );
+        response()->withContent($broadcastRpy)->end();
         if(empty($broadcastReq->getProto())){
-            return Context::get()->getResponse()->withContent($broadcastRpy);
+            return;
         }
         Co::create(function ()use($broadcastReq){
             Broadcast::push($broadcastReq->getProto(),$broadcastReq->getProtoOp());
         });
-        //使用 grpc 包根据probuf 格式进行序列化
-        return response()->withContent($broadcastRpy);
     }
 
     /**
-     * @return \Core\Http\Response\Response|static
+     * @return \Core\Http\Response\Response|static|void
      */
     public function broadcastRoom()
     {
@@ -117,9 +116,10 @@ class Cloud
             [BroadcastRoomReq::class,null],
             request()->getRawBody()
         );
+        response()->withContent($broadroomRpy)->end();
         Log::info("broadcastRoom req:".json_encode($broadroomReq));
         if(empty($broadroomReq->getProto()) || empty($broadroomReq->getRoomID())){
-            return response()->withContent($broadroomRpy);
+            return;
         }
         //go coroutine
         Co::create(function()use($broadroomReq){
@@ -127,7 +127,6 @@ class Cloud
                 Room::push($roomId,$broadroomReq);
             }
         },false);
-
 
     }
     /**
@@ -140,7 +139,7 @@ class Cloud
         $roomRpy->setRooms($roomids);
         return Context::get()->getResponse()
                              ->withContent(
-                                 $roomRpy->serializeToJsonString()
+                                 Parser::serializeMessage($roomRpy)
                              );
     }
 }

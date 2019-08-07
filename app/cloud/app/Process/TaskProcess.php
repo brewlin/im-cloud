@@ -23,6 +23,9 @@ class TaskProcess extends AbstractProcess
     public function __construct()
     {
         $this->name = self::Name;
+
+        //设置管道为数据报模式
+        $this->pipe = SOCK_DGRAM;
     }
     public function check(): bool
     {
@@ -46,7 +49,7 @@ class TaskProcess extends AbstractProcess
 //                },false);
             }catch (\Throwable $e)
             {
-               Log::debug($e->getMessage());
+               Log::error($e->getMessage());
             }
         }
     }

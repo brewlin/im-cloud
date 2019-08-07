@@ -18,6 +18,7 @@ use Core\Cloud;
 use Core\Container\Mapping\Bean;
 use Core\Context\Context;
 use Grpc\Client\GrpcLogicClient;
+use Im\Cloud\Operation;
 use Im\Logic\ConnectReply;
 use Im\Logic\ConnectReq;
 use Log\Helper\Log;
@@ -120,7 +121,7 @@ class Auth
         $fd = Context::value("fd");
         /** @var Packet $packet */
         $packet = \bean(Packet::class);
-        $packet->setOperation(Protocol::AuthReplyOk);
+        $packet->setOperation(Operation::OpAuthReply);
         $buf = $packet->pack(json_encode(["ok" => "yes"]));
         Cloud::server()->getSwooleServer()->push($fd,$buf,WEBSOCKET_OPCODE_BINARY);
         Log::info("register success reply client buf:".$buf);

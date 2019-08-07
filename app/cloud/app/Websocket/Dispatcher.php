@@ -14,6 +14,7 @@ use App\Service\Service\Auth;
 use App\Service\Service\Heartbeat;
 use Core\Container\Mapping\Bean;
 use Core\Context\Context;
+use Im\Cloud\Operation;
 
 /**
  * Class Dispatch
@@ -33,12 +34,12 @@ class Dispatcher
         switch ($packet->getOperation())
         {
             //register
-            case Protocol::Auth:
+            case Operation::OpAuth:
                 container()->get(Auth::class)
                            ->auth();
                 break;
             //heartbeat
-            case Protocol::Heartbeat:
+            case Operation::OpHeartbeat:
                 container()->get(Heartbeat::class)
                            ->heartbeat();
                 break;

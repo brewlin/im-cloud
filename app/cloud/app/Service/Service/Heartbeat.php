@@ -16,6 +16,7 @@ use Core\Cloud;
 use Core\Container\Mapping\Bean;
 use Core\Context\Context;
 use Grpc\Client\GrpcLogicClient;
+use Im\Cloud\Operation;
 use Im\Logic\HeartbeatReq;
 use Log\Helper\Log;
 
@@ -42,7 +43,7 @@ class Heartbeat
         /** @var Packet $packet */
         $packet = \bean(Packet::class);
         //pack data repy cliend
-        $packet->setOperation(Protocol::HeartbeatReplyOk);
+        $packet->setOperation(Operation::OpHeartbeatReply);
         $buf = $packet->pack(self::HeartBeatReply);
         Cloud::server()->getSwooleServer()->push($fd,$buf,WEBSOCKET_OPCODE_BINARY);
 
