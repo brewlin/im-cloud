@@ -61,6 +61,7 @@ class Auth
             $task->setMethod("del");
             $task->setArg([$key,$fd,$roomId]);
             $task->exec();
+            throw $e;
         }
     }
     /**
