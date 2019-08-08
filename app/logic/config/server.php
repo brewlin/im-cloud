@@ -10,7 +10,7 @@ return [
         'daemonize' => (int)env("DAEMONIZE", 0),
         'worker_num' => (int)env("WORKER_NUM", 4),
         'http_parse_post' => true,
-        'task_worker_num' => (int)env("WORKER_NUM"),
+        'task_worker_num' => (int)env("TASK_WORKER_NUM"),
         'task_enable_coroutine' => env("TASK_ENABLE_COROUTINE",false),
     ],
     'scan' => [

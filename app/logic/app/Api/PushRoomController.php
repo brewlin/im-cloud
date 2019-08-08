@@ -20,8 +20,13 @@ use Core\Context\Context;
  */
 class PushRoomController extends BaseController
 {
+    /**
+     * @return PushRoomController|\Core\Http\Response\Response
+     * @throws \Exception
+     */
     public function room(){
         $post  = Context::get()->getRequest()->input();
+        $this->end();
         if(empty($post["operation"]) || empty($post["room"]) || empty($post["type"])){
             return $this->error("缺少参数");
         }
@@ -31,7 +36,6 @@ class PushRoomController extends BaseController
             "room" => $post["room"],
         ];
         container()->get(LogicPush::class)->pushRoom($arg["op"],$arg["type"],$arg["room"],$arg["msg"]);
-        return $this->success();
     }
 
 }

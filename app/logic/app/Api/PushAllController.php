@@ -21,9 +21,14 @@ use ImQueue\Amqp\Consumer;
  */
 class PushAllController extends BaseController
 {
+    /**
+     * @return PushAllController|\Core\Http\Response\Response
+     * @throws \Exception
+     */
     public function all()
     {
         $post  = Context::get()->getRequest()->input();
+        $this->end();
         if(empty($post["operation"]) || empty($post["speed"])){
             return $this->error("缺少参数");
         }
@@ -33,7 +38,6 @@ class PushAllController extends BaseController
             "msg" => $post["msg"]
         ];
         container()->get(LogicPush::class)->pushAll($arg["op"],$arg["speed"],$arg["msg"]);
-        return $this->success();
     }
 
 }

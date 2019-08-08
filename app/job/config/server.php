@@ -9,7 +9,7 @@ return [
     'setting' => [
         'daemonize' => (int)env("DAEMONIZE", 0),
         'worker_num' => (int)env("WORKER_NUM", 4),
-        'task_worker_num' => 4,
+        'task_worker_num' => (int)env("TASK_WORKER_NUM",4),
         'task_enable_coroutine' => env("TASK_ENABLE_COROUTINE",false),
     ],
     'scan' => [

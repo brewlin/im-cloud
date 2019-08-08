@@ -33,8 +33,8 @@ class PushMidController extends BaseController
      */
     public function mids()
     {
-        $this->end();
         $post  = Context::get()->getRequest()->input();
+        $this->end();
         if(empty($post["operation"]) || empty($post["mids"]) ||empty($post["msg"])){
             return $this->error("缺少参数");
         }
@@ -47,8 +47,7 @@ class PushMidController extends BaseController
         /**
          * @var LogicPush
          */
-            Task::deliver(LogicPush::class,"pushMids",[(int)$arg["op"],$arg["mids"],$arg["msg"]]);
-        return $this->success();
+        Task::deliver(LogicPush::class,"pushMids",[(int)$arg["op"],$arg["mids"],$arg["msg"]]);
     }
 
 }

@@ -21,6 +21,7 @@ class PushKeyController extends BaseController
     public function keys()
     {
         $post  = Context::get()->getRequest()->input();
+        $this->end();
         if(empty($post["operation"]) || empty($post["keys"])){
             return $this->error("缺少参数");
         }
@@ -30,7 +31,6 @@ class PushKeyController extends BaseController
             "msg" => $post["msg"]
         ];
         container()->get(LogicPush::class)->pushKeys($arg["op"],$arg["keys"],$arg["msg"]);
-        return $this->success();
     }
 
 }
