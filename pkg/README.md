@@ -1,16 +1,16 @@
 基础依赖库，全部基于composer包管理
 ==============
 
-## @[im-core](./im-core)
+## @[im-core](core)
 > 核心库
 
-## @[im-discovery](./im-discovery)
+## @[im-discovery](discovery)
 > 服务发现依赖库
 
-## @[im-grpc](./im-grpc)
+## @[im-grpc](grpc)
 > grpc 接口 protobuf 定义
 
-## @[im-process](./im-process)
+## @[im-process](process)
 > 进程管理，注册自定义进程
 
 ## @[im-queue](./im-quque)

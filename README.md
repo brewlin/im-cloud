@@ -24,9 +24,9 @@
 + [`job`](./app/-job) 节点作为消费节点 消费队列数据 然后进行`grpc` 和cloud服务进行通讯 进行 `push` `push room` `broadcast`,作为节点中间件，消费`kafaka`，`rockermq。。。`之类
 + [`logic`](./app/logic) 节点 提供rest api接口，作为生产节点 和  grpc客户端,可写入队列作为生产者，也可以扩展自己的业务进行rpc直接调用center中心进行推送
 + `cloud,job,logic` 等节点都可以水平扩容
-+ [`im-grpc`](./package/im-grpc) 定义grpc接口规范composer包,使用`protobuf`构建
-+ [`im-core`](./package/im-core) 为核心基础组件，底层设计借鉴 `swoft`源码设计
-+ [`im-discovery`](./package/im-discovery) 服务发现注册组件，注册`grpc-server`，发现服务等封装
++ [`im-grpc`](pkg/grpc) 定义grpc接口规范composer包,使用`protobuf`构建
++ [`im-core`](pkg/core) 为核心基础组件，底层设计借鉴 `swoft`源码设计
++ [`im-discovery`](pkg/discovery) 服务发现注册组件，注册`grpc-server`，发现服务等封装
 + 服务间配置独立，使用composer进行依赖管理，进行composer组件化开发，`im-core`,`im-grpc`,`im-discovery` 作为公用基础包
 
 
@@ -58,12 +58,12 @@ todo
 ### 7.`im-queue`,soon,消息队列 kafaka amqp 基于pool连接池
 
 ## 二、组件依赖
-### @[im-core](./package/im-core) (done)
-### @[im-grpc](./package/im-grpc) (done)
-### @[im-discovery](./package/im-discovery) (done)
-### @[im-process](./package/im-process)(done)
-### @[im-redis](./package/im-redis)(done)
-### @[im-queue](./package/im-queue)(done amqp,soon kafak)
+### @[im-core](pkg/core) (done)
+### @[im-grpc](pkg/grpc) (done)
+### @[im-discovery](pkg/discovery) (done)
+### @[im-process](pkg/process)(done)
+### @[im-redis](pkg/redis)(done)
+### @[im-queue](pkg/queue)(done amqp,soon kafak)
 ### @[cloud](./app/cloud) (test verion)
 ### @[job](./app/job)   (test version)
 ### @[logic](./app/logic) (test version)

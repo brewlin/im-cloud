@@ -16,7 +16,6 @@
         "brewlin/stdlib":"@dev",
         "nikic/fast-route": "^1.3",
         "vlucas/phpdotenv": "^2.5",
-        "swoft/swoole-ide-helper": "dev-master",
         "psr/http-message": "^1.0",
         "toolkit/cli-utils": "~1.0",
         "brewlin/im-grpc":"@dev",
@@ -36,39 +35,39 @@
     "repositories": {
         "0":{
             "type":"path",
-            "url":"../../package/im-grpc"
+            "url":"../../pkg/grpc"
         },
         "1":{
             "type":"path",
-            "url":"../../package/im-core"
+            "url":"../../pkg/core"
         },
         "2":{
             "type":"path",
-            "url":"../../package/im-discovery"
+            "url":"../../pkg/discovery"
         },
         "3":{
             "type":"path",
-            "url":"../../package/im-process"
+            "url":"../../pkg/process"
         },
         "4":{
             "type":"path",
-            "url":"../../package/im-queue"
+            "url":"../../pkg/queue"
         },
         "5":{
             "type":"path",
-            "url":"../../package/im-log"
+            "url":"../../pkg/log"
         },
         "6":{
             "type":"path",
-            "url":"../../package/im-stdlib"
+            "url":"../../pkg/stdlib"
         },
         "7":{
             "type":"path",
-            "url":"../../package/im-redis"
+            "url":"../../pkg/redis"
         },
         "8":{
             "type":"path",
-            "url":"../../package/im-task"
+            "url":"../../pkg/task"
         },
         "packagist": {
             "type": "composer",

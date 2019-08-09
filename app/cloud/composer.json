@@ -16,7 +16,6 @@
         "brewlin/stdlib":"@dev",
         "nikic/fast-route": "^1.3",
         "vlucas/phpdotenv": "^2.5",
-        "swoft/swoole-ide-helper": "dev-master",
         "psr/http-message": "^1.0",
         "toolkit/cli-utils": "~1.0",
         "brewlin/im-grpc":"@dev",
@@ -25,7 +24,8 @@
         "brewlin/im-process":"@dev",
         "brewlin/im-queue":"@dev",
         "brewlin/im-redis":"@dev",
-        "brewlin/im-task":"@dev"
+        "brewlin/im-task":"@dev",
+        "swoft/swoole-ide-helper": "^4.4"
 
     },
     "autoload": {
@@ -34,42 +34,42 @@
         }
     },
     "repositories": {
-        "0":{
-            "type":"path",
-            "url":"../../package/im-grpc"
-        },
-        "1":{
-            "type":"path",
-            "url":"../../package/im-core"
-        },
-        "2":{
-            "type":"path",
-            "url":"../../package/im-discovery"
-        },
-        "3":{
-            "type":"path",
-            "url":"../../package/im-process"
-        },
-        "4":{
-            "type":"path",
-            "url":"../../package/im-queue"
-        },
-        "5":{
-            "type":"path",
-            "url":"../../package/im-log"
-        },
-        "6":{
-            "type":"path",
-            "url":"../../package/im-stdlib"
-        },
-        "7":{
-            "type":"path",
-            "url":"../../package/im-redis"
-        },
-        "8":{
-            "type":"path",
-            "url":"../../package/im-task"
-        },
+      "0":{
+        "type":"path",
+        "url":"../../pkg/grpc"
+      },
+      "1":{
+        "type":"path",
+        "url":"../../pkg/core"
+      },
+      "2":{
+        "type":"path",
+        "url":"../../pkg/discovery"
+      },
+      "3":{
+        "type":"path",
+        "url":"../../pkg/process"
+      },
+      "4":{
+        "type":"path",
+        "url":"../../pkg/queue"
+      },
+      "5":{
+        "type":"path",
+        "url":"../../pkg/log"
+      },
+      "6":{
+        "type":"path",
+        "url":"../../pkg/stdlib"
+      },
+      "7":{
+        "type":"path",
+        "url":"../../pkg/redis"
+      },
+      "8":{
+        "type":"path",
+        "url":"../../pkg/task"
+      },
         "packagist": {
             "type": "composer",
             "url": "https://mirrors.aliyun.com/composer/"

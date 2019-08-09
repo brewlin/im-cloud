@@ -31,11 +31,6 @@ use Im\Logic\PingReply;
  */
 class Logic
 {
-    public function __construct()
-    {
-        var_dump(static::class);
-    }
-
     /**
      * @return \Core\Http\Response\Response
      */

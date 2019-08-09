@@ -14,7 +14,7 @@ protoc.exe --php_out=${logic} --grpc_out=${logic} --plugin=protoc-gen-grpc=./grp
 
 ```
 ## 不要随意改变grpc 依赖
-> [example demo](./example) 客户端调用demo
+> [example demo](example) 客户端调用demo
 ```php
 // 客户端调用
 require_once dirname(__DIR__)."/vendor/autoload.php";
