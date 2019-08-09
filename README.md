@@ -24,10 +24,7 @@
 + [`job`](./app/-job) 节点作为消费节点 消费队列数据 然后进行`grpc` 和cloud服务进行通讯 进行 `push` `push room` `broadcast`,作为节点中间件，消费`kafaka`，`rockermq。。。`之类
 + [`logic`](./app/logic) 节点 提供rest api接口，作为生产节点 和  grpc客户端,可写入队列作为生产者，也可以扩展自己的业务进行rpc直接调用center中心进行推送
 + `cloud,job,logic` 等节点都可以水平扩容
-+ [`im-grpc`](pkg/grpc) 定义grpc接口规范composer包,使用`protobuf`构建
-+ [`im-core`](pkg/core) 为核心基础组件，底层设计借鉴 `swoft`源码设计
-+ [`im-discovery`](pkg/discovery) 服务发现注册组件，注册`grpc-server`，发现服务等封装
-+ 服务间配置独立，使用composer进行依赖管理，进行composer组件化开发，`im-core`,`im-grpc`,`im-discovery` 作为公用基础包
+
 
 
 架构图
@@ -48,25 +45,28 @@ im-cloud 业务流程
 ------
 todo
 
-## 一、进度
-### 1.完成了 `im-core` 基础库的设计实现，借鉴swoft源码设计
-### 2.完成了`grpc-server` 路由注册和 grpc-client 请求流程的demo
-### 3.构建完成 protobuf 构建grpc 接口
-### 4.`im-discovery`，基础完成
-### 5.`im-process`,进程管理器 基础完成
-### 6.`im-redis`,done
-### 7.`im-queue`,soon,消息队列 kafaka amqp 基于pool连接池
-
-## 二、组件依赖
-### @[im-core](pkg/core) (done)
-### @[im-grpc](pkg/grpc) (done)
-### @[im-discovery](pkg/discovery) (done)
-### @[im-process](pkg/process)(done)
-### @[im-redis](pkg/redis)(done)
-### @[im-queue](pkg/queue)(done amqp,soon kafak)
+## 组件依赖
+> 相关组件为纯swoole实现
+### @[core](pkg/core) (done) 核心架构
+### @[grpc](pkg/grpc) (done) grpc包依赖 grpc-client连接池
+### @[discovery](pkg/discovery) (done) 服务发现注册
+### @[process](pkg/process)(done) 自定义进程管理器
+### @[redis](pkg/redis)(done) redis连接池
+### @[queue](pkg/queue)(done amqp,soon kafak) 消息队列连接池
+### @[task](pkg/task)(done) 异步任务投递组件
 ### @[cloud](./app/cloud) (test verion)
 ### @[job](./app/job)   (test version)
 ### @[logic](./app/logic) (test version)
+
+## 相关文档
+### [im-cloud 基于swoole 原生协程构建分布式推送中间件](./docs)
+### [im-cloud 分布式中间件的安装部署](./docs)
+### [im-cloud <> goim 分布式中间件并发压测对比 ](./docs)
+### [im-cloud分布式中间件分析(一)-通讯协议](./docs)
+### [im-cloud分布式中间件分析(二)-cloud节点实现](./docs)
+### [im-cloud分布式中间件分析(三)-job节点实现](./docs)
+### [im-cloud分布式中间件分析(四)-logic节点实现](./docs)
+
 
 ## 📝 License
 
