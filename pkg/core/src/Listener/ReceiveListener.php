@@ -17,7 +17,6 @@ class ReceiveListener implements ReceiveInterface
     public function onReceive(Server $server, int $fd, int $reactorId, string $data): void
     {
         var_dump(" tcp receive");
-        var_dump($data,$server);
         // TODO: Implement onReceive() method.
     }
 

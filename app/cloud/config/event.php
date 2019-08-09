@@ -17,18 +17,28 @@ use \App\Event\ShutdownListener;
 use \App\Websocket\MessageListener;
 use \App\Websocket\HandshakeListener;
 use App\Tcp\ReceiveListener;
+use App\Event\OnCloseListener;
+use App\Event\WorkerStartListener;
 
 return [
     //监听onpipmessage事件
     SwooleEvent::PIPE_MESSAGE => new PipeMessageListener(),
-    SwooleEvent::WORKER_STOP => new WorkerStopListener(),
-    SwooleEvent::SHUTDOWN    => new ShutdownListener(),
+
+    //监听进程启动事件
+    SwooleEvent::WORKER_START => new WorkerStartListener(),
+
+    //监听进程关闭事件
+    SwooleEvent::WORKER_STOP  => new WorkerStopListener(),
+    SwooleEvent::SHUTDOWN     => new ShutdownListener(),
 
     //监听tcp事件
-    SwooleEvent::RECEIVE     => new ReceiveListener(),
+    SwooleEvent::RECEIVE      => new ReceiveListener(),
 
     //监听websocket 事件
-    SwooleEvent::MESSAGE     => new MessageListener(),
+    SwooleEvent::MESSAGE      => new MessageListener(),
     //websocket握手事件
-    SwooleEvent::HANDSHAKE        => new HandshakeListener(),
+    SwooleEvent::HANDSHAKE    => new HandshakeListener(),
+
+    //server监听关闭连接事件然后grpc通知logic销毁连接信息
+    SwooleEvent::CLOSE        => new OnCloseListener(),
 ];

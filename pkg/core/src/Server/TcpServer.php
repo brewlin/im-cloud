@@ -91,9 +91,17 @@ class TcpServer implements ServerInterface
      */
     public function getOn(): array
     {
-        return [
+        $event = config("event");
+        $listener = [SwooleEvent::RECEIVE,SwooleEvent::CLOSE];
+        $on = [];
+        foreach ($event as $e => $f){
+            if(in_array($e,$listener)){
+                $on[$e] = $f;
+            }
+        }
+        return array_merge([
                 SwooleEvent::RECEIVE => new ReceiveListener()
-            ];
+            ],$on);
         // TODO: Implement getOn() method.
     }
 

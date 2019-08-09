@@ -74,7 +74,7 @@ class Task implements PackerInterface
      * @param $data
      * @return string
      */
-    public function pack($data): string
+    public function pack($data = null): string
     {
         if(empty($this->class) || empty($this->method) || empty($this->arg)){
             Log::error("rquire class | method |arg");

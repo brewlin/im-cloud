@@ -43,6 +43,21 @@ class GrpcLogicClient
         return $res;
     }
     /**
+     * Disconnect
+     * @param \Im\Logic\DisconnectReq $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     */
+    public static function Disconnect(string $serverId ,\Im\Logic\DisconnectReq $argument, $metadata = [], $options = []) {
+        if(empty($serverId))return;
+        $pool = self::connection();
+        $connection = $pool->getConnection($serverId);
+        $client = $connection->getActiveConnection();
+        $res = $client->Disconnect($argument,$metadata,$options);
+        self::release($pool,$connection);
+        return $res;
+    }
+    /**
      * Heartbeat
      * @param \Im\Logic\HeartbeatReq $argument input argument
      * @param array $metadata metadata

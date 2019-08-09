@@ -9,18 +9,48 @@
 namespace App\Service\Dao;
 
 
+use App\cloud\app\Service\Service\Disconnect;
+use App\Packet\Task;
+use App\Process\TaskProcess;
 use ImRedis\Redis;
 use Log\Helper\Log;
+use Process\ProcessManager;
 
 class Bucket
 {
 
+    /**
+     * @var array server => count
+     */
     public static $ipCounts = [];
-    public static $keyToFd = [];
-    public static $FdToKey = [];
+    /**
+     * @var array roomid => roomid
+     */
     public static $bucketsRoom = [];
+    /**
+     * @var array [
+     *      roomid => [
+     *              fd,fd fd fd
+     *             ]
+     * ]
+     */
     public static $roomFds = [];
+    /**
+     * @var array key => fd
+     */
+    public static $keyToFd = [];
+    /**
+     * @var array fd => key
+     */
+    public static $FdToKey = [];
+    /**
+     * @var array fd => mid
+     */
     public static $FdToMid = [];
+    /**
+     * @var array key => roomid
+     */
+    public static $keyToRoomId = [];
 
     /**
      * @param string $roomId
@@ -42,6 +72,7 @@ class Bucket
         if(!isset(self::$bucketsRoom[$roomId])){
             self::$bucketsRoom[$roomId] = $roomId;
         }
+        self::$keyToRoomId[$key] = $roomId;
         //add fd to room
         self::$roomFds[$roomId][$fd] = $fd;
     }
@@ -58,10 +89,29 @@ class Bucket
         if(!empty($roomId)){
             //del set room - fd
             unset(self::$roomFds[$roomId][$fd]);
-
+            unset(self::$keyToRoomId[$key]);
         }
         //ip count --
         self::$ipCounts[env("APP_HOST","127.0.0.1")] --;
+    }
+
+    /**
+     * 关闭连接销毁相关数据
+     * @param int $fd
+     */
+    public static function disconnect(int $fd)
+    {
+        $key = self::$FdToKey[$fd];
+        $mid = self::$FdToMid[$fd];
+        if(empty($key)||empty($mid))return;
+        $roomid = self::$keyToRoomId[$key];
+        self::del($key,$fd,$roomid);
+        /** @var Task $task */
+        $task = bean(Task::class);
+        $task->setClass(Disconnect::class);
+        $task->setMethod("disconnect");
+        $task->setArg([$mid,$key]);
+        ProcessManager::getProcesses(TaskProcess::Name)->write($task->pack());
     }
 
     /**
