@@ -58,7 +58,7 @@ class LogicConnection
      * @param string $server
      * @throws \Exception
      */
-    public function disConnection(int $mid,string $key,string $server)
+    public function disConnect(int $mid,string $key,string $server)
     {
         container()->get(RedisDao::class)
                     ->delMapping($mid,$key,$server);

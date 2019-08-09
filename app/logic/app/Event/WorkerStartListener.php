@@ -27,9 +27,9 @@ class WorkerStartListener implements WorkerStartInterface
 //        }
 //        $scheduler = new Coroutine\Scheduler;
 //        $scheduler->add(function(){
-            Co::create(function (){
-                Logic::loadOnline();
-            },false);
+//            Co::create(function (){
+//                Logic::loadOnline();
+//            },false);
 
 //        });
 

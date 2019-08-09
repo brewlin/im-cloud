@@ -160,7 +160,15 @@ class ConsulProvider implements ProviderInterface
                 json_encode($this->registerParam)
             );
         }catch (\Throwable $e){
-            CLog::error($e->getMessage());
+            CLog::error(
+                sprintf(
+                    '<error>RPC service register failed by consul ! tcp=%s:%d</error>',
+                    $this->registerAddress,
+                    $this->registerPort).
+                " exception:".
+                $e->getMessage()
+            );
+            return;
         }
         if($res->success){
             Console::writeln(sprintf('<success>RPC service register success by consul ! tcp=%s:%d</success>', $this->registerAddress, $this->registerPort));

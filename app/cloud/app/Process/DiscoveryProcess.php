@@ -9,6 +9,7 @@
 namespace App\Process;
 
 
+use App\Lib\LogicClient;
 use Core\Cloud;
 use Core\Processor\ProcessorInterface;
 use Log\Helper\Log;
@@ -53,7 +54,8 @@ class DiscoveryProcess extends AbstractProcess
             for($i = 0; $i < (int)env("WORKER_NUM",4);$i++)
             {
                 //将可以用的服务同步到所有的worker进程
-                Cloud::server()->getSwooleServer()->sendMessage($services,$i);
+                $sync = ["call" => [LogicClient::class,"updateService"],"arg" => [$services]];
+                Cloud::server()->getSwooleServer()->sendMessage($sync,$i);
             }
 SLEEP:
             sleep(10);

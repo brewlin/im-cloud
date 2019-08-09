@@ -25,8 +25,9 @@ class PipeMessageListener implements PipeMessageInterface
     public function onPipeMessage(Server $server, int $srcWorkerId, $message): void
     {
         //将grpc调用的可用服务更新
-//        LogicClient::$serviceList = $message;
-        LogicClient::updateService($message);
+        if(isset($message["call"])) {
+            call_user_func_array($message["call"],$message["arg"]);
+        }
     }
 
 }

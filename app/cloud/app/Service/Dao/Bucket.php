@@ -12,6 +12,7 @@ namespace App\Service\Dao;
 use App\cloud\app\Service\Service\Disconnect;
 use App\Packet\Task;
 use App\Process\TaskProcess;
+use Core\Cloud;
 use ImRedis\Redis;
 use Log\Helper\Log;
 use Process\ProcessManager;
@@ -107,11 +108,9 @@ class Bucket
         $roomid = self::$keyToRoomId[$key];
         self::del($key,$fd,$roomid);
         /** @var Task $task */
-        $task = bean(Task::class);
-        $task->setClass(Disconnect::class);
-        $task->setMethod("disconnect");
-        $task->setArg([$mid,$key]);
-        ProcessManager::getProcesses(TaskProcess::Name)->write($task->pack());
+        $sync = ["call" => [Disconnect::class,"disconnect"],"arg" => [$mid,$key]];
+        Cloud::server()->getSwooleServer()->sendMessage($sync,rand(0,env("WORKER_NUM",4)-1));
+//        ProcessManager::getProcesses(TaskProcess::Name)->write($task->pack());
     }
 
     /**

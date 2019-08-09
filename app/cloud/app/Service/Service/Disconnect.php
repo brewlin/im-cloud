@@ -11,7 +11,8 @@ namespace App\cloud\app\Service\Service;
 use Core\Container\Mapping\Bean;
 use Grpc\Client\GrpcLogicClient;
 use Im\Logic\DisconnectReq;
-use Im\Logic\LogicClient;
+use App\Lib\LogicClient;
+use Log\Helper\Log;
 
 /**
  * Class Close
@@ -26,6 +27,7 @@ class Disconnect
      */
     public function disconnect(int $mid,string $key)
     {
+        Log::debug("key:%s  disconnect",$key);
         if(empty($key) || empty($mid))return;
 
         $disReq = new DisconnectReq();
@@ -33,10 +35,11 @@ class Disconnect
         $disReq->setKey($key);
         $serverId = env("APP_HOST","127.0.0.1").":".env("GRPC_PORT",9500);
         $disReq->setServer($serverId);
+        $server = LogicClient::getLogicClient();
         /**
          * 请求logic节点注销相关信息
          */
-        GrpcLogicClient::Disconnect($serverId,$disReq);
+        GrpcLogicClient::Disconnect($server,$disReq);
 
 
     }

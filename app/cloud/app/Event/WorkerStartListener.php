@@ -27,23 +27,23 @@ class WorkerStartListener implements WorkerStartInterface
         //接受自定义进程taskProcess 投递过来的请求
         if(App::isWorkerStatus()){
             //创建协程周期执行任务
-            $scheduler = new Scheduler();
-            $scheduler->add(function (){
-                //事件循环
-                while(true){
-                    $buf  = ProcessManager::getProcesses(TaskProcess::Name)->read();
-                    try{
-                        /** @var Task $task */
-                        $task = bean(Task::class)->unpack();
-                        bean($task->getClass())->{$task->getMethod()}(...$task->getArg());
-                    }catch(\Throwable $e)
-                    {
-                        Log::error("read taskprocess 进程 数据解析失败 buf:%s msg:%s",$buf,$e->getMessage());
-                    }
-                }
-
-            });
-            $scheduler->start();
+//            $scheduler = new Scheduler();
+//            $scheduler->add(function (){
+//                事件循环
+//                while(true){
+//                    $buf  = ProcessManager::getProcesses(TaskProcess::Name)->read();
+//                    try{
+//                        /** @var Task $task */
+//                        $task = bean(Task::class)->unpack();
+//                        bean($task->getClass())->{$task->getMethod()}(...$task->getArg());
+//                    }catch(\Throwable $e)
+//                    {
+//                        Log::error("read taskprocess 进程 数据解析失败 buf:%s msg:%s",$buf,$e->getMessage());
+//                    }
+//                }
+//
+//            });
+//            $scheduler->start();
         }
     }
 
