@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace Grpc\Pool;
 
 use App\Lib\LogicClient;
-use Co\Channel;
+use \Swoole\Coroutine\Channel;
 use Core\Container\Mapping\Bean;
 use Core\Pool\PoolConnectionInterface;
 use Core\Pool\PoolFactory;

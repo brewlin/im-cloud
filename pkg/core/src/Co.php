@@ -10,12 +10,8 @@
 namespace Core;
 
 use function count;
-use function go;
 use ReflectionException;
-use function sgo;
-use Core;
 use Core\Context\Context;
-use Log\Debug;
 use Stdlib\Helper\PhpHelper;
 use Log\Helper\CLog;
 use Swoole\Coroutine;
@@ -76,7 +72,7 @@ class Co
         $tid = self::tid();
 
         // return coroutine ID for created.
-        return go(function () use ($callable, $tid, $wait) {
+        return Coroutine::create(function () use ($callable, $tid, $wait) {
             try {
                 $id = Coroutine::getCid();
                 // Storage fd

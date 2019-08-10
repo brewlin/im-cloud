@@ -17,7 +17,6 @@ class ConfigProcessor extends Processor
     {
         // TODO: Implement handle() method.
         define('APP_DEBUG', (int)getenv('APP_DEBUG', 0));
-        define('SWOFT_DEBUG', (int)getenv('APP_DEBUG', 0));
         define("APP_NAME",(string)getenv("APP_NAME","im-undifined-node"));
         \Core\Container\Container::getInstance()->create(Config::class);
         return true;

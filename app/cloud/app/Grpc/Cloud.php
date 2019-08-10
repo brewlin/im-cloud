@@ -28,6 +28,7 @@ use Im\Cloud\RoomsReply;
 use Im\Logic\CloseReply;
 use Im\Logic\PingReply;
 use Log\Helper\Log;
+use Swoole\Coroutine;
 
 /**
  * Class Cloud
@@ -78,7 +79,7 @@ class Cloud
         $body = $pushMsgReq->getProto()->getBody();
         //coroutine do
         foreach ($keys as $key){
-            Co::create(function ()use($key,$body,$op){
+            Coroutine::create(function ()use($key,$body,$op){
                     /** @var Task $task */
                     \bean(Task::class)->deliver(Push::class,"push",[$key,$op,$body]);
             });

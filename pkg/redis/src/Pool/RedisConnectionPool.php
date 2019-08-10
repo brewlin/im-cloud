@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace ImRedis\Pool;
 
-use Co\Channel;
+use \Swoole\Coroutine\Channel;
 use Core\Container\Mapping\Bean;
 use Core\Pool\PoolConnectionInterface;
 use Core\Pool\PoolFactory;

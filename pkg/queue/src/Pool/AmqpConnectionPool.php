@@ -5,13 +5,13 @@ declare(strict_types=1);
 
 namespace ImQueue\Pool;
 
-use Co\Channel;
 use Core\Container\Mapping\Bean;
 use Core\Pool\PoolConnectionInterface;
 use Core\Pool\PoolFactory;
 use ImQueue\Amqp\Connection;
 
 use InvalidArgumentException;
+use Swoole\Coroutine\Channel;
 
 /**
  * Class AmqpConnectionPool

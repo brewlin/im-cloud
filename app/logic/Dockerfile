@@ -1,4 +1,4 @@
-# brew/cloud
+# brew/logic
 #
 # @link     https://www.github.com/brewlin/im-cloud
 # @license  https://github.com/brewlin/im-cloud/blob/master/LICENSE
@@ -7,6 +7,6 @@ FROM brewlin/im-cloud-base
 
 ADD . /website/im-cloud
 
-EXPOSE 9500 9501
+EXPOSE 9600
 
-ENTRYPOINT ["php", "/website/im-cloud/app/cloud/bin/app"]
+ENTRYPOINT ["php", "/website/im-cloud/app/logic/bin/app"]

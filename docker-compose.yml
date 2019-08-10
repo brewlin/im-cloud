@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  cloud:
+    image: brewlin/cloud
+    network_mode: host
+
+  job:
+    image: brewlin/job
+    network_mode: host
+
+  logic:
+    image: brewlin/logic
+    network_mode: host
+
+  consul:
+    image: consul
+    network_mode: host

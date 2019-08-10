@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 namespace Core\Pool;
-use Co\Channel;
+use \Swoole\Coroutine\Channel;
 use Core\Container\Mapping\Bean;
 
 /**
