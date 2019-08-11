@@ -16,3 +16,6 @@ services:
   consul:
     image: consul
     network_mode: host
+  redis:
+    image: redis
+    network_mode: host

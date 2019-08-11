@@ -135,6 +135,7 @@ trait InteractsWithInput
         $parsedBody = $this->getParsedBody();
         $parsedBody = is_array($parsedBody) ? $parsedBody : [];
         $inputs     = array_merge($parsedBody, $this->getQueryParams());
+        $inputs     = array_merge($inputs,$this->getPost());
 
         if (!$key) {
             return $inputs;
