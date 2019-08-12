@@ -37,7 +37,6 @@ class QueueDao
         Log::info("push msg to job node data:".json_encode($pushmsg));
         /** @var Producer $producers */
         $producers = \bean(Producer::class);
-//        $producers = new Producer();
         //发送到队列里
         producer()->produce($producers->producer($pushmsg));
     }
@@ -54,8 +53,11 @@ class QueueDao
         $type = PushMsg\Type::ROOM;
         $pushmsg = compact("type","operation","room","msg");
         Log::info("push msg to job node data:".json_encode($pushmsg));
+        /** @var Producer $producers */
+        $producers = \bean(Producer::class);
+
         //发送到队列里
-        producer()->produce(new Producer($pushmsg));
+        producer()->produce($producers->producer($pushmsg));
     }
 
     /**
@@ -69,8 +71,12 @@ class QueueDao
         $type = PushMsg\Type::BROADCAST;
         $pushmsg = compact("type","operation","speed","msg");
         Log::info("push msg to job node data:".json_encode($pushmsg));
+
+        /** @var Producer $producers */
+        $producers = \bean(Producer::class);
+
         //发送到队列里
-        \producer()->produce(new Producer($pushmsg));
+        producer()->produce($producers->producer($pushmsg));
     }
 
 }

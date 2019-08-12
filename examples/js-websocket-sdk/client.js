@@ -5,7 +5,8 @@
     const verOffset = 6;
     const opOffset = 8;
     const seqOffset = 12;
-    const wsurl = "ws://127.0.0.1:9500/sub";
+    // const wsurl = "ws://127.0.0.1:9500/sub";
+    const wsurl = "ws://www.huido.site:9500/sub";
 
     var Client = function(options) {
         var MAX_CONNECT_TIMES = 10;

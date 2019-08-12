@@ -9,9 +9,12 @@
 namespace App\Service\Model;
 
 
+use Core\Container\Mapping\Bean;
+
 /**
  * Class Room
  * @package App\Service\Model
+ * @Bean()
  */
 class Room
 {
