@@ -28,10 +28,10 @@ class PushAllController extends BaseController
     public function all()
     {
         $post  = Context::get()->getRequest()->input();
-        $this->end();
         if(empty($post["operation"]) || empty($post["speed"])){
             return $this->error("缺少参数");
         }
+        $this->end();
         $arg = [
             "op" => $post["operation"],
             "speed" => $post["speed"],

@@ -34,10 +34,10 @@ class PushMidController extends BaseController
     public function mids()
     {
         $post  = Context::get()->getRequest()->input();
-        $this->end();
         if(empty($post["operation"]) || empty($post["mids"]) ||empty($post["msg"])){
             return $this->error("缺少参数");
         }
+        $this->end();
         $arg = [
             "op" => $post["operation"],
             "mids" => is_array($post["mids"])?$post["mids"]:[$post["mids"]],

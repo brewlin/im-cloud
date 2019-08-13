@@ -11,6 +11,7 @@ namespace App\Grpc;
 
 use App\Lib\Broadcast;
 use App\Packet\Task;
+use App\Service\Dao\BroadcastRoom;
 use App\Service\Dao\Bucket;
 use App\Service\Dao\Push;
 use App\Service\Dao\Room;
@@ -122,11 +123,13 @@ class Cloud
         if(empty($broadroomReq->getProto()) || empty($broadroomReq->getRoomID())){
             return;
         }
+        $msg = $broadroomReq->getProto()->getBody();
+        $roomId = $broadroomReq->getRoomID();
+        $op = $broadroomReq->getProto()->getOp();
         //go coroutine
-        Co::create(function()use($broadroomReq){
-            foreach(Bucket::buckets() as $roomId){
-                Room::push($roomId,$broadroomReq);
-            }
+        Co::create(function()use($msg,$op,$roomId){
+            /** @var Task $task */
+            \bean(Task::class)->deliver(BroadcastRoom::class,"push",[$roomId,$op,$msg]);
         },false);
 
     }
