@@ -12,7 +12,10 @@ namespace App\Event;
 use App\Lib\LogicClient;
 use Core\Swoole\PipeMessageInterface;
 use Swoole\Server;
-
+/**
+ * 进程间通信 事件入口
+ * @package Event
+ */
 class PipeMessageListener implements PipeMessageInterface
 {
     /**

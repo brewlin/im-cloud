@@ -20,6 +20,14 @@ use Swoole\Server;
  */
 class OnCloseListener implements CloseInterface
 {
+    /**
+     * onClose event
+     *
+     * @param Server $server
+     * @param integer $fd
+     * @param integer $reactorId
+     * @return void
+     */
     public function onClose(Server $server, int $fd, int $reactorId): void
     {
         $clientInfo = Cloud::server()->getSwooleServer()->getClientInfo($fd);
@@ -36,8 +44,6 @@ class OnCloseListener implements CloseInterface
             bean(Task::class)->deliver(Bucket::class,"disconnect",[$fd]);
             return;
         }
-
-        // TODO: Implement onClose() method.
     }
 
 }

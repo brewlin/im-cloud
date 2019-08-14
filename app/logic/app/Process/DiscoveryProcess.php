@@ -42,7 +42,14 @@ class DiscoveryProcess extends AbstractProcess
      */
     public function run(Process $process)
     {
-        provider()->select()->registerService();
+        $registerStatus = false;
+        //注册失败则一直重试注册到发现中心
+        while($registerStatus){
+            $registerStatus = provider()->select()->registerService();
+            if(!$registerStatus)
+                CLog::
+            sleep(1);
+        }
         while (true){
             $services = provider()->select()->getServiceList("grpc-im-cloud-node");
             if(empty($services)){

@@ -3,6 +3,7 @@
 
 ## @[cloud](./cloud)
 > 注册中心节点
+完成功能开发
 ```php
 cd cloud
 composer install
@@ -14,6 +15,7 @@ composer install
 
 ## @[job](./job)
 > 消费中心节点
+完成功能开发
 ```php
 cd job
 composer install
@@ -30,6 +32,7 @@ composer install
 ```
 ### 进度
 - 完成了http api
+    -   `完成并发压测单点推送`
 - 完成了grpc api
 - 完成了注册发现与服务调用
 - 完成了队列的生产 使用rabbitmq

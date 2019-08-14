@@ -21,7 +21,13 @@ use Swoole\Server as SwooleServer;
 class WorkerStartListener implements WorkerStartInterface
 {
     const INIT_LOGIC = 1;
-
+    /**
+     * 监听worker进程  task进程 启动事件
+     *
+     * @param SwooleServer $server
+     * @param integer $workerId
+     * @return void
+     */
     public function onWorkerStart(SwooleServer $server, int $workerId): void
     {
         //接受自定义进程taskProcess 投递过来的请求

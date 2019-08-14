@@ -25,7 +25,7 @@ class ShutdownListener implements ShutdownInterface
         //注销节点
 //        Co::create(function (){
         $discovery = config("discovery");
-            provider()->select()->deregisterService($discovery["discovery"]);
+        provider()->select()->deregisterService($discovery["discovery"]);
 //        });
 //        sleep(10);
 

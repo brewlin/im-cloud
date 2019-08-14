@@ -8,17 +8,15 @@
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" target="_blank" />
   </a>
   <a href="https://github.com/brewlin/im-cloud/LICENSE">
-    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" target="_blank" />
+    <img alt="License: Apache" src="https://img.shields.io/badge/License-Apache-yellow.svg" target="_blank" />
   </a>
 </p>
 
-> 基于原生 swoole 全协程化构建 im-cloud中间件，多节点扩容
-
-### 🏠 [Homepage](https://github.com/brewlin/im-cloud)
+基于原生 swoole 全协程化构建 im-cloud中间件，多节点扩容
 
 
 ## 概述
-+ 基于`swoole`原生商业化即时推送im服务,不再进行业务处理，单独作为中间件使用，可弹性扩充节点增加性能处理,业务demo:(todo)
++ 基于`swoole`原生商业化即时推送im服务,不进行业务处理，单独作为中间件使用，可弹性扩充节点增加性能处理,业务demo:(todo)
 + 高性能 水平扩容 分布式服务架构 接入服务治理
 + [`cloud`](./app/cloud) 作为中心服务节点 `grpc-server` 节点，对外可以进行TCP、Websocket 客户端进行`长连接`,可以对水平扩容至多个节点 并注册到服务中心 例如`consul`，每个cloud节点维护自己的客户端
 + [`job`](./app/-job) 节点作为消费节点 消费队列数据 然后进行`grpc` 和cloud服务进行通讯 进行 `push` `push room` `broadcast`,作为节点中间件，消费`kafaka`，`rockermq。。。`之类

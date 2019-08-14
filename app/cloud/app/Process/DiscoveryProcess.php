@@ -42,7 +42,11 @@ class DiscoveryProcess extends AbstractProcess
      */
     public function run(Process $process)
     {
-        provider()->select()->registerService();
+        $registerStatus = false;
+        while($registerStatus){
+            $registerStatus = provider()->select()->registerService();
+            sleep(1);
+        }
         $config = config("discovery");
         $discovery = $config["consul"]["discovery"]["name"];
         while (true){

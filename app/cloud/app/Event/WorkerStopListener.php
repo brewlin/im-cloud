@@ -16,6 +16,13 @@ use Swoole\Server as SwooleServer;
 
 class WorkerStopListener implements WorkerStopInterface
 {
+    /**
+     * 监听worker进程  task进程 退出事件
+     *
+     * @param SwooleServer $server
+     * @param integer $workerId
+     * @return void
+     */
     public function onWorkerStop(SwooleServer $server, int $workerId): void
     {
         Log::info("workerid:".$workerId." is stop");

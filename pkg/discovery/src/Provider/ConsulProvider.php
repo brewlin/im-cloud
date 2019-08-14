@@ -168,15 +168,17 @@ class ConsulProvider implements ProviderInterface
                 " exception:".
                 $e->getMessage()
             );
-            return;
+            return false;
         }
         if($res->success){
             Console::writeln(sprintf('<success>RPC service register success by consul ! tcp=%s:%d</success>', $this->registerAddress, $this->registerPort));
+            return ture;
         }else{
             Console::writeln(sprintf('<error>RPC service register failed by consul ! tcp=%s:%d</error>', $this->registerAddress, $this->registerPort));
+            return false;
         }
 
-        return true;
+        return false;
     }
 
     /**

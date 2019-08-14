@@ -59,9 +59,9 @@ class Cloud
             ->getResponse()
             ->withContent($closeRp);
     }
-
     /**
-     *
+     * 接受 logic节点 job节点grpc请求，单点推送消息
+     * @return void
      */
     public function pushMsg()
     {
@@ -108,6 +108,7 @@ class Cloud
     }
 
     /**
+     * 接受job节点 logic节点 grpc请求，并进行房间广播
      * @return \Core\Http\Response\Response|static|void
      */
     public function broadcastRoom()
