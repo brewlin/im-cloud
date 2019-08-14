@@ -47,7 +47,6 @@ class DiscoveryProcess extends AbstractProcess
         while($registerStatus){
             $registerStatus = provider()->select()->registerService();
             if(!$registerStatus)
-                CLog::
             sleep(1);
         }
         while (true){
