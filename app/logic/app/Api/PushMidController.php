@@ -30,6 +30,7 @@ class PushMidController extends BaseController
 {
     /**
      * @return \Core\Http\Response\Response|static
+     * @throws \Exception
      */
     public function mids()
     {

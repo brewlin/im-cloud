@@ -10,6 +10,7 @@ namespace App\Api;
 use App\Task\LogicPush;
 use Core\Container\Mapping\Bean;
 use Core\Context\Context;
+use Task\Task;
 
 /**
  * Class PushKeyController
@@ -18,6 +19,14 @@ use Core\Context\Context;
  */
 class PushKeyController extends BaseController
 {
+    /**
+     * @param [
+     *      'operation' => 9
+     *      'keys' => ['key1',key2',key3']
+     *      'msg' =>  body
+     * ]
+     * @return \Core\Http\Response\Response|static
+     */
     public function keys()
     {
         $post  = Context::get()->getRequest()->input();
@@ -27,10 +36,13 @@ class PushKeyController extends BaseController
         $this->end();
         $arg = [
             "op" => $post["operation"],
-            "keys" => $post["keys"],
+            "keys" => is_array($post["keys"])?$post["keys"]:[$post["keys"]],
             "msg" => $post["msg"]
         ];
-        container()->get(LogicPush::class)->pushKeys($arg["op"],$arg["keys"],$arg["msg"]);
+        /**
+         * @var LogicPush
+         */
+        Task::deliver(LogicPush::class,"pushKeys",[(int)$arg["op"],$arg["keys"],$arg["msg"]]);
     }
 
 }

@@ -9,10 +9,11 @@
 namespace App\Api;
 
 
-use App\Lib\LogicPush;
+use App\Task\LogicPush;
 use Core\Container\Mapping\Bean;
 use Core\Context\Context;
 use ImQueue\Amqp\Consumer;
+use Task\Task;
 
 /**
  * Class PushAllController
@@ -37,7 +38,7 @@ class PushAllController extends BaseController
             "speed" => $post["speed"],
             "msg" => $post["msg"]
         ];
-        container()->get(LogicPush::class)->pushAll($arg["op"],$arg["speed"],$arg["msg"]);
+        Task::deliver(LogicPush::class,"pushAll",[$arg['op'],$arg['speed'],$arg['msg']]);
     }
 
 }

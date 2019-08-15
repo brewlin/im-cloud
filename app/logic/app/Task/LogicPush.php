@@ -31,18 +31,20 @@ class LogicPush
      */
     public function pushKeys(int $op,array $keys,$msg)
     {
-        /** @var RedisDao $servers */
-        $servers = \container()->get(RedisDao::class)->getServersByKeys($keys);
-        $pushKeys = [];
-        foreach ($keys as $i => $key){
-            $server = $servers[$i];
-            if(!empty($server) && empty($key))
-                $pushKeys[$server][] = $key;
-        }
-        foreach ($pushKeys as $server => $key){
-            //丢到队列里去操做，让job去处理
-            \container()->get(QueueDao::class)->pushMsg($op,$server,$pushKeys[$server],$msg);
-        }
+        Co::create(function()use($op,$keys,$msg){
+            /** @var RedisDao $servers */
+            if(!($servers = \container()->get(RedisDao::class)->getServersByKeys($keys)))return;
+            $pushKeys = [];
+            foreach ($keys as $i => $key){
+                $server = $servers[$i];
+                if(!empty($server) && !empty($key))
+                    $pushKeys[$server][] = $key;
+            }
+            foreach ($pushKeys as $server => $key){
+                //丢到队列里去操做，让job去处理
+                \container()->get(QueueDao::class)->pushMsg($op,$server,$pushKeys[$server],$msg);
+            }
+        });
     }
 
     /**
@@ -78,10 +80,12 @@ class LogicPush
      */
     public function pushRoom(int $op,$type,$room,$msg)
     {
-        \container()
-            ->get(QueueDao::class)
-            ->broadcastRoomMsg($op,\bean(Room::class)
-                ->encodeRoomKey($type,$room),$msg);
+        Co::create(function ()use($op,$type,$room,$msg){
+            \container()
+                ->get(QueueDao::class)
+                ->broadcastRoomMsg($op,\bean(Room::class)
+                    ->encodeRoomKey($type,$room),$msg);
+        });
     }
 
     /**

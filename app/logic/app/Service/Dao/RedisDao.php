@@ -25,10 +25,10 @@ class RedisDao
     const _prefixMidServer    = "mid_%d"; // mid -> key:server
 	const _prefixKeyServer    = "key_%s"; // key -> server
 	const _prefixServerOnline = "ol_%s";  // server -> online
-    public static $redisExpire = 1800;
+    public static $redisExpire = 20; //20s
     public function __construct()
     {
-        self::$redisExpire = env("EXPIRE",1800);
+        self::$redisExpire = env("EXPIRE",20);
     }
 
     public function keyMidServer(int $mid)

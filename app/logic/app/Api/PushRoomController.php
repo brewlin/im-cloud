@@ -12,6 +12,7 @@ namespace App\Api;
 use App\Task\LogicPush;
 use Core\Container\Mapping\Bean;
 use Core\Context\Context;
+use Task\Task;
 
 /**
  * Class PushRoomController
@@ -36,7 +37,8 @@ class PushRoomController extends BaseController
             "room" => $post["room"],
             'msg' => $post['msg']
         ];
-        container()->get(LogicPush::class)->pushRoom($arg["op"],$arg["type"],$arg["room"],$arg["msg"]);
+        /** Task::deliver */
+        Task::deliver(LogicPush::class,"pushRoom",[$arg['op'],$arg['type'],$arg['room'],$arg['msg']]);
     }
 
 }

@@ -25,6 +25,7 @@ class BaseController
         ];
         return Context::get()->getResponse()
                               ->withStatus($code)
+                              ->withContentType("application/json")
                               ->withContent($data);
     }
     public function success($data = [],$msg = "",$code = MsgEnum::Ok)
@@ -36,9 +37,10 @@ class BaseController
         ];
         return Context::get()->getResponse()
                               ->withStatus($code)
+                              ->withContentType("application/json")
                               ->withContent($data);
     }
-    public function end($data = [],$msg = "",$code = MsgEnum::Ok)
+    public function end($data = ["ok"],$msg = "",$code = MsgEnum::Ok)
     {
         $data = [
             "msg" => $msg,
@@ -47,6 +49,7 @@ class BaseController
         ];
         Context::get()->getResponse()
             ->withStatus($code)
+            ->withContentType("application/json")
             ->withContent($data)
             ->end();
     }

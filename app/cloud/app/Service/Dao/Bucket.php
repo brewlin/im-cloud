@@ -60,7 +60,10 @@ class Bucket
      */
     public static function put(string $key,int $fd,string $mid,string $roomId = "")
     {
-        //ip ++
+        //ipcount ++
+        if(!isset(self::$ipCounts[env("APP_HOST","127.0.0.1")])){
+            self::$ipCounts[env("APP_HOST","127.0.0.1")] = 0;
+        }
         self::$ipCounts[env("APP_HOST","127.0.0.1")] ++;
         //bind key to fd
         self::$keyToFd[$key] = $fd;
