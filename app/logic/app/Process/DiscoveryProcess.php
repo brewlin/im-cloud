@@ -12,6 +12,7 @@ namespace App\Process;
 use App\Lib\LogicClient;
 use Core\Cloud;
 use Core\Processor\ProcessorInterface;
+use Log\Helper\CLog;
 use Log\Helper\Log;
 use Process\Contract\AbstractProcess;
 use Process\Process;
@@ -44,10 +45,12 @@ class DiscoveryProcess extends AbstractProcess
     {
         $registerStatus = false;
         //注册失败则一直重试注册到发现中心
-        while($registerStatus){
+        while(!$registerStatus){
             $registerStatus = provider()->select()->registerService();
-            if(!$registerStatus)
-            sleep(1);
+            if(!$registerStatus){
+                sleep(1);
+                CLog::error("consul register false sleep 1 sec to reregiseter");
+            }
         }
         while (true){
             $services = provider()->select()->getServiceList("grpc-im-cloud-node");

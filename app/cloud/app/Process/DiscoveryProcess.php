@@ -12,6 +12,7 @@ namespace App\Process;
 use App\Lib\LogicClient;
 use Core\Cloud;
 use Core\Processor\ProcessorInterface;
+use Log\Helper\CLog;
 use Log\Helper\Log;
 use Process\Contract\AbstractProcess;
 use Process\Process;
@@ -43,9 +44,12 @@ class DiscoveryProcess extends AbstractProcess
     public function run(Process $process)
     {
         $registerStatus = false;
-        while($registerStatus){
+        while(!$registerStatus){
             $registerStatus = provider()->select()->registerService();
-            sleep(1);
+            if(!$registerStatus){
+                CLog::error("consul register false sleep 1 sec to reregiseter");
+                sleep(1);
+            }
         }
         $config = config("discovery");
         $discovery = $config["consul"]["discovery"]["name"];
