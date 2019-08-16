@@ -14,6 +14,7 @@ use Log\Helper\Log;
 use Process\ProcessManager;
 
 /**
+ * 投递到bucket缓存池中处理，该操作都在taskprocess中处理
  * Class Task
  * @package App\Packet
  * @Bean()

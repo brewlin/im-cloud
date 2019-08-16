@@ -14,6 +14,7 @@ use Process\Contract\AbstractProcess;
 use Process\Process;
 
 /**
+ * 自定义进程，作为bucket缓存池
  * Class BucketProcess
  * @package App\cloud\app\Process
  */

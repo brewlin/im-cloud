@@ -9,7 +9,7 @@
 namespace App\Grpc;
 
 
-use App\Lib\Broadcast;
+use App\Service\Dao\Broadcast;
 use App\Packet\Task;
 use App\Service\Dao\BroadcastRoom;
 use App\Service\Dao\Bucket;
@@ -103,7 +103,11 @@ class Cloud
             return;
         }
         Co::create(function ()use($broadcastReq){
-            Broadcast::push($broadcastReq->getProto(),$broadcastReq->getProtoOp());
+            /** BroadcastReq */
+            \bean(Task::class)->deliver(Broadcast::class,"push",[
+                (int)$broadcastReq->getProtoOp(),
+                $broadcastReq->getProto()->getBody(),
+            ]);
         });
     }
 

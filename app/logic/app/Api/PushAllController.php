@@ -29,16 +29,15 @@ class PushAllController extends BaseController
     public function all()
     {
         $post  = Context::get()->getRequest()->input();
-        if(empty($post["operation"]) || empty($post["speed"])){
+        if(empty($post["operation"])){
             return $this->error("缺少参数");
         }
         $this->end();
         $arg = [
             "op" => $post["operation"],
-            "speed" => $post["speed"],
             "msg" => $post["msg"]
         ];
-        Task::deliver(LogicPush::class,"pushAll",[$arg['op'],$arg['speed'],$arg['msg']]);
+        Task::deliver(LogicPush::class,"pushAll",[(int)$arg['op'],$arg['msg']]);
     }
 
 }

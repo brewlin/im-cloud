@@ -68,8 +68,7 @@ class Job
                     container()->get(Broadcast::class)->push(
                         $serverList,
                         $pushmsg->getOperation(),
-                        $pushmsg->getMsg(),
-                        $pushmsg->getSpeed()
+                        $pushmsg->getMsg()
                     );
                 default:
             }

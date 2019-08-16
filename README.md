@@ -69,6 +69,6 @@ todo
 ## 📝 License
 
 Copyright © 2019 [brewlin](https://github.com/brewlin).<br />
-This project is [MIT](https://github.com/brewlin/im-cloud/LICENSE) licensed.
+This project is [Apache2.0](https://github.com/brewlin/im-cloud/LICENSE) licensed.
 
 

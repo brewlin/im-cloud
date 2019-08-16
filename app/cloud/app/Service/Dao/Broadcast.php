@@ -6,10 +6,8 @@
  * Time: 10:49
  */
 
-namespace App\Lib;
-use App\Service\Dao\Push;
+namespace App\Service\Dao;
 use Core\Cloud;
-use Core\Container\Mapping\Bean;
 use Im\Cloud\Proto;
 use Log\Helper\Log;
 
@@ -23,9 +21,9 @@ class Broadcast
      * @param Proto $proto
      * @param int $op
      */
-    public static function push(Proto $proto,int $op)
+    public static function push(int $op,$body)
     {
-        Log::info("Cloud broadcast op:$op data:".json_encode($proto));
+        Log::info("Cloud broadcast op:$op data:".json_encode($body));
 
         $start_fd = 0;
         while(true)
@@ -38,10 +36,11 @@ class Broadcast
             $start_fd = end($conn_list);
             foreach($conn_list as $fd)
             {
-                container()->get(Push::class)->push($fd,$proto->serializeToJsonString());
+                container()->get(Push::class)->pushFd($fd,$op,$body);
             }
         }
 
     }
+
 
 }

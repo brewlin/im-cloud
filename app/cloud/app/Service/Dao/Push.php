@@ -30,9 +30,19 @@ class Push
     {
         Log::info("Cloud push:{$key}  data:".json_encode($body));
         if(!($fd = Bucket::fd($key))) return;
+
+        self::pushFd($fd,$op,$body);
+    }
+
+    /**
+     * @param $fd
+     * @param $body
+     */
+    public function pushFd($fd,$op,$body)
+    {
         if(!($clientinfo = Cloud::server()->getSwooleServer()->getClientInfo($fd))){
             Log::info("连接 fd:{$fd} 不存在,待发送数据:".json_encode($body));
-           return;
+            return;
         }
         //判断为websocket连接且已经握手完毕
         if(isset($clientinfo['websocket_status']) && $clientinfo['websocket_status'] == WEBSOCKET_STATUS_FRAME){

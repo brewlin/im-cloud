@@ -66,10 +66,10 @@ class QueueDao
      * @param int $peed
      * @param $msg
      */
-    public function broadcastMsg(int $operation,int $speed,$msg)
+    public function broadcastMsg(int $operation,$msg)
     {
         $type = PushMsg\Type::BROADCAST;
-        $pushmsg = compact("type","operation","speed","msg");
+        $pushmsg = compact("type","operation","msg");
         Log::info("push msg to job node data:".json_encode($pushmsg));
 
         /** @var Producer $producers */

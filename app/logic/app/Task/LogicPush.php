@@ -93,11 +93,11 @@ class LogicPush
      * @param int $speed
      * @param $msg
      */
-    public function pushAll(int $op,int $speed,$msg)
+    public function pushAll(int $op,$msg)
     {
         \container()
             ->get(QueueDao::class)
-            ->broadcastMsg($op,$speed,$msg);
+            ->broadcastMsg($op,$msg);
     }
     
 

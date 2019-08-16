@@ -27,7 +27,7 @@ class Broadcast
      * @param $body
      * @param int $speed
      */
-    public function push(array $serviceList,int $operation,$body,int $speed)
+    public function push(array $serviceList,int $operation,$body)
     {
         $proto = new Proto();
         $proto->setVer(1);
@@ -35,7 +35,6 @@ class Broadcast
         $proto->setBody($body);
 
         $broadcastReq = new BroadcastReq();
-        $broadcastReq->setSpeed($speed);
         $broadcastReq->setProtoOp($operation);
         $broadcastReq->setProto($proto);
         foreach ($serviceList as $server) {
