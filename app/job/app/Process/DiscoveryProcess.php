@@ -50,17 +50,26 @@ class DiscoveryProcess extends AbstractProcess
             $services = provider()->select()->getServiceList($discoveryname);
             if(empty($services)){
                 Log::error("not find instance node:$discoveryname");
+                $this->syncServeiceList([]);
                 goto SLEEP;
             }
-            for($i = 0; $i < (int)env("WORKER_NUM",4);$i++)
-            {
-                //将可以用的服务同步到所有的worker进程
-//                $sync = ["call" => [LogicClient::class,"updateService"],"arg" => [$services]];
-                Cloud::server()->getSwooleServer()->sendMessage($services,$i);
-            }
             //独立子进程直接sleep阻塞即可
+            $this->syncServeiceList($services);
 SLEEP:
-            sleep(10);
+            sleep(5);
         }
+    }
+    /**
+     * @param array $services
+     */
+    public function syncServeiceList(array $services)
+    {
+        for($i = 0; $i < (int)env("WORKER_NUM",4);$i++)
+        {
+            //将可以用的服务同步到所有的worker进程
+//               $sync = ["call" => [LogicClient::class,"updateService"],"arg" => [$services]];
+            Cloud::server()->getSwooleServer()->sendMessage($services,$i);
+        }
+
     }
 }

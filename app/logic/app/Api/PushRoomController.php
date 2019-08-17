@@ -38,7 +38,7 @@ class PushRoomController extends BaseController
             'msg' => $post['msg']
         ];
         /** Task::deliver */
-        Task::deliver(LogicPush::class,"pushRoom",[$arg['op'],$arg['type'],$arg['room'],$arg['msg']]);
+        Task::deliver(LogicPush::class,"pushRoom",[(int)$arg['op'],$arg['type'],$arg['room'],$arg['msg']]);
     }
 
 }
