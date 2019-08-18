@@ -44,9 +44,9 @@ class Consumer extends ConsumerMessage
 //            return Result::REQUEUE;
             return Result::DROP;
         }
-        Co::create(function()use($data){
+//        Co::create(function()use($data){
             Task::deliver(Job::class,"push",[CloudClient::$serviceList,$data]);
-        },true);
+//        },true);
         return Result::ACK;
     }
 

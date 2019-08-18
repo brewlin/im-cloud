@@ -84,7 +84,7 @@ class Bucket
     /**
      * @param string $key
      */
-    public static function del(string $key,int $fd,string $roomId = "")
+    public static function del($key = "",$fd = null,$roomId = "")
     {
         //del key to fd
         unset(self::$keyToFd[$key]);
