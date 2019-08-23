@@ -9,6 +9,7 @@
 namespace Core;
 
 
+use Core\Console\Cli;
 use Core\Container\Mapping\Bean;
 use Core\Processor\AnnotationProcessor;
 use Core\Processor\Container;
@@ -37,6 +38,13 @@ class App
      */
     private $processor;
 
+    const FONT_LOGO = "
+ _                  _                 _                           _      
+(_)_ __ ___     ___| | ___  _   _  __| |  _____      _____   ___ | | ___ 
+| | '_ ` _ \   / __| |/ _ \| | | |/ _` | / __\ \ /\ / / _ \ / _ \| |/ _ \
+| | | | | | | | (__| | (_) | |_| | (_| | \__ \\ V  V / (_) | (_) | |  __/
+|_|_| |_| |_|  \___|_|\___/ \__,_|\__,_| |___/ \_/\_/ \___/ \___/|_|\___|
+";
     public function __construct()
     {
         Cloud::$app = $this;
@@ -49,7 +57,7 @@ class App
             'logFile' => ''
         ];
         CLog::init($config);
-        CLog::info('Swoole\Runtime::enableCoroutine');
+//        CLog::info('Swoole\Runtime::enableCoroutine');
         //set env path
         $this->setEnvFile();
         //run handle
@@ -75,6 +83,7 @@ class App
      * start run
      */
     public function run(){
+//        (new Cli())->showApplicationHelp();
         $this->processor->handle();
         $this->initLog();
         if(env("ENABLE_WS")){
