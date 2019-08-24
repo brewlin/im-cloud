@@ -12,6 +12,7 @@ namespace Core;
 use Core\Console\Cli;
 use Core\Container\Mapping\Bean;
 use Core\Processor\AnnotationProcessor;
+use Core\Processor\ConsoleProcessor;
 use Core\Processor\Container;
 use Core\Server\HttpServer;
 use Core\Processor\AppProcessor;
@@ -76,6 +77,7 @@ class App
             new ConfigProcessor($this),
             new AnnotationProcessor($this),
             new Container($this),
+            new ConsoleProcessor($this),
         ];
     }
 
@@ -83,7 +85,6 @@ class App
      * start run
      */
     public function run(){
-//        (new Cli())->showApplicationHelp();
         $this->processor->handle();
         $this->initLog();
         if(env("ENABLE_WS")){
