@@ -10,10 +10,17 @@ namespace Core\Console;
 
 
 use Core\App;
+use Core\Console\Input\Input;
+use Core\Container\Mapping\Bean;
 use Stdlib\Helper\Arr;
 use Stdlib\Helper\Str;
 use Toolkit\Cli\ColorTag;
 
+/**
+ * Class Cli
+ * @package Core\Console
+ * @Bean()
+ */
 class Cli
 {
     /**
@@ -30,6 +37,7 @@ class Cli
     private static $globalOptions = [
         'start'      => 'start the server 启动服务',
         'stop'       => 'stop the server  kill服务',
+        "reload"     => 'reload the server 重启worker',
         '-d'         => 'with deamon      守护模式',
         'debug'       => 'start debug     开启debug',
         'log:bool'         => 'true start log,false stop log 是否开启日志记录',
@@ -48,7 +56,7 @@ class Cli
             Console::colored(App::FONT_LOGO, 'cyan');
         }
 
-        $script = (new Input\Input())->getScriptName();
+        $script = (new Input())->getScriptName();
         // Global options
         $globalOptions = self::$globalOptions;
         // Append expand option
@@ -67,7 +75,7 @@ class Cli
         ]);
 
         $router   = new Router\Router();
-        $expand   = (new Input\Input())->getBoolOpt('expand');
+        $expand = (new Input())->getBoolOpt('expand');
         $keyWidth = $router->getKeyWidth($expand ? 2 : -4);
 
 //        Console::writeln('<comment>Available Commands:</comment>');

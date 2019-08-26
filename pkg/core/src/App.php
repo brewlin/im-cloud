@@ -75,9 +75,9 @@ class App
         return [
             new EnvProcessor($this),
             new ConfigProcessor($this),
+            new ConsoleProcessor($this),
             new AnnotationProcessor($this),
             new Container($this),
-            new ConsoleProcessor($this),
         ];
     }
 

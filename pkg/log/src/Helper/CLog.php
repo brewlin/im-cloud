@@ -66,7 +66,7 @@ class CLog
      */
     public static function debug(string $message, ...$params): void
     {
-        if(APP_DEBUG){
+        if(env("APP_DEBUG")){
             self::$cLogger->debug(sprintf($message, ...$params), []);
         }
     }

@@ -9,7 +9,9 @@
 namespace Core\Processor;
 
 
+use Core\App;
 use Core\Config\Config;
+use Core\Console\Cli;
 use Core\Console\Console;
 
 /**
@@ -23,10 +25,44 @@ class ConsoleProcessor extends Processor
      */
     public function handle(): bool
     {
-        //处理命令行参数
-        /** @var Console $cli */
-//        $cli =  bean(Console::class);
+        $arg = getopt("",["start","stop","reload","d","debug","log:","h","v"]);
+        $this->handleArg($arg);
         return true;
+    }
+
+    /**
+     * @param array $arg
+     */
+    public function handleArg(array $arg){
+        /** @var Cli $cli */
+        $cli = new Cli();
+        if(empty($arg) || isset($arg['v']) || isset($arg['h'])){
+            $cli->showApplicationHelp();
+            exit;
+        }
+        if(isset($arg['v'])){
+            Console::colored(App::FONT_LOGO, 'cyan');
+            Console::writeln(sprintf('<success>version:</success>%s',$cli->getVersion()));
+            exit;
+        }
+        if(isset($arg['d'])){
+            putenv("DAEMONIZE=true");
+        }
+        if(isset($arg["log"])){
+            putenv("START_LOG={$arg["log"]}");
+        }
+        if(isset($arg["debug"])){
+            putenv("APP_DEBUG=1");
+        }
+        if(isset($arg["start"])){
+            putenv("APP=start");
+        }
+        if(isset($arg["reload"])){
+            putenv("APP=reload");
+        }
+        if(isset($arg["stop"])){
+            putenv("APP=stop");
+        }
     }
 
 

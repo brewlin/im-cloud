@@ -25,6 +25,7 @@ use function strpos;
 use function strtoupper;
 use Toolkit\Cli\ColorTag;
 use function trim;
+use Core\App as Application;
 
 /**
  * Class Console

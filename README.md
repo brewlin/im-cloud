@@ -39,8 +39,10 @@ im-cloud 业务流程
 -----
 ![](./resource/im-cloudt-task.png)
 
-服务处理
+终端处理
 ------
+![](./resource/console.png)
+
 todo
 
 ## 组件依赖
