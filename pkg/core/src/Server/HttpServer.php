@@ -36,7 +36,7 @@ class HttpServer extends Server
             'open_http2_protocol' => (bool)env("ENABLE_GRPC",false),
         ];
         if(!empty($serverConfig['setting']))
-            $default = array_merge($default,$serverConfig['setting']);
+            $default = array_merge($serverConfig['setting'],$default);
         return $default;
     }
     /**

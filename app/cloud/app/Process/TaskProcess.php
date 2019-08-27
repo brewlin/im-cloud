@@ -39,6 +39,7 @@ class TaskProcess extends AbstractProcess
      */
     public function run(Process $process)
     {
+        swoole_set_process_name(sprintf('php-im-cloud task process (%s)',ROOT));
         while (true){
             $body = $process->read();
             try{

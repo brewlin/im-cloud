@@ -43,6 +43,7 @@ class DiscoveryProcess extends AbstractProcess
      */
     public function run(Process $process)
     {
+        swoole_set_process_name(sprintf('php-im-cloud discovery process (%s)',ROOT));
         $registerStatus = false;
         while(!$registerStatus){
             $registerStatus = provider()->select()->registerService();

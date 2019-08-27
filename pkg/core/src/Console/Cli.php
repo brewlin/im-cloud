@@ -35,14 +35,14 @@ class Cli
 
     /** @var array */
     private static $globalOptions = [
-        'start'      => 'start the server 启动服务',
-        'stop'       => 'stop the server  kill服务',
-        "reload"     => 'reload the server 重启worker',
-        '-d'         => 'with deamon      守护模式',
-        'debug'       => 'start debug     开启debug',
-        'log:bool'         => 'true start log,false stop log 是否开启日志记录',
-        '-h'    => 'Display this help message',
-        '-v' => 'Show application version information',
+        '--start'      => 'start the server 启动服务',
+        '--stop'       => 'stop the server  kill服务',
+        "--reload"     => 'reload the server 重启worker',
+        '--d'         => 'with deamon      守护模式',
+        '--debug'       => 'start debug     开启debug',
+        '--log=bool'         => 'true start log,false stop log 是否开启日志记录',
+        '--h'    => 'Display this help message',
+        '--v' => 'Show application version information',
     ];
     /**
      * Display command list of the application
@@ -55,8 +55,9 @@ class Cli
         if ($showLogo) {
             Console::colored(App::FONT_LOGO, 'cyan');
         }
+        $input = new Input();
+        $script = $input->getScriptName();
 
-        $script = (new Input())->getScriptName();
         // Global options
         $globalOptions = self::$globalOptions;
         // Append expand option
@@ -68,14 +69,14 @@ class Cli
         Console::writeln(sprintf("%s%s\n", $appDesc, $appVer ? " (Version: <info>$appVer</info>)" : ''));
 
         self::showMList([
-            'Usage:'   => "$script <info>COMMAND</info> [arg0 arg1 arg2 ...] [--opt -v -h ...]",
+            'Usage:'   => "php $script <info>OPTIONS</info> --opt -v -h ...",
             'Options:' => self::alignOptions($globalOptions),
         ], [
             'sepChar' => '   ',
         ]);
 
         $router   = new Router\Router();
-        $expand = (new Input())->getBoolOpt('expand');
+        $expand = $input->getBoolOpt('expand');
         $keyWidth = $router->getKeyWidth($expand ? 2 : -4);
 
 //        Console::writeln('<comment>Available Commands:</comment>');

@@ -42,8 +42,11 @@ im-cloud 业务流程
 终端处理
 ------
 ![](./resource/console.png)
+process
+![](./resource/process.png)
+start
+![](./resource/start.png)
 
-todo
 
 ## 组件依赖
 > 相关组件为纯swoole实现

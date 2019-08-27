@@ -11,11 +11,13 @@ namespace Core\Server;
 
 use Core\Console\Console;
 use Core\Container\Container;
+use Core\Server\Helper\ServerHelper;
 use Core\Swoole\SwooleEvent;
 use Process\ProcessManager;
 use Log\Helper\CLog;
 use Stdlib\Helper\Dir;
 use Stdlib\Helper\Sys;
+use Swoole\Process;
 use Swoole\Server as SwooleServer;
 use Task\Listeners\TaskEventListener;
 
@@ -50,7 +52,7 @@ class Server
      *
      * @var string
      */
-    protected $pidName = "im-cloud";
+    protected $pidName = "php-im-cloud";
 
     /**
      * Record started server PIDs and with current workerId
@@ -184,20 +186,94 @@ class Server
             $this->addEvent($server, $on);
         }
     }
+
     /**
-     * Set pid map
+     * @param bool $onlyTaskWorker
      *
-     * @param SwooleServer $server
+     * @return bool
      */
-    protected function setPidMap(SwooleServer $server): void
+    public function reload(bool $onlyTaskWorker = false): bool
     {
-        if ($server->master_pid > 0) {
-            $this->pidMap['masterPid'] = $server->master_pid;
+        if(!$this->isRunning()){
+            Console::writeln(sprintf('<error>server is not running now !</error>'));
+            return false;
+        }
+        if (($pid = $this->pidMap['masterPid']) < 1) {
+            Console::writeln(sprintf('<error>server is not running now !</error>'));
+            return false;
         }
 
-        if ($server->manager_pid > 0) {
-            $this->pidMap['managerPid'] = $server->manager_pid;
+        // SIGUSR1(10):
+        //  Send a signal to the management process that will smoothly restart all worker processes
+        // SIGUSR2(12):
+        //  Send a signal to the management process, only restart the task process
+        $signal = $onlyTaskWorker ? 12 : 10;
+        Console::writeln(sprintf('<success>server is reload now! send signal %s to pid:%s</success>', $signal, $pid));
+
+        return ServerHelper::sendSignal($pid, $signal);
+    }
+
+    /**
+     * @return bool
+     */
+    public function stop(): bool
+    {
+        if(!$this->isRunning()){
+            Console::writeln(sprintf('<error>server is not running now !</error>'));
+            return true;
         }
+
+        $pid = $this->getPid();
+        if ($pid < 1) {
+            Console::writeln(sprintf('<error>server is not running now !</error>'));
+            return false;
+        }
+
+        // SIGTERM = 15
+        if (ServerHelper::killAndWait($pid, 15, $this->pidName)) {
+            Console::writeln(sprintf('<success>server is stop now! send signal %s to pid:%s</success>', 15, $pid));
+            return ServerHelper::removePidFile(ROOT.$this->pidFile);
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if the server is running
+     *
+     * @return bool
+     */
+    public function isRunning(): bool
+    {
+        $pidFile = ROOT.$this->pidFile;
+
+        // Is pid file exist ?
+        if (file_exists($pidFile)) {
+            // Get pid file content and parse the content
+            $pidFile = file_get_contents($pidFile);
+
+            // Parse and record PIDs
+            [$masterPID, $managerPID] = explode(',', $pidFile);
+            // Format type
+            $masterPID  = (int)$masterPID;
+            $managerPID = (int)$managerPID;
+
+            $this->pidMap['masterPid']  = $masterPID;
+            $this->pidMap['managerPid'] = $managerPID;
+
+            return $masterPID > 0 && Process::kill($masterPID, 0);
+        }
+
+        return false;
+    }
+    /**
+     * @param string $name
+     *
+     * @return int
+     */
+    public function getPid(string $name = 'masterPid'): int
+    {
+        return $this->pidMap[$name] ?? 0;
     }
     /**
      * On master start event
@@ -228,6 +304,21 @@ class Server
 //        $this->setSetting($server->setting);
 
     }
+    /**
+     * Set pid map
+     *
+     * @param SwooleServer $server
+     */
+    protected function setPidMap(SwooleServer $server): void
+    {
+        if ($server->master_pid > 0) {
+            $this->pidMap['masterPid'] = $server->master_pid;
+        }
+
+        if ($server->manager_pid > 0) {
+            $this->pidMap['managerPid'] = $server->manager_pid;
+        }
+    }
 
     /**
      * Manager start event
@@ -239,6 +330,7 @@ class Server
         // Server pid map
         $this->setPidMap($server);
         // Set process title
+        Sys::setProcessTitle(sprintf('%s manager process (%s)', $this->pidName,ROOT));
     }
 
     /**

@@ -36,7 +36,7 @@ class ConsoleProcessor extends Processor
     public function handleArg(array $arg){
         /** @var Cli $cli */
         $cli = new Cli();
-        if(empty($arg) || isset($arg['v']) || isset($arg['h'])){
+        if(empty($arg) || isset($arg['h'])){
             $cli->showApplicationHelp();
             exit;
         }
@@ -46,7 +46,7 @@ class ConsoleProcessor extends Processor
             exit;
         }
         if(isset($arg['d'])){
-            putenv("DAEMONIZE=true");
+            putenv("DAEMONIZE=1");
         }
         if(isset($arg["log"])){
             putenv("START_LOG={$arg["log"]}");
@@ -63,6 +63,7 @@ class ConsoleProcessor extends Processor
         if(isset($arg["stop"])){
             putenv("APP=stop");
         }
+
     }
 
 

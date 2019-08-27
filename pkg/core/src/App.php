@@ -33,7 +33,17 @@ class App
      * env file path
      * @var string
      */
-    protected $envFile = '';
+    protected $envFile = ROOT."/.env";
+    /**
+     * runtime/log/notice.log
+     * @var string
+     */
+    protected $noticeFile = ROOT."/runtime/logs/notice.log";
+    /**
+     * runtime/log/error.log
+     * @var string
+     */
+    protected $errorFile = ROOT."/runtime/logs/error.log";
     /**
      * @var Processor\Processor
      */
@@ -58,9 +68,6 @@ class App
             'logFile' => ''
         ];
         CLog::init($config);
-//        CLog::info('Swoole\Runtime::enableCoroutine');
-        //set env path
-        $this->setEnvFile();
         //run handle
         $processors = $this->processors();
         $this->processor = new AppProcessor($this);
@@ -87,17 +94,21 @@ class App
     public function run(){
         $this->processor->handle();
         $this->initLog();
-        if(env("ENABLE_WS")){
-            ( new WebsocketServer())->start();
-        }
-        (new HttpServer())->start();
+        $this->serverHandle();
     }
 
     /**
-     * set env file path
+     * start reload stop
      */
-    public function setEnvFile(){
-        $this->envFile = ROOT."/.env";
+    public function serverHandle()
+    {
+        $action = env("APP","start");
+        if(env("ENABLE_WS")){
+            ( new WebsocketServer());
+        }else{
+            (new HttpServer());
+        }
+        Cloud::server()->{$action}();
     }
 
     /**
@@ -121,7 +132,7 @@ class App
             Logger::DEBUG,
             Logger::TRACE,
         ]);
-        $noticeHandler->setLogfile(ROOT."/runtime/logs/notice.log");
+        $noticeHandler->setLogfile($this->noticeFile);
         $noticeHandler->init();
 
         $appHandler = new FileHandler();
@@ -130,7 +141,7 @@ class App
             Logger::ERROR,
             Logger::WARNING,
         ]);
-        $appHandler->setLogfile(ROOT."/runtime/logs/error.log");
+        $appHandler->setLogfile($this->errorFile);
         $appHandler->init();
         /** @var \Log\Logger $logger */
         $logger = \bean(\Log\Logger::class);

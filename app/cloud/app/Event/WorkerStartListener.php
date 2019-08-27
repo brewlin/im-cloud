@@ -16,6 +16,7 @@ use Core\App;
 use Core\Swoole\WorkerStartInterface;
 use Log\Helper\Log;
 use Process\ProcessManager;
+use Stdlib\Helper\Sys;
 use Swoole\Server as SwooleServer;
 
 class WorkerStartListener implements WorkerStartInterface
@@ -30,6 +31,7 @@ class WorkerStartListener implements WorkerStartInterface
      */
     public function onWorkerStart(SwooleServer $server, int $workerId): void
     {
+        Sys::setProcessTitle(sprintf('%s worker process (%s)', "php-im-cloud",ROOT));
         //接受自定义进程taskProcess 投递过来的请求
         if(App::isWorkerStatus()){
             //创建协程周期执行任务
