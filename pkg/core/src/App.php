@@ -145,7 +145,7 @@ class App
         $appHandler->init();
         /** @var \Log\Logger $logger */
         $logger = \bean(\Log\Logger::class);
-        $logger->setEnable(env("START_LOG",true));
+        $logger->setEnable(env("START_LOG",false));
         $logger->setHandlers([$noticeHandler,$appHandler]);
 
     }

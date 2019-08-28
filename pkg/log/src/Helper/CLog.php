@@ -79,7 +79,9 @@ class CLog
      */
     public static function info(string $message, ...$params): void
     {
-        self::$cLogger->info(sprintf($message, ...$params), []);
+        if(env("START_LOG",false)) {
+            self::$cLogger->info(sprintf($message, ...$params), []);
+        }
     }
 
     /**
@@ -90,7 +92,9 @@ class CLog
      */
     public static function warning(string $message, ...$params): void
     {
-        self::$cLogger->warning(sprintf($message, ...$params), []);
+        if(env("START_LOG",false)) {
+            self::$cLogger->warning(sprintf($message, ...$params), []);
+        }
     }
 
     /**
@@ -101,6 +105,8 @@ class CLog
      */
     public static function error(string $message, ...$params): void
     {
-        self::$cLogger->error(sprintf($message, ...$params), []);
+        if(env("START_LOG",false)) {
+            self::$cLogger->error(sprintf($message, ...$params), []);
+        }
     }
 }
