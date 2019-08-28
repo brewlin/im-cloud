@@ -49,6 +49,12 @@ cd im-cloud
 docker-compose up
 ```
 ## 二、手动部署
+### help
+![](../resource/console.png)
+### process 
+![](../resource/process.png)
+### status
+![](../resource/start.png)
 ### 环境要求
 - swoole 4 +
 - php 7.2 +
@@ -64,17 +70,17 @@ make install
 ### 2.启动cloud节点
 ```
 cd path/im-cloud/app/cloud
-php bin/app
+php bin/app --start --d --log=true --debug
 ```
 ### 3.启动logic节点
 ```
 cd path/im-cloud/app/logic;
-php bin/app
+php bin/app --start --d --log=true --debug
 ```
 ### 4.启动job节点
 ```
 cd path/im-cloud/app/job;
-php bin/app
+php bin/app --start --d --log=true --debug
 ```
 ### 5.安装启动consul
 1、登录官网进行下载，下载地址
