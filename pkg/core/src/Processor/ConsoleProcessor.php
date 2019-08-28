@@ -25,7 +25,7 @@ class ConsoleProcessor extends Processor
      */
     public function handle(): bool
     {
-        $arg = getopt("",["start","stop","reload","d","debug","log:","h","v"]);
+        $arg = getopt("",["start","restart","stop","reload","d","debug","log:","h","v"]);
         $this->handleArg($arg);
         return true;
     }
@@ -56,6 +56,10 @@ class ConsoleProcessor extends Processor
         }
         if(isset($arg["start"])){
             putenv("APP=start");
+        }
+        if(isset($arg["restart"])){
+            putenv("APP=restart");
+            putenv("DAEMONIZE=1");
         }
         if(isset($arg["reload"])){
             putenv("APP=reload");

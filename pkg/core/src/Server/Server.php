@@ -216,6 +216,15 @@ class Server
     /**
      * @return bool
      */
+    public function restart():bool
+    {
+        $this->stop();
+        Console::writeln(sprintf('<success>start the server now!</success>'));
+        $this->start();
+    }
+    /**
+     * @return bool
+     */
     public function stop(): bool
     {
         if(!$this->isRunning()){

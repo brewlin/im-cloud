@@ -36,6 +36,7 @@ class Cli
     /** @var array */
     private static $globalOptions = [
         '--start'      => 'start the server 启动服务',
+        '--restart'    => 'restart the server 重启服务',
         '--stop'       => 'stop the server  kill服务',
         "--reload"     => 'reload the server 重启worker',
         '--d'         => 'with deamon      守护模式',
