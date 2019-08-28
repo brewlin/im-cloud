@@ -17,14 +17,21 @@ use Log\Helper\Log;
 use Swoole\Coroutine;
 use Swoole\Server as SwooleServer;
 
+/**
+ * Class ShutdownListener
+ * @package App\Event
+ */
 class ShutdownListener implements ShutdownInterface
 {
+    /**
+     * @param SwooleServer $server
+     */
     public function onShutdown(SwooleServer $server): void
     {
-        Log::info("注销 注册中心 im-cloud-node 节点");
+//        Log::info("注销 注册中心 im-job-node 节点");
         //注销节点
 //        Co::create(function (){
-            provider()->select()->deregisterService("im-cloud-node");
+//            provider()->select()->deregisterService("im-cloud-node");
 //        });
 //        sleep(10);
 

@@ -5,6 +5,7 @@ namespace Discovery\Provider;
 use Core\Co;
 use Core\Console\Console;
 use Core\Container\Mapping\Bean;
+use Log\Helper\Log;
 use Swlib\Saber;
 use Swlib\SaberGM;
 use Log\Helper\CLog;
@@ -126,12 +127,12 @@ class ConsulProvider implements ProviderInterface
         $nodes = [];
         foreach ($services as $service) {
             if (!isset($service['Service'])) {
-                CLog::warning("consul[Service] 服务健康节点集合，数据格式不不正确，Data=" . $result);
+                Log::warning("consul[Service] 服务健康节点集合，数据格式不不正确，Data=" . $result);
                 continue;
             }
             $serviceInfo = $service['Service'];
             if (!isset($serviceInfo['Address'], $serviceInfo['Port'])) {
-                CLog::warning("consul[Address] Or consul[Port] 服务健康节点集合，数据格式不不正确，Data=" . $result);
+                Log::warning("consul[Address] Or consul[Port] 服务健康节点集合，数据格式不不正确，Data=" . $result);
                 continue;
             }
             $address = $serviceInfo['Address'];
@@ -373,8 +374,6 @@ class ConsulProvider implements ProviderInterface
     public function deregisterService($serviceId): array
     {
         return $this->curlput(sprintf("%s:%d%s",$this->address,$this->port,'/v1/agent/service/deregister/' . $this->getServiceId($serviceId)),[]);
-//        SaberGM::put(sprintf("%s:%d%s",$this->address,$this->port,'/v1/agent/service/deregister/' . $this->getServiceId($serviceId)));
-//        return $this->request('put', '/v1/agent/service/deregister/' . $this->getServiceId($serviceId));
     }
 
 

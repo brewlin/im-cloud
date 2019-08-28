@@ -9,4 +9,4 @@ ADD . /website/im-cloud
 
 EXPOSE 9600
 
-ENTRYPOINT ["php", "/website/im-cloud/app/logic/bin/app"]
+ENTRYPOINT ["php", "/website/im-cloud/app/logic/bin/app","--start","--log=true","--debug"]

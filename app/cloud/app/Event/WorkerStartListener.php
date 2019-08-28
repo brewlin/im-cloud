@@ -19,6 +19,10 @@ use Process\ProcessManager;
 use Stdlib\Helper\Sys;
 use Swoole\Server as SwooleServer;
 
+/**
+ * Class WorkerStartListener
+ * @package App\Event
+ */
 class WorkerStartListener implements WorkerStartInterface
 {
     const INIT_LOGIC = 1;

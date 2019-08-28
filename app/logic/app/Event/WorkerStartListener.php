@@ -12,14 +12,24 @@ namespace App\Event;
 use App\Lib\Logic;
 use Core\Co;
 use Core\Swoole\WorkerStartInterface;
+use Stdlib\Helper\Sys;
 use Swoole\Server as SwooleServer;
 
+/**
+ * Class WorkerStartListener
+ * @package App\Event
+ */
 class WorkerStartListener implements WorkerStartInterface
 {
     const INIT_LOGIC = 1;
 
+    /**
+     * @param SwooleServer $server
+     * @param int $workerId
+     */
     public function onWorkerStart(SwooleServer $server, int $workerId): void
     {
+        Sys::setProcessTitle(sprintf('%s worker process (%s)', "php-im-logic",ROOT));
         $workerNum = env("WORKER_NUM",4);
 
 //        if($workerId == self::INIT_LOGIC){
