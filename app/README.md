@@ -8,7 +8,7 @@
 cd cloud
 composer install
 ```
-## 进度
+## 进度 (test version)
 - 完成grpc接口
 - 完成tcp  websocket 注册链接
 - 完成主流程
@@ -20,7 +20,7 @@ composer install
 cd job
 composer install
 ```
-### 进度
+### 进度 (test version)
 - 完成了队列的消费 多进程消费
 - 完成了grpc cloud的调用
 
@@ -30,7 +30,7 @@ composer install
 cd logic
 composer install
 ```
-### 进度
+### 进度 (test version)
 - 完成了http api
     -   `完成并发压测单点推送`
 - 完成了grpc api

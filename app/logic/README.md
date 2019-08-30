@@ -8,5 +8,5 @@
 + `logic` 节点注册到 consul上
 
 
-# todo..
+# test version
 

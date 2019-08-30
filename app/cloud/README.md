@@ -11,7 +11,11 @@ df
 + `cloud` 节点注册到consul
 
 ## 进度
-### 1.完成了Grpc-server 路由 和样例demo
+### done all code 
+### test version
+
+## demo
+### 1.Grpc-server 路由 和样例demo
 ```php
 //注册grpc-server 接口路由
  $routeCollector->post('/im.cloud.Cloud/Broadcast', '/Grpc/Cloud/broadcast');

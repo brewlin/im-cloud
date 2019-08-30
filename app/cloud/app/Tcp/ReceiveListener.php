@@ -18,6 +18,10 @@ use Im\Logic\ConnectReq;
 use Log\Helper\Log;
 use Swoole\Server;
 
+/**
+ * Class ReceiveListener
+ * @package App\Tcp
+ */
 class ReceiveListener implements ReceiveInterface
 {
     /**
