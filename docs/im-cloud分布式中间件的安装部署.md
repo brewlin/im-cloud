@@ -82,6 +82,13 @@ php bin/app --start --d --log=true --debug
 cd path/im-cloud/app/job;
 php bin/app --start --d --log=true --debug
 ```
+### @makefile自动工具
+```proto
+cd im-cloud;
+make start
+make stop
+make restart
+```
 ### 5.安装启动consul
 1、登录官网进行下载，下载地址
 ```shell

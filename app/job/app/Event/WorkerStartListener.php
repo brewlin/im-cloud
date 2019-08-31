@@ -29,7 +29,7 @@ class WorkerStartListener implements WorkerStartInterface
      */
     public function onWorkerStart(SwooleServer $server, int $workerId): void
     {
-        Sys::setProcessTitle(sprintf('%s worker process (%s)', "php-im-job",ROOT));
+        Sys::setProcessTitle(sprintf('php-%s worker process (%s)', env("APP_NAME"),ROOT));
         if(App::isWorkerStatus()){
             //启动的n个 worker进程 分别作为消费者进程消费，每个进程会直接阻塞直到消费到数据
             consumer()->consume(new Consumer());

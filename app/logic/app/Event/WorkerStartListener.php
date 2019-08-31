@@ -29,7 +29,7 @@ class WorkerStartListener implements WorkerStartInterface
      */
     public function onWorkerStart(SwooleServer $server, int $workerId): void
     {
-        Sys::setProcessTitle(sprintf('%s worker process (%s)', "php-im-logic",ROOT));
+        Sys::setProcessTitle(sprintf('php-%s worker process (%s)', env("APP_NAME"),ROOT));
         $workerNum = env("WORKER_NUM",4);
 
 //        if($workerId == self::INIT_LOGIC){

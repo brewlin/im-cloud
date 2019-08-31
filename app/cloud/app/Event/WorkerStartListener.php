@@ -35,7 +35,7 @@ class WorkerStartListener implements WorkerStartInterface
      */
     public function onWorkerStart(SwooleServer $server, int $workerId): void
     {
-        Sys::setProcessTitle(sprintf('%s worker process (%s)', "php-im-cloud",ROOT));
+        Sys::setProcessTitle(sprintf('php-%s worker process (%s)', env("APP_NAME"),ROOT));
         //接受自定义进程taskProcess 投递过来的请求
         if(App::isWorkerStatus()){
             //创建协程周期执行任务

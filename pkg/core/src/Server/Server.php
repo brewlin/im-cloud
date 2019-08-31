@@ -52,7 +52,7 @@ class Server
      *
      * @var string
      */
-    protected $pidName = "php-im-cloud";
+    protected $pidName = "php-im-";
 
     /**
      * Record started server PIDs and with current workerId
@@ -300,7 +300,7 @@ class Server
         $managerPid = $server->manager_pid;
 
         $pidStr = sprintf('%s,%s', $masterPid, $managerPid);
-        $title  = sprintf('%s master process (%s)', $this->pidName, ROOT);
+        $title  = sprintf('php-%s master process (%s)', env("APP_NAME","im-nil-node"), ROOT);
 
         // Save PID to file
         $pidFile = ROOT.$this->pidFile;
@@ -339,7 +339,8 @@ class Server
         // Server pid map
         $this->setPidMap($server);
         // Set process title
-        Sys::setProcessTitle(sprintf('%s manager process (%s)', $this->pidName,ROOT));
+//        Sys::setProcessTitle(sprintf('%s manager process (%s)', $this->pidName.env("APP_NAME"),ROOT));
+        Sys::setProcessTitle(sprintf('php-%s manager process (%s)',env("APP_NAME","im-nil-node"),ROOT));
     }
 
     /**

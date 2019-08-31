@@ -66,7 +66,7 @@
                         appendMsg("receive: auth reply");
                         // send a heartbeat to server
                         heartbeat();
-                        heartbeatInterval = setInterval(heartbeat, 30 * 1000);
+                        heartbeatInterval = setInterval(heartbeat, 10 * 1000);
                         break;
                     case 3:
                         // receive a heartbeat from server
