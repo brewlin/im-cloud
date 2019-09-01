@@ -46,7 +46,8 @@ process
 ![](./resource/process.png)
 start
 ![](./resource/start.png)
-
+监控
+![](./resource/monitor.png)
 
 ## 组件依赖
 > 相关组件为纯swoole实现

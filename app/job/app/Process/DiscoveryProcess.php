@@ -48,6 +48,7 @@ class DiscoveryProcess extends AbstractProcess
         $discoveryname = $config["consul"]["discovery"]["name"];
         while (true){
             $services = provider()->select()->getServiceList($discoveryname);
+            var_dump($services);
             if(empty($services)){
                 Log::error("not find instance node:$discoveryname");
                 $this->syncServeiceList([]);
