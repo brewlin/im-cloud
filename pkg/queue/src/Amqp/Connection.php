@@ -104,7 +104,8 @@ class Connection implements ConnectionInterface
 
     public function reconnect(): bool
     {
-        $this->connection = $this->initConnection();
+//        $this->connection = $this->initConnection();
+        $this->connection = $this->connection->reconnect();
         $this->channel = null;
         $this->confirmChannel = null;
         return true;

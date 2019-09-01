@@ -179,10 +179,7 @@ class Server
 
             /* @var SwooleServer\Port $server */
             $server = $this->swooleServer->listen($host, $port, $type);
-            $server->set([
-                'open_eof_check'     => false,
-                'package_max_length' => 2048
-            ]);
+            $server->set($listener->getSetting());
             $this->addEvent($server, $on);
         }
     }

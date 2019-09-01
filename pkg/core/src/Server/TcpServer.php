@@ -83,6 +83,13 @@ class TcpServer implements ServerInterface
      */
     public function getSetting(): array
     {
+        $set = config("server");
+        if(empty($set))return [
+            'open_eof_check'     => false,
+            'package_max_length' => 2048,
+        ];
+
+        return $set["tcp"];
         // TODO: Implement getSetting() method.
     }
 

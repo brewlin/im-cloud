@@ -50,7 +50,7 @@ class Log
     public static function debug(string $message, ...$params)
     {
         if(!env("START_LOG",false))return;
-        if (APP_DEBUG) {
+        if (env("APP_DEBUG")) {
             if(env("LOG_TYPE") == self::TypeConsole){
                 return CLog::debug($message,...$params);
             }
