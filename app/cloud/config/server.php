@@ -11,8 +11,7 @@ return [
         'worker_num' => (int)env("WORKER_NUM", 4),
     ],
     'tcp' => [
-        'open_eof_check'     => false,
-        'package_max_length' => 2048,
+        'package_max_length' => 1081920,
         'heartbeat_idle_time' => 20,
         'heartbeat_check_interval' => 5,
     ],

@@ -12,6 +12,7 @@ use App\Packet\Packet;
 use App\Packet\Protocol;
 use App\Packet\Task;
 use App\Service\Dao\Bucket;
+use App\Service\Dao\Push;
 use Core\Cloud;
 use Core\Container\Mapping\Bean;
 use Core\Context\Context;
@@ -40,12 +41,16 @@ class Heartbeat
         if(empty($server))
             throw  new \Exception("not find any logic node");
         \bean(Task::class)->deliver(Heartbeat::class,"heartbeatLogic",[$server,$fd]);
-        /** @var Packet $packet */
-        $packet = \bean(Packet::class);
-        //pack data repy cliend
-        $packet->setOperation(Operation::OpHeartbeatReply);
-        $buf = $packet->pack(self::HeartBeatReply);
-        Cloud::server()->getSwooleServer()->push($fd,$buf,WEBSOCKET_OPCODE_BINARY);
+
+        /** @var Push $push */
+        $push = \bean(Push::class);
+        $push->pushFd($fd,Operation::OpHeartbeatReply,self::HeartBeatReply);
+//        /** @var Packet $packet */
+//        $packet = \bean(Packet::class);
+//        //pack data repy cliend
+//        $packet->setOperation(Operation::OpHeartbeatReply);
+//        $buf = $packet->pack(self::HeartBeatReply);
+//        Cloud::server()->getSwooleServer()->push($fd,$buf,WEBSOCKET_OPCODE_BINARY);
 
     }
 

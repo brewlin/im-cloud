@@ -10,9 +10,6 @@ cloud 主服务节点
 df
 + `cloud` 节点注册到consul
 
-## 进度
-### done all code 
-### test version
 
 ## demo
 ### 1.Grpc-server 路由 和样例demo
@@ -54,3 +51,7 @@ go(function() {
     var_dump($res);
 });
 ```
+
+### 2.完成tcp websocket 通讯协议
+### 3.完成grpc交互流程
+### 4.进入test version 测试版

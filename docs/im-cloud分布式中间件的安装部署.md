@@ -90,20 +90,9 @@ make stop
 make restart
 ```
 ### 5.安装启动consul
-1、登录官网进行下载，下载地址
-```shell
-wget https://releases.hashicorp.com/consul/1.2.1/consul_1.2.1_linux_amd64.zip
-unzip consul_1.2.1_linux_amd64.zip
+```proto
+docker run --network consul
 ```
-2、设置环境变量，如果不设置可以直接把consul执行文件移动到/usr/bin目录下
-```shell
-mv consul /usr/bin
-```
-3、 单机配置、这种方式适合用于搭建服务调试使用
-```
-consul agent -bootstrap-expect 1 -server -data-dir /data/consul -node=cloud -bind=127.0.0.1 -config-dir /etc/consul.d -enable-script-checks=true -datacenter=dc1 -client=0.0.0.0 -ui
-```
-可以通过 http://192.168.1.100:8500 查看服务信息
 ### 6.安装rabbitmq
 - 1.添加新的源
 

@@ -7,6 +7,6 @@
 + `logic` 节点采用redis缓存 缓存用户和节点之间的映射关系，在进行推送的时候可以选择集群节点进行推送
 + `logic` 节点注册到 consul上
 
-
-# test version
+# 完成通用功能开发
+# 进入测试版本，test version
 

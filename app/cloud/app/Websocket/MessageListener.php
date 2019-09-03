@@ -10,6 +10,7 @@ namespace App\Websocket;
 
 
 use App\Packet\Packet;
+use App\Service\Service\Dispatcher;
 use Core\Context\Context;
 use Core\Swoole\MessageInterface;
 use Log\Helper\Log;

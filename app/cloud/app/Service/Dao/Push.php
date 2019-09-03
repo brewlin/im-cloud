@@ -52,6 +52,13 @@ class Push
             $buf = $packet->pack($body);
             Cloud::server()->getSwooleServer()->push($fd,$buf,WEBSOCKET_OPCODE_BINARY);
             return;
+        //TCP send 推送
+        }else if($clientinfo['server_port'] == env("TCP_PORT")){
+            $packet = \bean(Packet::class);
+            $packet->setOperation($op);
+            $buf = $packet->pack($body);
+            Cloud::server()->getSwooleServer()->send($fd,$buf);
+            return;
         }
         Log::error("fd{$fd} 未连接");
     }

@@ -7,6 +7,7 @@
  */
 
 require "./Protocol.php";
+require "./Operation.php";
 /**
  * Class tcp client sdk
  */
@@ -35,7 +36,8 @@ class client
      */
     public function clientReceive($cli,$data)
     {
-        echo "recv data from cloud\n";
+        $revData = $this->protocol->unpack($data);
+        var_dump($revData);
     }
     /**
      * @param $cli
@@ -44,17 +46,18 @@ class client
     {
         echo "client  is connect\n";
         $this->auth();
-        Swoole\Timer::tick($this->heartbeat,[$this,"heartbeat"]);
+        \Swoole\Timer::after(10000,function (){
+            Swoole\Timer::tick($this->heartbeat,[$this,"heartbeat"]);
+        });
     }
 
+    /**
+     * auth
+     * @return void
+     */
     public function auth()
     {
-        $this->protocol->setBody($this->auth);
-        $this->protocol->setOperation(Operation::OpAuth);
-        $buf = $this->protocol->pack();
-        /** Client */
-        $this->trigger($this->client);
-        $this->trigger($this->client->send($buf));
+        $this->send(Operation::OpAuth,$this->auth);
     }
 
     /**
@@ -62,12 +65,7 @@ class client
      */
     public function heartbeat()
     {
-        $this->protocol->setOperation(Operation::OpHeartbeat);
-        $this->protocol->setBody("heartbeat");
-        $buf = $this->protocol->pack();
-        /** Client */
-        $this->trigger($this->client);
-        $this->trigger($this->client->send($buf));
+        $this->send(Operation::OpHeartbeat,"heartbeat");
     }
 
     /**
@@ -91,32 +89,48 @@ class client
      */
     public function start()
     {
+        $this->protocol = new Protocol();
+        $this->connection();
+    }
+
+    /**
+     * connection the cloud server,register
+     */
+    public function connection(){
         $client = new swoole_client(SWOOLE_SOCK_TCP,SWOOLE_SOCK_ASYNC);
         $client->on('connect',[$this,'clientConnect']);
         $client->on('receive',[$this,'clientReceive']);
         $client->on('error',[$this,'clientError']);
         $client->on('close',[$this,'clientClose']);
         $this->client = $client;
-        $this->protocol = new Protocol();
         $this->client->connect(IP,PORT);
     }
 
-    public function reconnection(){
-        $client = new swoole_client(SWOOLE_SOCK_TCP,SWOOLE_SOCK_ASYNC);
-        $client->on('connect',[$this,'clientConnect']);
-        $client->on('receive',[$this,'clientReceive']);
-        $client->on('error',[$this,'clientError']);
-        $client->on('close',[$this,'clientClose']);
-        $this->client = $client;
-        $this->client->connect(IP,PORT);
+    /**
+     * @param $buf
+     */
+    public function send($op ,$buf){
+
+        $this->protocol->setOperation($op);
+        $this->protocol->setBody($buf);
+        $buf = $this->protocol->pack();
+        var_dump($buf);
+        /** Client */
+        $this->trigger($this->client);
+        $this->trigger($this->client->send($buf));
+
     }
+
+    /**
+     * @param $res
+     */
     public function trigger($res)
     {
         if($res instanceof \Swoole\Client){
+            var_dump("debug check client is connect");
             if(!$res->isConnected()){
-                $this->reconnection();
+                $this->connection();
             }
         }
-        var_dump($res);
     }
 }

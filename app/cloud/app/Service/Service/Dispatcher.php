@@ -6,7 +6,7 @@
  * Time: 下午 6:08
  */
 
-namespace App\Websocket;
+namespace App\Service\Service;
 
 use App\Packet\Packet;
 use App\Packet\Protocol;

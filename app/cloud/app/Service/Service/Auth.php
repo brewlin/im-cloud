@@ -13,6 +13,7 @@ use App\Packet\Packet;
 use App\Packet\Protocol;
 use App\Packet\Task;
 use App\Service\Dao\Bucket;
+use App\Service\Dao\Push;
 use App\Websocket\Exception\RequireArgException;
 use Core\Cloud;
 use Core\Container\Mapping\Bean;
@@ -120,12 +121,15 @@ class Auth
     public function registerSuccess()
     {
         $fd = Context::value("fd");
-        /** @var Packet $packet */
-        $packet = \bean(Packet::class);
-        $packet->setOperation(Operation::OpAuthReply);
-        $buf = $packet->pack(json_encode(["ok" => "yes"]));
-        Cloud::server()->getSwooleServer()->push($fd,$buf,WEBSOCKET_OPCODE_BINARY);
-        Log::info("register success reply client buf:".$buf);
+        /** @var Push $push */
+        $push = \bean(Push::class);
+        $push->pushFd($fd,Operation::OpAuthReply,json_encode(["ok" => "yes"]));
+//        /** @var Packet $packet */
+//        $packet = \bean(Packet::class);
+//        $packet->setOperation(Operation::OpAuthReply);
+//        $buf = $packet->pack(json_encode(["ok" => "yes"]));
+//        Cloud::server()->getSwooleServer()->push($fd,$buf,WEBSOCKET_OPCODE_BINARY);
+        Log::info("register success reply client buf:".json_encode(["ok" => "yes"]));
     }
 
 }

@@ -51,6 +51,7 @@ class Protocol
      */
     public function pack()
     {
+        $buf = $this->buf;
         if(!is_string($this->buf)){
             $buf = json_encode($this->buf);
         }
@@ -58,6 +59,39 @@ class Protocol
         $header = pack("NnnNN",$packLen,Protocol::_rawHeaderSize,$this->ver,$this->op,$this->seq);
         $buf = $header.$buf;
         return $buf;
+    }
+    /**
+     * @param string $buf
+     * @return $this|bool
+     */
+    public function unpack(string $buf)
+    {
+        if(strlen($buf) < Protocol::_rawHeaderSize){
+            var_dump("packet error hearder not enough",0);
+            return '';
+        }
+
+        //big endian int32
+        $packlen = unpack("N",substr($buf,Protocol::_packOffset,Protocol::_headerOffset))[1];
+        //big endian int16
+        $headerlen = unpack("n",substr($buf,Protocol::_headerOffset,Protocol::_verOffset))[1];
+        //big endian int16
+        $this->ver = unpack("n",substr($buf,Protocol::_verOffset,Protocol::_opOffset))[1];
+        //big endian int32
+        $this->op = unpack("N",substr($buf,Protocol::_opOffset,Protocol::_seqOffset))[1];
+        //big endian int32
+        $this->seq = unpack("N",substr($buf,Protocol::_seqOffset,Protocol::_heartOffset))[1];
+
+        if($packlen > Protocol::_maxPackSize) {
+            var_dump("packet body too max");
+            return '';
+        }
+
+        if($headerlen != Protocol::_rawHeaderSize)
+            return false;
+        $body = substr($buf,$headerlen,$packlen);
+        $this->buf = json_decode($body,true);
+        return $this->buf;
     }
     /**
      * @return int
@@ -103,7 +137,7 @@ class Protocol
      */
     public function setBody($body)
     {
-        $this->body = $body;
+        $this->buf = $body;
     }
 
 }
