@@ -80,10 +80,10 @@ class Cloud
         $body = $pushMsgReq->getProto()->getBody();
         //coroutine do
         foreach ($keys as $key){
-            Coroutine::create(function ()use($key,$body,$op){
+//            Coroutine::create(function ()use($key,$body,$op){
                     /** @var Task $task */
                     \bean(Task::class)->deliver(Push::class,"push",[$key,$op,$body]);
-            });
+//            });
         }
 
     }

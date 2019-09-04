@@ -43,7 +43,7 @@ class Job
         foreach ($pushmsg->getKeys()->getIterator() as $v){
             $keys[] = $v;
         }
-        Co::create(function()use($pushmsg,$keys,$serverList){
+//        Co::create(function()use($pushmsg,$keys,$serverList){
             switch ($pushmsg->getType())
             {
                 case PushMsg\Type::PUSH:
@@ -72,7 +72,7 @@ class Job
                     );
                 default:
             }
-        },false);
+//        },false);
 
 
     }

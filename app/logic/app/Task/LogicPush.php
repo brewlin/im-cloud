@@ -31,7 +31,7 @@ class LogicPush
      */
     public function pushKeys(int $op,array $keys,$msg)
     {
-        Co::create(function()use($op,$keys,$msg){
+//        Co::create(function()use($op,$keys,$msg){
             /** @var RedisDao $servers */
             if(!($servers = \container()->get(RedisDao::class)->getServersByKeys($keys)))return;
             $pushKeys = [];
@@ -44,7 +44,7 @@ class LogicPush
                 //丢到队列里去操做，让job去处理
                 \container()->get(QueueDao::class)->pushMsg($op,$server,$pushKeys[$server],$msg);
             }
-        });
+//        });
     }
 
     /**

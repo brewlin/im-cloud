@@ -91,62 +91,13 @@ make restart
 ```
 ### 5.安装启动consul
 ```proto
-docker run --network consul
+docker run --network -d consul
 ```
 ### 6.安装rabbitmq
-- 1.添加新的源
-
-```
-echo 'deb http://www.rabbitmq.com/debian/ testing main' |
-     sudo tee /etc/apt/sources.list.d/rabbitmq.list
-```
-- 2.下载公钥
-
-```
-wget -O- https://www.rabbitmq.com/rabbitmq-release-signing-key.asc |
-     sudo apt-key add -
-```
-- 3.更新 & 安装
-
-```
-sudo apt-get update
-sudo apt-get install rabbitmq-server
-```
-- 4.修改配置文件
-
-```
-cd /etc/rabbitmq/
-新建文件
-touch rabbitmq.config
-
-在配置文件中加入
-
-[{rabbit, [{loopback_users, []}]}].
+```proto
+docker run --network -d rabbitmq
 ```
 
-
-- 5.状态管理
-```
-rabbitmqctl status 可查看rabbitmq的状态
-```
-
-- 6.开启web管理界面
-```shell
-# 开启rabbitmq web界面
-Host]# rabbitmq-plugins enable rabbitmq_management
-    The following plugins have been enabled:
-        rabbitmq_web_dispatch
-        rabbitmq_management_agent
-        rabbitmq_management
-```
-
-- 7.创建用户
-```
-Host]# rabbitmqctl add_user xiaodo xiaodo
-    Creating user "admin"
-Host]# rabbitmqctl set_user_tags xiaodo administrator
-    Setting tags for user "admin" to [administrator]
-```
 ## 三、测试
 - 1.使用js sdk 提供的demo 注册到cloud
 - 2.post `http://host:9600/im/push/mids?mids=123&operation=9&msg=pushtest` 进行单点推送

@@ -90,8 +90,8 @@ class Protocol
         if($headerlen != Protocol::_rawHeaderSize)
             return false;
         $body = substr($buf,$headerlen,$packlen);
-        $this->buf = json_decode($body,true);
-        return $this->buf;
+//        $this->buf = json_decode($body,true);
+        return $body;
     }
     /**
      * @return int

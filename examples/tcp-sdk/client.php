@@ -36,8 +36,7 @@ class client
      */
     public function clientReceive($cli,$data)
     {
-        $revData = $this->protocol->unpack($data);
-        var_dump($revData);
+        echo $this->protocol->unpack($data);
     }
     /**
      * @param $cli
