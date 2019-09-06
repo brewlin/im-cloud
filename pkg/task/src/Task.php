@@ -5,6 +5,7 @@ namespace Task;
 use Core\App;
 use Core\Swoole\PipeMessageInterface;
 use Log\Helper\CLog;
+use Log\Helper\Log;
 use Task\Exception\TaskException;
 use Task\Helper\TaskHelper;
 
@@ -50,7 +51,9 @@ class Task
 
         $server = App::server();
         // Deliver async task
-        return $server->task($data);
+        $tasres =  $server->task($data);
+        Log::debug("task deliver: taskNmae:$taskName methodName:$methodName params:".json_encode($params)." res:".$tasres);
+        return $tasres;
     }
     /**
      * Deliver coroutine or async task

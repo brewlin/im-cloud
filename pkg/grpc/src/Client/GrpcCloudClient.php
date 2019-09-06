@@ -10,6 +10,7 @@ use Core\Pool\PoolConnectionInterface;
 use Core\Pool\PoolFactory;
 use Grpc\Pool\CloudConnectionPool;
 use Grpc\Pool\Connection;
+use Log\Helper\Log;
 
 /**
  * Class GrpcCloudClient
@@ -41,7 +42,12 @@ class GrpcCloudClient
         $pool = self::connection($serverId);
         $connection = $pool->getConnection($serverId);
         $client = $connection->getActiveConnection();
-        $res = $client->PushMsg($argument,$metadata,$options);
+        $res = null;
+        try{
+            $res = $client->PushMsg($argument,$metadata,$options);
+        }catch (\Exception $e){
+            Log::error($e->getMessage());
+        }
         self::release($pool,$connection);
         return $res;
     }
@@ -55,7 +61,12 @@ class GrpcCloudClient
         $pool = self::connection($serverId);
         $connection = $pool->getConnection($serverId);
         $client = $connection->getActiveConnection();
-        $res = $client->Broadcast($argument,$metadata,$options);
+        $res = null;
+        try{
+            $res = $client->Broadcast($argument,$metadata,$options);
+        }catch (\Exception $e){
+            Log::error($e->getMessage());
+        }
         self::release($pool,$connection);
         return $res;
     }
@@ -70,7 +81,12 @@ class GrpcCloudClient
         $pool = self::connection($serverId);
         $connection = $pool->getConnection($serverId);
         $client = $connection->getActiveConnection();
-        $res = $client->BroadcastRoom($argument,$metadata,$options);
+        $res = null;
+        try{
+            $res = $client->BroadcastRoom($argument,$metadata,$options);
+        }catch (\Exception $e){
+            Log::error($e->getMessage());
+        }
         self::release($pool,$connection);
         return $res;
     }

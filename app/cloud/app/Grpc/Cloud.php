@@ -65,6 +65,7 @@ class Cloud
      */
     public function pushMsg()
     {
+        Log::debug("cloud node: pushmsg");
         $pushMsgRpy = Parser::serializeMessage(new PushMsgReply());
         /** @var PushMsgReq $pushMsgReq */
         $pushMsgReq = Parser::deserializeMessage([PushMsgReq::class,null],request()->getRawBody());

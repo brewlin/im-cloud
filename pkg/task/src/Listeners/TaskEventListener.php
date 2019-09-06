@@ -7,6 +7,7 @@ use Core\Container\Mapping\Bean;
 use Core\Swoole\FinishInterface;
 use Core\Swoole\TaskInterface;
 use Log\Helper\CLog;
+use Log\Helper\Log;
 use Task\TaskExecutor;
 use Swoole\Server;
 
@@ -31,6 +32,7 @@ class TaskEventListener implements TaskInterface,FinishInterface
      */
     public function onTask(Server $server, $taskId, int $workerId, $data)
     {
+        Log::debug("ontask : taskId:$taskId data:$data");
         try {
             /* @var TaskExecutor $taskExecutor*/
             $taskExecutor = bean(TaskExecutor::class);
@@ -53,6 +55,7 @@ class TaskEventListener implements TaskInterface,FinishInterface
      */
     public function onCoTask(Server $server, Server\Task $task)
     {
+        Log::debug("oncotask : taskId:$task->id data:$task->data");
         try {
             /* @var TaskExecutor $taskExecutor*/
             $taskExecutor = bean(TaskExecutor::class);

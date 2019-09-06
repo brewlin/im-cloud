@@ -27,6 +27,7 @@ class Job
      */
     public function push(array $serverList ,array $data)
     {
+        Log::info("job node push msgType:".$data['type']);
         /** @var PushMsg $pushMsg */
         $pushmsg = new PushMsg();
         foreach ($data as $key => $value){
@@ -38,7 +39,6 @@ class Job
                 return;
             }
         }
-        Log::info("job node push msgType:".$pushmsg->getType());
         $keys = [];
         foreach ($pushmsg->getKeys()->getIterator() as $v){
             $keys[] = $v;

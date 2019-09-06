@@ -55,7 +55,7 @@ class LogicPush
      */
     public function pushMids(int $op,array $mids,$msg)
     {
-        Co::create(function ()use($op,$mids,$msg){
+//        Co::create(function ()use($op,$mids,$msg){
             /** @var RedisDao $servers */
             $servers = \container()->get(RedisDao::class)->getKeysByMids($mids);
             $keys = [];
@@ -67,7 +67,7 @@ class LogicPush
                 \container()->get(QueueDao::class)->pushMsg($op,$server,$key,$msg);
             }
 
-        },true);
+//        },true);
 
     }
 

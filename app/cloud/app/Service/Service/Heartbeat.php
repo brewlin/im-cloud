@@ -36,6 +36,7 @@ class Heartbeat
     public function heartbeat():void
     {
         $fd = Context::value("fd");
+        Log::debug("@heartbeat: fd:$fd ");
         //grpc to logic node expire currrent time
         $server = LogicClient::getLogicClient();
         if(empty($server))
