@@ -51,13 +51,25 @@ class PoolFactory
         }
         return true;
     }
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
     public function pop(string $name)
     {
         return $this->pools[$name]->pop();
     }
+
+    /**
+     * @param string $name
+     * @param ConnectionInterface $connection
+     */
     public function push(string $name,ConnectionInterface $connection)
     {
-        $this->pools[$name]->push($connection);
+        if($this->pools[$name]->length() < $this->maxActive) {
+            $this->pools[$name]->push($connection);
+        }
     }
     /**
      * @param string $name
