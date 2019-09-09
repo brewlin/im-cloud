@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 namespace Core\Pool;
+use Log\Helper\CLog;
+use mysql_xdevapi\Exception;
 use \Swoole\Coroutine\Channel;
 use Core\Container\Mapping\Bean;
 
@@ -13,6 +15,27 @@ use Core\Container\Mapping\Bean;
  */
 class PoolFactory
 {
+    /**
+     * Minimum active number of connections
+     *
+     * @var int
+     */
+    protected $minActive = 5;
+
+    /**
+     * Maximum active number of connections
+     *
+     * @var int
+     */
+    protected $maxActive = 10;
+
+    /**
+     * Maximum waiting time(second), if there is not limit to 0
+     *
+     * @var float
+     */
+    protected $maxWaitTime = 0;
+
     /**
      * @var PoolConnectionInterface
      */
@@ -38,34 +61,53 @@ class PoolFactory
     }
     /**
      * @param string $name
-     * @return PoolConnectionInterface
+     * @param string $option
+     * @return mixed
      */
-    public  function getPool(string $name)
+    public  function getPool(string $name,$option = "")
     {
-        if (isset($this->pools[$name])) {
-            return $this->pools[$name]->pop();
+        $channelName = $option.$name;
+        //check connection exist
+        if($this->pools[$channelName] === null){
+            $this->pools[$channelName] = new Channel($this->maxActive);
         }
-        container()->get($name)->initPool($this);
-        return $this->pools[$name]->pop();
+
+        //check not reach minActive return new create
+        if($this->pools[$channelName]->length() < $this->minActive){
+            return container()->get($name)->create($option);
+        }
+
+        //Pop connection
+        $connection = null;
+        if(!$this->pools[$channelName]->isEmpty()){
+            $connection = $this->pools[$channelName]->pop();
+        }
+
+        //return connection
+        if($connection !== null){
+            return $connection;
+        }
+
+        //channel is empty or not reach maxActive return new create
+        if($this->pools[$channelName]->length() < $this->maxActive){
+            return container()->get($name)->create($option);
+        }
+
+        $connection = $this->pools[$channelName]->pop($this->maxWaitTime);
+        if($connection === false){
+            CLog::error("channel pop timeout name:$name");
+            return container()->get($name)->create($option);
+
+        }
+        return $connection;
     }
 
     /**
      * @param PoolConnectionInterface
      */
-    public  function releasePool(PoolConnectionInterface $pool){
-        if (isset($this->pools[$pool->getName()])) {
-            return $this->pools[$pool->getName()]->push($pool);
-        }
-    }
-
-    /**
-     * @param $name
-     * @param Channel $pool
-     */
-    public function registerPool($name,Channel $pool)
-    {
-        if (!isset($this->pools[$name])) {
-            $this->pools[$name] = $pool;
+    public  function releasePool(PoolConnectionInterface $pool,$option = ""){
+        if($this->pools[$option.$pool->getName()]->length() < $this->maxActive){
+            $this->pools[$option.$pool->getName()]->push($pool);
         }
     }
 }

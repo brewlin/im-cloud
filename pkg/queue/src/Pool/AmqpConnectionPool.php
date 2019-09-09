@@ -20,36 +20,57 @@ use Swoole\Coroutine\Channel;
  */
 class AmqpConnectionPool implements PoolConnectionInterface
 {
-
+    /**
+     * @var array
+     */
     protected $config;
     /**
      * @var Connection
      */
     protected $connection;
-
+    /**
+     * @var string $name
+     */
     protected $name;
 
+    /**
+     * @param $config
+     */
     public function init($config)
     {
         $this->config = $config;
-//        $this->connection =  new Connection($this);
         $this->name = AmqpConnectionPool::class;
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->name;
     }
+
+    /**
+     * @return array
+     */
     public function getConfig(){
         return $this->config;
     }
 
+    /**
+     * @return Connection
+     */
     public function createConnection(): Connection
     {
         if(!$this->connection)
             $this->connection = new Connection($this);
         return $this->connection;
     }
+
+    /**
+     * @param AmqpConnectionPool $pool
+     * @throws \Exception
+     */
     public function release(AmqpConnectionPool $pool){
         /** @var PoolFactory $pool */
         $poolFactory = container()->get(PoolFactory::class);
@@ -57,19 +78,14 @@ class AmqpConnectionPool implements PoolConnectionInterface
     }
 
     /**
-     * @param PoolFactory $pool
+     * @return AmqpConnectionPool
      */
-    public function initPool(PoolFactory $pool)
+    public function create($options = "")
     {
-
-        $poolSize = (int)env("QUEUE_POOL_SIZE",10);
         $config = config("queue");
-        $chan = new Channel($poolSize);
-        for($i = 0 ; $i < $poolSize; $i++){
-            $obj = new AmqpConnectionPool();
-            $obj->init($config);
-            $chan->push($obj);
-        }
-        $pool->registerPool(AmqpConnectionPool::class,$chan);
+        $obj = new AmqpConnectionPool();
+        $obj->init($config);
+        return $obj;
+
     }
 }

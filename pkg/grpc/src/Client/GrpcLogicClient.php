@@ -22,10 +22,8 @@ class GrpcLogicClient
      * @return LogicConnectionPool
      */
     public static function connection(){
-        /** @var PoolFactory $pool */
-        $pool = bean(PoolFactory::class);
         /** @var LogicConnectionPool $connectionPool */
-        $connectionPool = $pool->getPool(LogicConnectionPool::class);
+        $connectionPool = bean(LogicConnectionPool::class);
         return $connectionPool;
     }
     /**

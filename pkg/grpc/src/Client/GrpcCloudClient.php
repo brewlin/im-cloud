@@ -23,10 +23,8 @@ class GrpcCloudClient
      * @return CloudConnectionPool
      */
     public static function connection(string $serverId){
-        /** @var PoolFactory $pool */
-        $pool = bean(PoolFactory::class);
-        /** @var CloudConnectionPool $connectionPool */
-        $connectionPool = $pool->getPool(CloudConnectionPool::class);
+        /** @var CloudConnectionPool $pool */
+        $connectionPool = bean(CloudConnectionPool::class);
         return $connectionPool;
     }
 

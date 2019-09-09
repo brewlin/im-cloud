@@ -21,11 +21,14 @@ class CloudConnectionPool implements PoolConnectionInterface
 {
 
 
-    const Poolname = "im-grpc-cloud-serverId-%s";
-
+    /**
+     * @var string
+     */
     protected $name = CloudConnectionPool::class;
 
-
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->name;
@@ -38,46 +41,31 @@ class CloudConnectionPool implements PoolConnectionInterface
     public function getConnection(string $serverId):Connection
     {
         if(empty($serverId))return null;
-        $poolname = sprintf(self::Poolname,$serverId);
         /** @var PoolFactory $pool */
         $pool = \bean(PoolFactory::class);
-        if(!$pool->check($poolname))
-            $this->createPool($serverId,$pool);
-        return $pool->pop($poolname);
+        return $pool->getPool($this->name,$serverId);
 
     }
-    private function createPool(string $serverId,PoolFactory $pool)
-    {
-        $poolname = sprintf(self::Poolname,$serverId);
-        $poolSize = (int)env("GRPC_POOL_SIZE",10);
-        $chan = new Channel($poolSize);
-        for($i = 0 ; $i < $poolSize; $i++){
-            $obj = new Connection(\Im\Cloud\CloudClient::class,$serverId,$pool,$poolname);
-            $chan->push($obj);
-        }
-        $pool->registerPool($poolname,$chan);
 
+    /**
+     * @param string $serverId
+     * @return PoolConnectionInterface|Connection
+     */
+    public function create($serverId = "")
+    {
+        /** @var PoolFactory $pool */
+        $pool = bean(PoolFactory::class);
+        $poolName = $serverId.\Im\Cloud\CloudClient::class;
+
+        $obj = new Connection(
+            \Im\Cloud\CloudClient::class,
+            $serverId,
+            $pool,
+            $poolName
+            );
+        return $obj;
     }
     public function createConnection(): Connection
     {
-    }
-    public function release(CloudConnectionPool $pool){
-        /** @var PoolFactory $pool */
-        $poolFactory = container()->get(PoolFactory::class);
-        $poolFactory->releasePool($pool);
-    }
-    /**
-     * @param PoolFactory $pool
-     */
-    public function initPool(PoolFactory $pool)
-    {
-
-        $poolSize = (int)env("GRPC_POOL_SIZE",10);
-        $chan = new Channel($poolSize);
-        for($i = 0 ; $i < $poolSize; $i++){
-            $obj = new CloudConnectionPool();
-            $chan->push($obj);
-        }
-        $pool->registerPool(CloudConnectionPool::class,$chan);
     }
 }

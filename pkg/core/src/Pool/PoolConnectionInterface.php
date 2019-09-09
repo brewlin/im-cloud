@@ -12,12 +12,6 @@ namespace Core\Pool;
 interface PoolConnectionInterface
 {
     /**
-     * @param PoolFactory $pool
-     * @return mixed
-     */
-    public function initPool(PoolFactory $pool);
-
-    /**
      * @return mixed
      */
     public function getName();
@@ -26,4 +20,9 @@ interface PoolConnectionInterface
      * @return ConnectionInterface
      */
     public function createConnection();
+
+    /**
+     * @return PoolConnectionInterface
+     */
+    public function create();
 }

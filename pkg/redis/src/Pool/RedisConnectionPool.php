@@ -20,31 +20,48 @@ use InvalidArgumentException;
  */
 class RedisConnectionPool implements PoolConnectionInterface
 {
-
+    /**
+     * @var array $config
+     */
     protected $config;
     /**
      * @var PhpRedisConnector
      */
     protected $connection;
-
+    /**
+     * @var
+     */
     protected $name;
 
+    /**
+     * @param $config
+     * @return $this
+     */
     public function init($config)
     {
         $this->config = $config;
-//        $this->connection =  new Connection($this);
         $this->name = RedisConnectionPool::class;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->name;
     }
+
+    /**
+     * @return mixed
+     */
     public function getConfig(){
         return $this->config;
     }
 
+    /**
+     * @return \Redis
+     */
     public function createConnection(): \Redis
     {
         if(!$this->connection)
@@ -58,18 +75,12 @@ class RedisConnectionPool implements PoolConnectionInterface
     }
 
     /**
-     * @param PoolFactory $pool
+     * @return RedisConnectionPool
      */
-    public function initPool(PoolFactory $pool)
-    {
+    public function create($options = ""){
+        $config = config("redis");
+        $obj = new RedisConnectionPool();
 
-        $poolSize = (int)env("REDIS_POOL_SIZE",10);
-        /** @var RedisDb $config */
-//        $config = \bean(RedisDb::class)->init(config("redis"));
-        $chan = new Channel($poolSize);
-        for($i = 0 ; $i < $poolSize; $i++){
-            $chan->push((new RedisConnectionPool())->init(config("redis")));
-        }
-        $pool->registerPool(RedisConnectionPool::class,$chan);
+        return  $obj->init($config);
     }
 }

@@ -22,58 +22,51 @@ class LogicConnectionPool implements PoolConnectionInterface
 {
 
 
-    const Poolname = "im-grpc-logic-serverId-%s";
-
+    /**
+     * @var string
+     */
     protected $name = LogicConnectionPool::class;
 
-
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->name;
     }
+
+    /**
+     * @param string $serverId
+     * @return Connection
+     */
     public function getConnection(string $serverId):Connection
     {
         if(empty($serverId))return null;
-        $poolname = sprintf(self::Poolname,$serverId);
         /** @var PoolFactory $pool */
         $pool = \bean(PoolFactory::class);
-        if(!$pool->check($poolname))
-            $this->createPool($serverId,$pool);
-        return $pool->pop($poolname);
-
+        return $pool->getPool($this->name,$serverId);
     }
-    public function createPool(string $serverId,PoolFactory $pool)
+
+    /**
+     * @param string $serverId
+     * @return PoolConnectionInterface|Connection
+     */
+    public function create($serverId = "")
     {
-        $poolname = sprintf(self::Poolname,$serverId);
-        $poolSize = (int)env("GRPC_POOL_SIZE",10);
-        $chan = new Channel($poolSize);
-        for($i = 0 ; $i < $poolSize; $i++){
-            $obj = new Connection(\Im\Logic\LogicClient::class,$serverId,$pool,$poolname);
-            $chan->push($obj);
-        }
-        $pool->registerPool($poolname,$chan);
+        /** @var PoolFactory $pool */
+        $pool = bean(PoolFactory::class);
+        $poolName = $serverId.\Im\Logic\LogicClient::class;
 
+        $obj = new Connection(
+            \Im\Logic\LogicClient::class,
+            $serverId,
+            $pool,
+            $poolName
+        );
+        return $obj;
     }
+
     public function createConnection(): Connection
     {
-    }
-    public function release(LogicConnectionPool $pool){
-        /** @var PoolFactory $pool */
-        $poolFactory = container()->get(PoolFactory::class);
-        $poolFactory->releasePool($pool);
-    }
-    /**
-     * @param PoolFactory $pool
-     */
-    public function initPool(PoolFactory $pool)
-    {
-
-        $poolSize = (int)env("GRPC_POOL_SIZE",10);
-        $chan = new Channel($poolSize);
-        for($i = 0 ; $i < $poolSize; $i++){
-            $obj = new LogicConnectionPool();
-            $chan->push($obj);
-        }
-        $pool->registerPool(LogicConnectionPool::class,$chan);
     }
 }
