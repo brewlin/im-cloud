@@ -55,7 +55,7 @@ class CloudConnectionPool implements PoolConnectionInterface
     {
         /** @var PoolFactory $pool */
         $pool = bean(PoolFactory::class);
-        $poolName = $serverId.\Im\Cloud\CloudClient::class;
+        $poolName = $serverId.static::class;
 
         $obj = new Connection(
             \Im\Cloud\CloudClient::class,

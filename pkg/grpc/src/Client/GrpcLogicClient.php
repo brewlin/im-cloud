@@ -93,7 +93,7 @@ class GrpcLogicClient
      */
     public static function release(LogicConnectionPool $pool,Connection $con)
     {
-        $pool->release($pool);
+//        $pool->release($pool);
         $con->release();
     }
 

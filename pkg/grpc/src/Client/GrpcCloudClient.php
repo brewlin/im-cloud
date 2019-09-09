@@ -94,7 +94,7 @@ class GrpcCloudClient
      */
     public static function release(CloudConnectionPool $pool,Connection $con)
     {
-        $pool->release($pool);
+//        $pool->release($pool);
         $con->release();
     }
 

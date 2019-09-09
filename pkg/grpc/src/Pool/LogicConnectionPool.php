@@ -55,7 +55,7 @@ class LogicConnectionPool implements PoolConnectionInterface
     {
         /** @var PoolFactory $pool */
         $pool = bean(PoolFactory::class);
-        $poolName = $serverId.\Im\Logic\LogicClient::class;
+        $poolName = $serverId.static::class;
 
         $obj = new Connection(
             \Im\Logic\LogicClient::class,

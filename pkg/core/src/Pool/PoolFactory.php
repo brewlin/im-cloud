@@ -37,7 +37,7 @@ class PoolFactory
     protected $maxWaitTime = 0;
 
     /**
-     * @var PoolConnectionInterface
+     * @var Channel
      */
     private $pools = [];
 
@@ -80,7 +80,7 @@ class PoolFactory
     {
         $channelName = $option.$name;
         //check connection exist
-        if($this->pools[$channelName] === null){
+        if(!isset($this->pools[$channelName]) || $this->pools[$channelName] === null){
             $this->pools[$channelName] = new Channel($this->maxActive);
         }
 
