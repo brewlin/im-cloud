@@ -9,8 +9,10 @@
 namespace App\Process;
 
 
+use App\Lib\CloudClient;
 use App\Lib\LogicClient;
 use Core\Cloud;
+use Core\Container\Mapping\Bean;
 use Core\Processor\ProcessorInterface;
 use Log\Helper\Log;
 use Process\Contract\AbstractProcess;
@@ -23,6 +25,7 @@ use Process\ProcessInterface;
  * 2.定时从服务中心发现服务 并刷新到本地serviceslist
  * Class DiscoveryProcess
  * @package App\Process
+ * @Bean()
  */
 class DiscoveryProcess extends AbstractProcess
 {
@@ -50,26 +53,13 @@ class DiscoveryProcess extends AbstractProcess
             $services = provider()->select()->getServiceList($discoveryname);
             if(empty($services)){
                 Log::error("not find instance node:$discoveryname");
-                $this->syncServeiceList([]);
+                CloudClient::updateService([]);
                 goto SLEEP;
             }
             //独立子进程直接sleep阻塞即可
-            $this->syncServeiceList($services);
+            CloudClient::updateService($services);
 SLEEP:
             sleep(5);
         }
-    }
-    /**
-     * @param array $services
-     */
-    public function syncServeiceList(array $services)
-    {
-        for($i = 0; $i < (int)env("WORKER_NUM",4);$i++)
-        {
-            //将可以用的服务同步到所有的worker进程
-//               $sync = ["call" => [LogicClient::class,"updateService"],"arg" => [$services]];
-            Cloud::server()->getSwooleServer()->sendMessage($services,$i);
-        }
-
     }
 }

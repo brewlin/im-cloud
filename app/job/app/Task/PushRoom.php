@@ -28,7 +28,7 @@ class PushRoom
      * @param int $operation
      * @param $msg
      */
-    public function push(array $serviceList,string $room,int $operation,$msg)
+    public function push(string $room,int $operation,$msg)
     {
         $proto = new Proto();
         $proto->setVer(1);
@@ -38,7 +38,7 @@ class PushRoom
         $arg = new BroadcastRoomReq();
         $arg->setRoomID($room);
         $arg->setProto($proto);
-        foreach ($serviceList as $server) {
+        foreach (CloudClient::getAllInstance() as $server) {
             Log::info("brocatroom roomid:$room servicd:$server");
             GrpcCloudClient::BroadcastRoom($server,$arg);
         }

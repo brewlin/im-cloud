@@ -9,14 +9,11 @@
 namespace App\Process;
 
 
-use App\Lib\LogicClient;
-use Core\Cloud;
-use Core\Processor\ProcessorInterface;
+use App\Lib\CloudClient;
 use Log\Helper\CLog;
 use Log\Helper\Log;
 use Process\Contract\AbstractProcess;
 use Process\Process;
-use Process\ProcessInterface;
 
 /**
  * 自定义进程
@@ -56,33 +53,12 @@ class DiscoveryProcess extends AbstractProcess
             $services = provider()->select()->getServiceList("grpc-im-cloud-node");
             if(empty($services)){
                 Log::error("not find any instance node:grpc-im-cloud-node");
-                $sync = ["call" => [LogicClient::class,"updateService"],"arg" => [[]]];
-                $this->syncServeiceList($sync);
+                CloudClient::updateService([]);
                 goto SLEEP;
             }
-            for($i = 0; $i < (int)env("WORKER_NUM",4);$i++)
-            {
-
-                //将可以用的服务同步到所有的worker进程
-                $sync = ["call" => [LogicClient::class,"updateService"],"arg" => [$services]];
-                $this->syncServeiceList($sync);
-                Cloud::server()->getSwooleServer()->sendMessage($sync,$i);
-
-            }
+            CloudClient::updateService($services);
 SLEEP:
             sleep(10);
         }
-    }
-    /**
-     * @param array $services
-     */
-    public function syncServeiceList(array $sync)
-    {
-        for($i = 0; $i < (int)env("WORKER_NUM",4);$i++)
-        {
-            //将可以用的服务同步到所有的worker进程
-            Cloud::server()->getSwooleServer()->sendMessage($sync,$i);
-        }
-
     }
 }

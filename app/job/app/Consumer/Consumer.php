@@ -39,14 +39,12 @@ class Consumer extends ConsumerMessage
     public function consume($data): string
     {
         Log::info("job node consume data:".json_encode($data));
-        if(empty(CloudClient::$serviceList)){
+        if(CloudClient::$table->count() == 0){
             Log::error("cancle task deliver discovery cloud node is empty");
 //            return Result::REQUEUE;
             return Result::DROP;
         }
-//        Co::create(function()use($data){
-            Task::deliver(Job::class,"push",[CloudClient::$serviceList,$data]);
-//        },true);
+        Task::deliver(Job::class,"push",[$data]);
         return Result::ACK;
     }
 

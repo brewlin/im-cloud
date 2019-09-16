@@ -135,11 +135,12 @@ class ConsulProvider implements ProviderInterface
                 Log::warning("consul[Address] Or consul[Port] 服务健康节点集合，数据格式不不正确，Data=" . $result);
                 continue;
             }
-            $address = $serviceInfo['Address'];
-            $port    = $serviceInfo['Port'];
+            $nodes[] = $serviceInfo;
+//            $address = $serviceInfo['Address'];
+//            $port    = $serviceInfo['Port'];
 
-            $uri     = implode(":", [$address, $port]);
-            $nodes[] = $uri;
+//            $uri     = implode(":", [$address, $port]);
+//            $nodes[] = $uri;
         }
 
         return $nodes;

@@ -27,7 +27,7 @@ class Broadcast
      * @param $body
      * @param int $speed
      */
-    public function push(array $serviceList,int $operation,$body)
+    public function push(int $operation,$body)
     {
         $proto = new Proto();
         $proto->setVer(1);
@@ -37,6 +37,8 @@ class Broadcast
         $broadcastReq = new BroadcastReq();
         $broadcastReq->setProtoOp($operation);
         $broadcastReq->setProto($proto);
+        //get all instance
+        $serviceList = CloudClient::getAllInstance();
         foreach ($serviceList as $server) {
             Log::info("brocast servicd:$server");
             GrpcCloudClient::Broadcast($server,$broadcastReq);

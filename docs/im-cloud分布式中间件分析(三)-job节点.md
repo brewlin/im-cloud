@@ -35,11 +35,11 @@ class WorkerStartListener implements WorkerStartInterface
 - 2.将每个数据投递至worker进程进行真正的grpc与cloud推送请求
 ```
 Co::create(function()use($data){
-    if(empty(CloudClient::$serviceList)){
+    if(empty(CloudClient::$table->getAllInstance())){
         Log::error("cancle task deliver discovery cloud node is empty");
         return;
     }
-    Task::deliver(Job::class,"push",[CloudClient::$serviceList,$data]);
+    Task::deliver(Job::class,"push",[$data]);
 },false);
 return Result::ACK;
 ```

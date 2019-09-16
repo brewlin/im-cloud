@@ -139,7 +139,8 @@ class AnnotationRegister
             "ImQueue\\",
             "Grpc\\",
             "Task\\",
-            "Log\\"
+            "Log\\",
+            "Memory\\",
         ]));
         $resource->load();
     }

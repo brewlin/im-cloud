@@ -13,8 +13,8 @@ use Core\Container\Mapping\Bean;
 use Discovery\Balancer\RandomBalancer;
 use Log\Helper\Log;
 use Memory\Table;
-use Memory\Table\MemoryTable;
 use Memory\Table\Type;
+use Memory\Table\MemoryTable;
 
 /**
  * Class CloudClient
@@ -26,7 +26,7 @@ class CloudClient
     /**
      * @var string
      */
-    const ServerList = "im-job-serverlist";
+    const ServerList = "im-logic-serverlist";
     /**
      * servicelist
      * @var MemoryTable
@@ -91,11 +91,4 @@ class CloudClient
         }
     }
 
-    /**
-     * @return array
-     */
-    public static function getAllInstance():array
-    {
-        return self::$table->getKeys();
-    }
 }

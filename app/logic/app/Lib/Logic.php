@@ -26,7 +26,7 @@ class Logic
     {
         //放到协程调度运行
         while (true){
-            $server = LogicClient::$serviceList;
+            $server = LogicClient::$table->getKeys();
             if(empty($server))goto SLEEP;
             foreach ($server as $ser){
                 /**

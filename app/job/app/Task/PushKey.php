@@ -29,7 +29,7 @@ class PushKey
      * @param array $subkey
      * @param $body
      */
-    public function push(array $serviceList ,int $operation ,string $server , array $subkey , $body)
+    public function push(int $operation ,string $server , array $subkey , $body)
     {
         $proto = new Proto();
         $proto->setOp($operation);
@@ -40,12 +40,12 @@ class PushKey
         $pushMsg->setKeys($subkey);
         $pushMsg->setProto($proto);
         $pushMsg->setProtoOp($operation);
-        $serverId = $serviceList[$server];
-        if(empty($serverId)){
+
+        if(!CloudClient::$table->exist($server)){
             Log::error("pushkey not exist grpc client server: $server ");
             return;
         }
-        GrpcCloudClient::PushMsg($serverId,$pushMsg);
+        GrpcCloudClient::PushMsg($server,$pushMsg);
     }
 
 }

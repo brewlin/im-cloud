@@ -9,10 +9,12 @@
 namespace App\Lib;
 
 
-use Core\Container\Container;
 use Core\Container\Mapping\Bean;
 use Discovery\Balancer\RandomBalancer;
-use Grpc\ChannelCredentials;
+use Log\Helper\Log;
+use Memory\Table;
+use Memory\Table\MemoryTable;
+use Memory\Table\Type;
 
 /**
  * Class LogicClient
@@ -23,38 +25,60 @@ class LogicClient
 {
     /**
      * servicelist
+     * @var MemoryTable
      * [
-     *      "127.0.0.1:9500"
+     *   ip => [addr => ip]
+     *   "127.0.0.1:9500" => ["Address" => "127.0.0.1","Port" => "9500"]
      * ]
-     * @var array
      */
-    public static $serviceList = [];
+    public static $table = null;
+
+    /**
+     * LogicClient constructor.
+     */
+    public function __construct()
+    {
+        $memorySize = (int)env("MEMORY_TABLE",1000);
+        $column = [
+            "Address" => [Type::String,20],
+            "Port"    => [Type::String,10],
+        ];
+        self::$table = Table::create($memorySize,$column);
+    }
 
     /**
      * 返回一个可用的grpc 客户端 和logic 节点进行交互
      * @return mixed|null
-     * @throws \Exception
      */
     public static function getLogicClient(){
-        if(empty(self::$serviceList))
-            throw new \Exception("not logic node find",0);
-        $node = Container::getInstance()->get(RandomBalancer::class)->select(array_keys(self::$serviceList));
+        var_dump(self::$table->count());
+        if(self::$table->count() == 0){
+            Log::error("not logic node find");
+            return false;
+        }
+
+        $node = \bean(RandomBalancer::class)->select(self::$table->getKeys());
         return $node;
     }
 
     /**
+     * automic operation insert|update|del
      * @param array $server
      */
     public static function updateService(array $server)
     {
+        //insert if not exist | update if not equal
+        $serverList = [];
         foreach ($server as $ser) {
-            if (!isset(self::$serviceList[$ser])) {
-                self::$serviceList[$ser] = $ser;
-            }
+            $addr = $ser["Address"].":".$ser["Port"];
+            $serverList[] = $addr;
+            if(!self::$table->exist($addr))
+                self::$table->set($addr,$ser);
         }
-        foreach (self::$serviceList as $k => $ser) {
-            if (!in_array($ser, $server)) {
-                unset(self::$serviceList[$k]);
+        //del not exist
+        foreach (self::$table as $k => $ser) {
+            if (!in_array($k, $serverList)) {
+                self::$table->del($k);
             }
         }
     }

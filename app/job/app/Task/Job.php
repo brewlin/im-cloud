@@ -25,7 +25,7 @@ class Job
      * 消费 队列数据后分发
      * @param $pushmsg PushMsg
      */
-    public function push(array $serverList ,array $data)
+    public function push(array $data)
     {
         Log::info("job node push msgType:".$data['type']);
         /** @var PushMsg $pushMsg */
@@ -48,7 +48,6 @@ class Job
             {
                 case PushMsg\Type::PUSH:
                     container()->get(PushKey::class)->push(
-                        $serverList,
                         $pushmsg->getOperation(),
                         $pushmsg->getServer(),
                         $keys,
@@ -57,7 +56,6 @@ class Job
                     break;
                 case PushMsg\Type::ROOM:
                     container()->get(PushRoom::class)->push(
-                        $serverList,
                         $pushmsg->getRoom(),
                         $pushmsg->getOperation(),
                         $pushmsg->getMsg()
@@ -66,7 +64,6 @@ class Job
                     break;
                 case PushMsg\Type::BROADCAST:
                     container()->get(Broadcast::class)->push(
-                        $serverList,
                         $pushmsg->getOperation(),
                         $pushmsg->getMsg()
                     );

@@ -24,7 +24,8 @@
         "brewlin/im-process":"@dev",
         "brewlin/im-queue":"@dev",
         "brewlin/im-redis":"@dev",
-        "brewlin/im-task":"@dev"
+        "brewlin/im-task":"@dev",
+        "brewlin/im-memory":"@dev"
 
     },
     "autoload": {
@@ -68,6 +69,10 @@
         "8":{
             "type":"path",
             "url":"../../pkg/task"
+        },
+        "9":{
+            "type":"path",
+            "url":"../../pkg/memory"
         },
         "packagist": {
             "type": "composer",
