@@ -23,6 +23,13 @@
 + [`logic`](./app/logic) 节点 提供rest api接口，作为生产节点 和  grpc客户端,可写入队列作为生产者，也可以扩展自己的业务进行rpc直接调用center中心进行推送,客户端数据缓存至redis中，多个logic节点访问redis数据同步
 + `cloud,job,logic` 等节点可水平扩容多个节点增加并发处理
 
+## app & apps
++ [`app`](./app) 多进程协程版本(`test version`) 测试和单元测试中
++ [`apps`](./apps) 单进程全协程化版本(`to do..`) 采用swoole协程化server
+```php
+Swoole\Coroutine\Server 协程版tcp server
+Swoole\Http\Server      协程版http&websocket server
+```   
 
 
 架构图

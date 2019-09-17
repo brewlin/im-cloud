@@ -51,7 +51,6 @@ class LogicClient
      * @return mixed|null
      */
     public static function getLogicClient(){
-        var_dump(self::$table->count());
         if(self::$table->count() == 0){
             Log::error("not logic node find");
             return false;
