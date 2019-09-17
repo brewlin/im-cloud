@@ -102,6 +102,10 @@ class App
      */
     public function serverHandle()
     {
+        if(!$this->checkStart()){
+            $this->handle();
+            return;
+        }
         $action = env("APP","start");
         if(env("ENABLE_WS")){
             ( new WebsocketServer());
@@ -109,6 +113,19 @@ class App
             (new HttpServer());
         }
         Cloud::server()->{$action}();
+    }
+
+    /**
+     * @return bool
+     */
+    public function checkStart():bool
+    {
+        $serverType = config("server")["server"];
+        if(empty($serverType))
+            $serverType = env("SERVER","process");
+        if($serverType == Cloud::Coroutine)
+            return false;
+        return true;
     }
 
     /**

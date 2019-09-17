@@ -13,7 +13,21 @@ use Core\Server\Server;
 
 class Cloud
 {
+    /**
+     * @var App
+     */
     public static $app;
+
+    /**
+     * @var string
+     */
+    const Coroutine = "coroutine";
+
+    /**
+     * @var string
+     */
+    const Process = "process";
+
 
 
     /**
