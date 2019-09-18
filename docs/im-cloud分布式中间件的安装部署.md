@@ -18,9 +18,15 @@ docker-compose networknamespace 为host模式，所以需要注意本地端口�
 - 镜像
     - consul
     - redis
-    - brewlin/cloud
-    - brewlin/job
-    - brewlin/logic
+- 多进程版本镜像
+    - brewlin/cloud-m
+    - brewlin/job-m
+    - brewlin/logic-m
+ - 单进程协程版镜像
+    - brewlin/cloud-s
+    - brewlin/job-s
+    - brewlin/logic-s
+ 
 - 启动consul
 ```
 docker run --network host consul
@@ -31,21 +37,29 @@ docker run --network host redis
 ```
 - 启动cloud节点
 ```
-docker run --network host brewlin/cloud
+docker run --network host brewlin/cloud-m
+or
+docker run --network host brewlin/cloud-s
+
 ```
 - 启动job节点
 ```
-docker run --network host  brewlin/job
+docker run --network host  brewlin/job-m
+or
+docker run --network host  brewlin/job-s
 ```
 - 启动logic节点
 ```
-docker run --network host  brewlin/logic
+docker run --network host  brewlin/logic-m
+or
+docker run --network host  brewlin/logic-s
 ```
 
 ### 2.docker-compose 编排服务
 ```
 git clone http://github.com/brewlin/im-cloud
 cd im-cloud
+//默认多进程版本
 docker-compose up
 ```
 ## 二、手动部署

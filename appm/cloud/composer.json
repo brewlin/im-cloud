@@ -25,8 +25,7 @@
         "brewlin/im-queue":"@dev",
         "brewlin/im-redis":"@dev",
         "brewlin/im-task":"@dev",
-        "brewlin/im-memory":"@dev",
-        "swoft/swoole-ide-helper": "^4.4"
+        "brewlin/im-memory":"@dev"
 
     },
     "autoload": {

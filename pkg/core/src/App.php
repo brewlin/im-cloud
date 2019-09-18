@@ -120,7 +120,7 @@ class App
      */
     public function checkStart():bool
     {
-        $serverType = config("server")["server"];
+        $serverType = isset(config("server")["server"])??"";
         if(empty($serverType))
             $serverType = env("SERVER","process");
         if($serverType == Cloud::Coroutine)

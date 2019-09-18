@@ -2,15 +2,15 @@ version: "3"
 
 services:
   cloud:
-    image: brewlin/cloud
+    image: brewlin/cloud-m
     network_mode: host
 
   job:
-    image: brewlin/job
+    image: brewlin/job-m
     network_mode: host
 
   logic:
-    image: brewlin/logic
+    image: brewlin/logic-m
     network_mode: host
 
   consul:
