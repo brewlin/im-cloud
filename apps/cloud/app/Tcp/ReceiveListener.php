@@ -17,44 +17,31 @@ use Core\Swoole\ReceiveInterface;
 use Im\Logic\ConnectReply;
 use Im\Logic\ConnectReq;
 use Log\Helper\Log;
-use Swoole\Server;
 use App\Packet\Packet;
 use Core\Context\Context;
+use Swoole\Coroutine\Server;
 
 /**
  * Class ReceiveListener
  * @package App\Tcp
  */
-class ReceiveListener implements ReceiveInterface
+class ReceiveListener
 {
     /**
      * @param Server $server
      * @param int $fd
-     * @param int $reactorId
      * @param string $data
      */
-    public function onReceive(Server $server, int $fd, int $reactorId, string $data): void
+    public function onReceive(Server $server, int $fd, string $data): void
     {
-        Log::info("fd:{$fd} data:{$data}");
-        try {
-            /** @var Packet $packet */
-            $packet = bean(Packet::class)->unpack($data);
-            Context::withValue(Packet::class, $packet);
-            Context::withValue("fd", $fd);
+        /** @var Packet $packet */
+        $packet = bean(Packet::class)->unpack($data);
+        Context::withValue(Packet::class, $packet);
+        Context::withValue("fd", $fd);
 
-            //dispatch
-            container()->get(Dispatcher::class)
-                ->dispatch();
-        } catch (\Throwable $e) {
-            $file = $e->getFile();
-            $line = $e->getLine();
-            $code = $e->getCode();
-            $exception = $e->getMessage();
-            Log::error("file:" . $file . " line:$line code:$code msg:$exception");
-            $server->close($fd);
-        }
-        //destory context
-        Context::compelete();
+        //dispatch
+        container()->get(Dispatcher::class)
+            ->dispatch();
     }
 
 }
