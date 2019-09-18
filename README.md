@@ -16,10 +16,11 @@
  <a href="https://secure.php.net/" rel="nofollow">
  <img src="https://camo.githubusercontent.com/2db74ea6a2c4e00381f6051289dedaa00f9fa38b/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f7068702d2533453d372e312d627269676874677265656e2e7376673f6d61784167653d32353932303030" alt="Php Version" data-canonical-src="https://img.shields.io/badge/php-%3E=7.1-brightgreen.svg?maxAge=2592000" style="max-width:100%;"></a> 
   
-<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/brewlin/im-cloud">
+
 
 <a href="https://github.com/swoole/swoole-src">
 <img src="https://camo.githubusercontent.com/936045a17b533972b1519eda85879839d97940ea/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f73776f6f6c652d2533453d342e342e312d627269676874677265656e2e7376673f6d61784167653d32353932303030" alt="Swoole Version" data-canonical-src="https://img.shields.io/badge/swoole-%3E=4.4.1-brightgreen.svg?maxAge=2592000" style="max-width:100%;"></a>
+<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/brewlin/im-cloud">
 </p>
 
 基于原生 swoole 全协程化构建 im-cloud中间件，多节点扩容

@@ -39,14 +39,14 @@ composer install
 
 ## 终端处理
 ![](../resource/console.png)
-process
+### process
 ![](../resource/process.png)
-start
+### start
 ![](../resource/start.png)
-监控
+### 监控
 ![](../resource/monitor.png)
-make start
+### make start
 ![](../resource/makestart.png)
-make stop
+### make stop
 ![](../resource/makestop.png)
 
