@@ -8,8 +8,18 @@
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" target="_blank" />
   </a>
   <a href="https://github.com/brewlin/im-cloud/LICENSE">
-    <img alt="License: Apache" src="https://img.shields.io/badge/License-Apache-yellow.svg" target="_blank" />
+    <img alt="License: Apache" src="https://img.shields.io/github/license/brewlin/im-cloud" target="_blank" />
   </a>
+ <a href="https://hub.docker.com/r/brewlin/" rel="nofollow">
+ <img src="https://camo.githubusercontent.com/db6c049fcef32b9a6850d6d6f1e2e79a7275101e/68747470733a2f2f696d672e736869656c64732e696f2f646f636b65722f6275696c642f73776f66742f616c7068702e737667" alt="Docker Build Status" data-canonical-src="https://img.shields.io/docker/build/swoft/alphp.svg" style="max-width:100%;"></a>
+  
+ <a href="https://secure.php.net/" rel="nofollow">
+ <img src="https://camo.githubusercontent.com/2db74ea6a2c4e00381f6051289dedaa00f9fa38b/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f7068702d2533453d372e312d627269676874677265656e2e7376673f6d61784167653d32353932303030" alt="Php Version" data-canonical-src="https://img.shields.io/badge/php-%3E=7.1-brightgreen.svg?maxAge=2592000" style="max-width:100%;"></a> 
+  
+<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/brewlin/im-cloud">
+
+<a href="https://github.com/swoole/swoole-src">
+<img src="https://camo.githubusercontent.com/936045a17b533972b1519eda85879839d97940ea/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f73776f6f6c652d2533453d342e342e312d627269676874677265656e2e7376673f6d61784167653d32353932303030" alt="Swoole Version" data-canonical-src="https://img.shields.io/badge/swoole-%3E=4.4.1-brightgreen.svg?maxAge=2592000" style="max-width:100%;"></a>
 </p>
 
 基于原生 swoole 全协程化构建 im-cloud中间件，多节点扩容
@@ -28,10 +38,10 @@
     - `test version` 
 + [`apps`](./apps)单进程全协程化server版本(`single process coroutine`) 采用swoole协程化server
     - `done soon..`
++ [`notice`](./NOTICE.md)
 
 
-架构图
-=========
+## 流程图
 im-cloud 连接流程图
 ----
 ![](./resource/im-cloud-connect.png)
@@ -43,16 +53,6 @@ im-cloud 数据流程图
 im-cloud 业务流程
 -----
 ![](./resource/im-cloudt-task.png)
-
-终端处理
-------
-![](./resource/console.png)
-process
-![](./resource/process.png)
-start
-![](./resource/start.png)
-监控
-![](./resource/monitor.png)
 
 ## 组件依赖
 > 相关组件为纯swoole实现

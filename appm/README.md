@@ -37,3 +37,16 @@ composer install
 - 完成了注册发现与服务调用
 - 完成了队列的生产 使用rabbitmq
 
+## 终端处理
+![](../resource/console.png)
+process
+![](../resource/process.png)
+start
+![](../resource/start.png)
+监控
+![](../resource/monitor.png)
+make start
+![](../resource/makestart.png)
+make stop
+![](../resource/makestop.png)
+
