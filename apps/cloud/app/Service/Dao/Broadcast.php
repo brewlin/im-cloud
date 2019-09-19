@@ -7,6 +7,7 @@
  */
 
 namespace App\Service\Dao;
+use App\Connection\Connection;
 use Core\Cloud;
 use Im\Cloud\Proto;
 use Log\Helper\Log;
@@ -24,21 +25,14 @@ class Broadcast
     public static function push(int $op,$body)
     {
         Log::info("Cloud broadcast op:$op data:".json_encode($body));
-
-        $start_fd = 0;
-        while(true)
-        {
-            $conn_list = Cloud::server()->getSwooleServer()->getClientList($start_fd, 10);
-            if ($conn_list===false or count($conn_list) === 0)
-            {
-                break;
-            }
-            $start_fd = end($conn_list);
-            foreach($conn_list as $fd)
-            {
+        go(function ()use($op,$body){
+            /** @var Connection[] $conns */
+            $conns = bean(\App\Connection\Bucket::class)->getFdList();
+            foreach ($conns as $fd){
                 container()->get(Push::class)->pushFd($fd,$op,$body);
             }
-        }
+
+        });
 
     }
 

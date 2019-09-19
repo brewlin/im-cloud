@@ -23,7 +23,8 @@ class Room
     public static function push(string $roomId,BroadcastRoomReq $broadcastRoomReq)
     {
         $pushData = $broadcastRoomReq->serializeToJsonString();
-        foreach (Bucket::roomfds($roomId) as $fd){
+        $roomfds = bean(\App\Connection\Bucket::class)->roomfds($roomId);
+        foreach ($roomfds as $fd){
             container()->get(Push::class)->push($fd,$pushData);
         }
     }

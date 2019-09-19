@@ -7,15 +7,16 @@
  */
 
 namespace App;
+use App\Event\Close;
 use App\Packet\Packet;
 use App\Service\Service\Dispatcher;
 use Core\Contract\ApplicationInterface;
-use App\Server\Bucket;
+use App\Connection\Bucket;
 use Core\Context\Context;
 use Log\Helper\Log;
 use Swoole\Coroutine\Server;
 use Swoole\Coroutine\Server\Connection;
-use App\Server\Connection as Con;
+use App\Connection\Connection as Con;
 
 /**
  * Class TcpServer
@@ -52,10 +53,10 @@ class TcpServer implements ApplicationInterface
     public function tcpAceept(Connection $conn)
     {
         $conn = new Con($conn,Con::Tcp);
-        bean(Bucket::class)->put($conn);
+        bean(Bucket::class)->addConn($conn);
         $this->eventLoop($conn);
         $conn->close();
-        bean(Bucket::class)->del($conn);
+        bean(Bucket::class)->delConn($conn);
     }
 
     /**
@@ -68,12 +69,15 @@ class TcpServer implements ApplicationInterface
                 Log::info("fd:{$conn->getFd()} data:{$data}");
                 $this->dispatch($conn->getFd(),$data);
             } catch (\Throwable $e) {
-                $file = $e->getFile();
-                $line = $e->getLine();
-                $code = $e->getCode();
-                $exception = $e->getMessage();
-                Log::error("file:" . $file . " line:$line code:$code msg:$exception");
+                Log::error(
+                    sprintf("file:%s line:%s code:%s msg:%s",
+                        $e->getFile(),$e->getLine(),$e->getCode(),$e->getMessage())
+                );
                 $conn->close();
+                bean(Close::class)->close($conn);
+                /** @var Bucket $bucket */
+                $bucket = bean(Bucket::class);
+                $bucket->pop($conn->getKey(),$conn->getFd());
             }
             //destory context
             Context::compelete();

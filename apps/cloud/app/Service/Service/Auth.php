@@ -8,11 +8,10 @@
 
 namespace App\Service\Service;
 
+use App\Connection\Bucket;
 use App\Lib\LogicClient;
 use App\Packet\Packet;
 use App\Packet\Protocol;
-use App\Packet\Task;
-use App\Service\Dao\Bucket;
 use App\Service\Dao\Push;
 use App\Websocket\Exception\RequireArgException;
 use Core\Cloud;
@@ -34,7 +33,7 @@ class Auth
     const MisBody = "require data";
     /**
      * connect event
-     * @throws \Exception
+     * @throws \Throwable
      */
     public function auth()
     {
@@ -49,19 +48,11 @@ class Auth
             //step 1
             [$mid,$key,$roomId,$accepts,$heartbeat] = $this->registerLogic($body);
             //step 2
-            /** @var Task $task */
-            \bean(Task::class)->deliver(Bucket::class,"put",[$key,$fd,$mid,$roomId]);
+            \bean(Bucket::class)->push($key,$fd,$mid,$roomId);
             //step 3
             $this->registerSuccess();
         }catch (\Throwable $e){
             Log::error("auth error fd:$fd {$e->getMessage()}");
-            /** @var Task $task */
-            $task = \bean(Task::class);
-            $task->setClass(Bucket::class);
-            //del fd
-            $task->setMethod("del");
-            $task->setArg([$key,$fd,$roomId]);
-            $task->exec();
             throw $e;
         }
     }
@@ -124,11 +115,6 @@ class Auth
         /** @var Push $push */
         $push = \bean(Push::class);
         $push->pushFd($fd,Operation::OpAuthReply,json_encode(["ok" => "yes"]));
-//        /** @var Packet $packet */
-//        $packet = \bean(Packet::class);
-//        $packet->setOperation(Operation::OpAuthReply);
-//        $buf = $packet->pack(json_encode(["ok" => "yes"]));
-//        Cloud::server()->getSwooleServer()->push($fd,$buf,WEBSOCKET_OPCODE_BINARY);
         Log::info("register success reply client buf:".json_encode(["ok" => "yes"]));
     }
 

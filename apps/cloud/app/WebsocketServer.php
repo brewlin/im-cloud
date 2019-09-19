@@ -7,11 +7,12 @@
  */
 
 namespace App;
+use App\Event\Close;
 use App\Packet\Packet;
 use App\Service\Service\Dispatcher;
 use Core\Contract\ApplicationInterface;
-use App\Server\Bucket;
-use App\Server\Connection as Con;
+use App\Connection\Bucket;
+use App\Connection\Connection as Con;
 use Core\Context\Context;
 use Log\Helper\Log;
 use Swoole\Coroutine\Http\Server;
@@ -78,10 +79,10 @@ class WebsocketServer implements ApplicationInterface
         //upgrade ws
         $conn = new Con($ws,Con::Websocket);
         $conn->upgrade();
-        bean(Bucket::class)->put($conn);
+        bean(Bucket::class)->addConn($conn);
         $this->eventLoop($conn);
         $conn->close();
-        bean(Bucket::class)->del($conn);
+        bean(Bucket::class)->delConn($conn);
     }
 
     /**
@@ -98,11 +99,14 @@ class WebsocketServer implements ApplicationInterface
                 Log::info("fd:{$conn->getFd()} data:{$data->data}");
                 $this->dispatch($data);
             } catch (\Throwable $e) {
-                $file = $e->getFile();
-                $line = $e->getLine();
-                $code = $e->getCode();
-                $exception = $e->getMessage();
-                Log::error("file:" . $file . " line:$line code:$code msg:$exception");
+                Log::error(
+                    sprintf("file:%s line:%s code:%s msg:%s",
+                        $e->getFile(),$e->getLine(),$e->getCode(),$e->getMessage())
+                );
+                bean(Close::class)->close($conn);
+                /** @var Bucket $bucket */
+                $bucket = bean(Bucket::class);
+                $bucket->pop($conn->getKey(),$conn->getFd());
 
                 //wsclient 未提供close函数，直接break loop返回就可以了
                 break;

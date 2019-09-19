@@ -9,6 +9,7 @@
 namespace App\Service\Dao;
 
 
+use App\Connection\Connection;
 use App\Packet\Packet;
 use App\Packet\Protocol;
 use Core\Cloud;
@@ -40,24 +41,29 @@ class Push
      */
     public function pushFd($fd,$op,$body)
     {
-        if(!($clientinfo = Cloud::server()->getSwooleServer()->getClientInfo($fd))){
+        /** @var Connection $conn */
+        $conn = \bean(\App\Connection\Bucket::class)->get($fd);
+        if(!$conn){
             Log::info("连接 fd:{$fd} 不存在,待发送数据:".json_encode($body));
             return;
         }
+
         //判断为websocket连接且已经握手完毕
-        if(isset($clientinfo['websocket_status']) && $clientinfo['websocket_status'] == WEBSOCKET_STATUS_FRAME){
+        if($conn->isWs())
+        {
             /** @var Packet $packet */
             $packet = \bean(Packet::class);
             $packet->setOperation($op);
             $buf = $packet->pack($body);
-            Cloud::server()->getSwooleServer()->push($fd,$buf,WEBSOCKET_OPCODE_BINARY);
+            $conn->push($buf,WEBSOCKET_OPCODE_BINARY);
             return;
         //TCP send 推送
-        }else if($clientinfo['server_port'] == env("TCP_PORT")){
+        }else if($conn->isTcp())
+        {
             $packet = \bean(Packet::class);
             $packet->setOperation($op);
             $buf = $packet->pack($body);
-            Cloud::server()->getSwooleServer()->send($fd,$buf);
+            $conn->send($buf);
             return;
         }
         Log::error("fd{$fd} 未连接");

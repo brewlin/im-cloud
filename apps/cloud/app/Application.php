@@ -8,8 +8,12 @@
 
 namespace App;
 
+use App\Discovery;
+use App\Event\Close;
+use App\Event\Shutdown;
 use Core\App;
 use Core\Contract\ApplicationInterface;
+use Swoole\Process;
 
 /**
  * Class Application
@@ -39,5 +43,29 @@ class Application extends App implements ApplicationInterface
                 $server->handle();
             });
         }
+        $this->process();
+        //注册信号
+        $this->signal();
+    }
+
+    /**
+     * coroutiner long runner
+     */
+    public function process()
+    {
+        //discovery consul..
+        go([new Discovery(),"run"]);
+    }
+
+    /**
+     * signal to graceful shutdown
+     */
+    public function signal()
+    {
+        Process::signal(SIGTERM,function($signo){
+
+            (new Shutdown())->shutdown();
+            exit;
+        });
     }
 }

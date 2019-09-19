@@ -6,7 +6,7 @@
  * Time: 18:30
  */
 
-namespace App\Process;
+namespace App;
 
 
 use App\Lib\LogicClient;
@@ -17,6 +17,7 @@ use Log\Helper\Log;
 use Process\Contract\AbstractProcess;
 use Process\Process;
 use Process\ProcessInterface;
+use Swoole\Coroutine;
 
 /**
  * 自定义进程
@@ -25,31 +26,20 @@ use Process\ProcessInterface;
  * Class DiscoveryProcess
  * @package App\Process
  */
-class DiscoveryProcess extends AbstractProcess
+class Discovery
 {
-    public function __construct()
-    {
-        $this->name = "im-cloud-discovery";
-    }
-
-    public function check(): bool
-    {
-        return true;
-    }
 
     /**
-     * 自定义子进程 执行入口
      * @param Process $process
      */
     public function run(Process $process)
     {
-        swoole_set_process_name(sprintf('php-im-cloud discovery process (%s)',ROOT));
         $registerStatus = false;
         while(!$registerStatus){
             $registerStatus = provider()->select()->registerService();
             if(!$registerStatus){
                 CLog::error("consul register false sleep 1 sec to reregiseter");
-                sleep(1);
+                Coroutine::sleep(1);
             }
         }
         $config = config("discovery");
@@ -63,7 +53,7 @@ class DiscoveryProcess extends AbstractProcess
             }
             LogicClient::updateService($services);
 SLEEP:
-            sleep(5);
+            Coroutine::sleep(5);
         }
     }
 }

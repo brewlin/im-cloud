@@ -6,7 +6,7 @@
  * Time: 22:39
  */
 
-namespace App\Server;
+namespace App\Connection;
 use Swoole\Coroutine\Server\Connection as Con;
 use Swoole\Http\Response;
 use Swoole\WebSocket\Frame;
@@ -50,6 +50,16 @@ class Connection
     const Websocket = 2;
 
     /**
+     * @var string
+     */
+    private $key = "";
+
+    /**
+     * @var string
+     */
+    private $mid = "";
+
+    /**
      * Connection constructor.
      * @param Con|Response $con
      */
@@ -74,6 +84,38 @@ class Connection
     {
         //abort this func
         return $this->socket->fd;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKey(): string
+    {
+        return $this->key;
+    }
+
+    /**
+     * @param string $key
+     */
+    public function setKey(string $key)
+    {
+        $this->key = $key;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMid(): string
+    {
+        return $this->mid;
+    }
+
+    /**
+     * @param string $mid
+     */
+    public function setMid(string $mid)
+    {
+        $this->mid = $mid;
     }
 
     /**

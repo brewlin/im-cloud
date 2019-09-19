@@ -7,6 +7,7 @@
  */
 
 namespace App\Service\Service;
+use App\Connection\Connection;
 use App\Lib\LogicClient;
 use App\Packet\Packet;
 use App\Packet\Protocol;
@@ -46,12 +47,6 @@ class Heartbeat
         /** @var Push $push */
         $push = \bean(Push::class);
         $push->pushFd($fd,Operation::OpHeartbeatReply,self::HeartBeatReply);
-//        /** @var Packet $packet */
-//        $packet = \bean(Packet::class);
-//        //pack data repy cliend
-//        $packet->setOperation(Operation::OpHeartbeatReply);
-//        $buf = $packet->pack(self::HeartBeatReply);
-//        Cloud::server()->getSwooleServer()->push($fd,$buf,WEBSOCKET_OPCODE_BINARY);
 
     }
 
@@ -61,8 +56,10 @@ class Heartbeat
      */
     public static function heartbeatLogic(string $grpcServer ,int $fd)
     {
-        $key = Bucket::key($fd);
-        $mid = Bucket::mid($fd);
+        /** @var Connection $conn */
+        $conn  = \bean(\App\Connection\Bucket::class)->get($fd);
+        $key = $conn->getKey();
+        $mid = $conn->getMid();
         if(empty($key)||empty($mid)){
             Log::error("fd:%d  is not exist key:%s mid:%s",$fd,$key,$mid);
             return;
