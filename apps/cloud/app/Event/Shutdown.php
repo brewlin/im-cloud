@@ -9,6 +9,7 @@
 namespace App\Event;
 
 
+use App\Connection\Bucket;
 use Core\Console\Console;
 use Log\Helper\Log;
 
@@ -27,7 +28,8 @@ class Shutdown
         //注销节点
         $discovery = config("discovery");
         provider()->select()->deregisterService($discovery['consul']["register"]['Name']);
-        //关闭连接
+        //关闭所用链接
+        bean(Bucket::class)->shutdown();
 
     }
 

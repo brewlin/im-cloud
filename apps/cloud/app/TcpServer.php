@@ -43,7 +43,9 @@ class TcpServer implements ApplicationInterface
             'heartbeat_check_interval' => 5,
         ]);
         self::$tcpServer = $server;
-        $server->handle([$this,"tcpAccept"]);
+        $server->handle(function(Connection $conn){
+            $this->tcpAceept($conn);
+        });
         $server->start();
     }
 

@@ -12,7 +12,11 @@ use App\Discovery;
 use App\Event\Close;
 use App\Event\Shutdown;
 use Core\App;
+use Core\Cloud;
 use Core\Contract\ApplicationInterface;
+use Core\Server\Server;
+use Stdlib\Helper\Dir;
+use Stdlib\Helper\Sys;
 use Swoole\Process;
 
 /**
@@ -35,6 +39,14 @@ class Application extends App implements ApplicationInterface
      */
     public function handle(): void
     {
+        $action = env("APP", "start");
+        $this->{$action}();
+    }
+    /**
+     * start the server
+     */
+    public function start():void
+    {
         foreach ($this->processor as $processor)
         {
             /** @var ApplicationInterface $server */
@@ -43,9 +55,22 @@ class Application extends App implements ApplicationInterface
                 $server->handle();
             });
         }
+        $this->setPidMap();
         $this->process();
         //注册信号
         $this->signal();
+    }
+    public function setPidMap()
+    {
+        $pidStr = sprintf('%s,%s', posix_getpid(), posix_getpid());
+        $title  = sprintf('cloud-s (%s)',ROOT);
+
+        // Save PID to file
+        $pidFile = Cloud::$app->getPidFile();
+        Dir::make(dirname($pidFile));
+        file_put_contents($pidFile, $pidStr);
+        // Set process title
+        Sys::setProcessTitle($title);
     }
 
     /**
@@ -63,7 +88,6 @@ class Application extends App implements ApplicationInterface
     public function signal()
     {
         Process::signal(SIGTERM,function($signo){
-
             (new Shutdown())->shutdown();
             exit;
         });

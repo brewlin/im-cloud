@@ -10,10 +10,12 @@ namespace Core;
 
 
 use Core\Console\Cli;
+use Core\Console\Console;
 use Core\Container\Mapping\Bean;
 use Core\Processor\AnnotationProcessor;
 use Core\Processor\ConsoleProcessor;
 use Core\Processor\Container;
+use Core\Server\Helper\ServerHelper;
 use Core\Server\HttpServer;
 use Core\Processor\AppProcessor;
 use Core\Processor\ConfigProcessor;
@@ -25,6 +27,7 @@ use Log\Helper\CLog;
 use Log\Logger;
 use Monolog\Formatter\LineFormatter;
 use Swoole\Coroutine;
+use Swoole\Process;
 use Swoole\Server;
 
 class App
@@ -44,6 +47,22 @@ class App
      * @var string
      */
     protected $errorFile = ROOT."/runtime/logs/error.log";
+    /** @
+     * var string  */
+    protected $pidFile = ROOT."/runtime/cloud.pid";
+    /**
+     * Record started server PIDs and with current workerId
+     *
+     * @var array
+     */
+    private $pidMap = [
+        'masterPid'  => 0,
+        'managerPid' => 0,
+        // if = 0, current is at master/manager process.
+        'workerPid'  => 0,
+        // if < 0, current is at master/manager process.
+        'workerId'   => -1,
+    ];
     /**
      * @var Processor\Processor
      */
@@ -220,5 +239,73 @@ class App
     public static function server():Server
     {
         return Cloud::server()->getSwooleServer();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPidFile()
+    {
+        return $this->pidFile;
+    }
+    /**
+     * @return bool
+     */
+    public function stop(): bool
+    {
+        if(!$this->isRunning()){
+            Console::writeln(sprintf('<error>server is not running now !</error>'));
+            return true;
+        }
+
+        $pid = $this->getPid();
+        if ($pid < 1) {
+            Console::writeln(sprintf('<error>server is not running now !</error>'));
+            return false;
+        }
+
+        // SIGTERM = 15
+        if (ServerHelper::killAndWait($pid, 15)) {
+            Console::writeln(sprintf('<success>server is stop now! send signal %s to pid:%s</success>', 15, $pid));
+            return ServerHelper::removePidFile(Cloud::$app->getPidFile());
+        }
+
+        return false;
+    }
+    /**
+     * Check if the server is running
+     *
+     * @return bool
+     */
+    public function isRunning(): bool
+    {
+        $pidFile = $this->getPidFile();
+
+        // Is pid file exist ?
+        if (file_exists($pidFile)) {
+            // Get pid file content and parse the content
+            $pidFile = file_get_contents($pidFile);
+
+            // Parse and record PIDs
+            [$masterPID, $managerPID] = explode(',', $pidFile);
+            // Format type
+            $masterPID  = (int)$masterPID;
+            $managerPID = (int)$managerPID;
+
+            $this->pidMap['masterPid']  = $masterPID;
+            $this->pidMap['managerPid'] = $managerPID;
+            return $masterPID > 0 && Process::kill($masterPID, 0);
+        }
+
+        return false;
+    }
+    /**
+     * @param string $name
+     *
+     * @return int
+     */
+    public function getPid(string $name = 'masterPid'): int
+    {
+        return $this->pidMap[$name] ?? 0;
     }
 }

@@ -21,7 +21,6 @@ use Swoole\WebSocket\Frame;
  * //websocket
  * @method bool push(mixed $data,int $opcode = 1,bool $finish = true)
  * @method bool upgrade() 升级为ws连接
- * @method bool close()
  */
 class Connection
 {
@@ -83,7 +82,15 @@ class Connection
     public function getFd():int
     {
         //abort this func
-        return $this->socket->fd;
+        return $this->con->socket->fd;
+    }
+
+    /**
+     * close the connection
+     */
+    public function close():void
+    {
+        $this->con->socket->close();
     }
 
     /**

@@ -35,9 +35,9 @@
 + `cloud,job,logic` 等节点可水平扩容多个节点增加并发处理
 
 ## appm & apps
-+ [`appm`](./appm)多进程协程版本(`multi process coroutine`) 测试和单元测试中
++ [`appm`](./appm)多进程版本(`multi process coroutine`) 测试和单元测试中
     - `test version` 
-+ [`apps`](./apps)单进程全协程化server版本(`single process coroutine`) 采用swoole协程化server
++ [`apps`](./apps)单进程全协程化server版本(`single process coroutine`) 
     - `done soon..`
 + [`notice`](./NOTICE.md)
 

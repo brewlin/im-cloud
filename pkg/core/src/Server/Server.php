@@ -9,6 +9,7 @@
 namespace Core\Server;
 
 
+use Core\Cloud;
 use Core\Console\Console;
 use Core\Container\Container;
 use Core\Server\Helper\ServerHelper;
@@ -41,13 +42,6 @@ class Server
     protected $panel;
 
     /**
-     * Pid file
-     *
-     * @var string
-     */
-    protected $pidFile = '/runtime/cloud.pid';
-
-    /**
      * Pid name
      *
      * @var string
@@ -78,6 +72,10 @@ class Server
     public function getSwooleServer(){
        return $this->swooleServer;
     }
+
+    /**
+     * Server constructor.
+     */
     public function __construct()
     {
         $this->setting = $this->defaultSetting();
@@ -238,7 +236,7 @@ class Server
         // SIGTERM = 15
         if (ServerHelper::killAndWait($pid, 15, $this->pidName)) {
             Console::writeln(sprintf('<success>server is stop now! send signal %s to pid:%s</success>', 15, $pid));
-            return ServerHelper::removePidFile(ROOT.$this->pidFile);
+            return ServerHelper::removePidFile(Cloud::$app->getPidFile());
         }
 
         return false;
@@ -251,7 +249,7 @@ class Server
      */
     public function isRunning(): bool
     {
-        $pidFile = ROOT.$this->pidFile;
+        $pidFile = Cloud::$app->getPidFile();
 
         // Is pid file exist ?
         if (file_exists($pidFile)) {
@@ -300,7 +298,7 @@ class Server
         $title  = sprintf('php-%s master process (%s)', env("APP_NAME","im-nil-node"), ROOT);
 
         // Save PID to file
-        $pidFile = ROOT.$this->pidFile;
+        $pidFile = Cloud::$app->getPidFile();
         Dir::make(dirname($pidFile));
         file_put_contents($pidFile, $pidStr);
         // Set process title

@@ -20,7 +20,7 @@ class Bucket
     /**
      * @var Connection[]
      */
-    private $conn = null;
+    private $conn = [];
 
     /**
      * @param Connection $conn
@@ -152,6 +152,22 @@ class Bucket
     public function mid(int $fd)
     {
         return $this->get($fd)->getMid();
+    }
+
+    /**
+     * graceful close all connection
+     */
+    public function shutdown()
+    {
+        //foreach close and free all connection
+        foreach ($this->conn as $connection){
+            //grpc to logic clear the cache
+            $this->disconnect($connection->getFd());
+            //close the connection
+            $this->pop($connection->getKey(),$connection->getFd());
+            $this->delConn($connection);
+            $connection->close();
+        }
     }
 
 }
