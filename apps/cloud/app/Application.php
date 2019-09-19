@@ -8,19 +8,8 @@
 
 namespace App;
 
-use App\Tcp\Bucket;
-use App\Tcp\ReceiveListener;
 use Core\App;
-use Core\Co;
-use Core\Context\Context;
 use Core\Contract\ApplicationInterface;
-use Swoole\Coroutine\Http\Server as HttpServer;
-use Swoole\Coroutine\Server as TcpServer;
-use Swoole\Coroutine\Server\Connection;
-use Core\Http\Request\Request as HttpRequest;
-use Core\Http\Response\Response as HttpResponse;
-use Core\Http\HttpDispatcher;
-use Swoole\Server;
 
 /**
  * Class Application
@@ -30,17 +19,25 @@ class Application extends App implements ApplicationInterface
 {
     /**
      * coroutine server processor
-     * @var array
+     * @var ApplicationInterface[]
      */
     protected $processor = [
-        TcpProcessor::class,
-        WebsocketProcessor::class,
+        TcpServer::class,
+        WebsocketServer::class
     ];
 
+    /**
+     * start the tcp and websocket server
+     */
     public function handle(): void
     {
-        foreach ($this->processor as $processor){
-            (new $processor())->handle();
+        foreach ($this->processor as $processor)
+        {
+            /** @var ApplicationInterface $server */
+            $server = new $processor();
+            go(function()use($server) {
+                $server->handle();
+            });
         }
     }
 }
