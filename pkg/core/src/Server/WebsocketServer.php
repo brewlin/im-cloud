@@ -8,6 +8,7 @@
 
 namespace Core\Server;
 
+use Core\Container\Mapping\Bean;
 use Core\Listener\MessageListener;
 use Core\Listener\ReceiveListener;
 use Core\Listener\RequestListener;
@@ -15,6 +16,11 @@ use Core\Server\Server;
 use Core\Swoole\SwooleEvent;
 use Core\Server\TcpServer;
 
+/**
+ * Class WebsocketServer
+ * @package Core\Server
+ * @Bean()
+ */
 class WebsocketServer extends Server
 {
     protected $port = 9090;

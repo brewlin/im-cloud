@@ -78,7 +78,15 @@ class Server
      */
     public function __construct()
     {
+
         $this->setting = $this->defaultSetting();
+        if(env("ENABLE_WS",false)){
+            if(static::class != WebsocketServer::class)
+                return ;
+        }else{
+            if(static::class !== HttpServer::class)
+                return;
+        }
         self::$server = $this;
 
     }

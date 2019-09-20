@@ -9,9 +9,15 @@
 namespace Core\Server;
 
 
+use Core\Container\Mapping\Bean;
 use Core\Listener\ReceiveListener;
 use Core\Swoole\SwooleEvent;
 
+/**
+ * Class TcpServer
+ * @package Core\Server
+ * @Bean()
+ */
 class TcpServer implements ServerInterface
 {
 

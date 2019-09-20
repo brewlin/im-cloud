@@ -126,11 +126,6 @@ class App
             return;
         }
         $action = env("APP","start");
-        if(env("ENABLE_WS")){
-            ( new WebsocketServer());
-        }else{
-            (new HttpServer());
-        }
         Cloud::server()->{$action}();
     }
 
@@ -146,7 +141,65 @@ class App
             return false;
         return true;
     }
+    public function restart():bool
+    {
 
+    }
+    public function start():bool
+    {
+        Cloud::server()->start();
+    }
+    /**
+     * @return bool
+     */
+    public function stop(): bool
+    {
+        if(!$this->isRunning()){
+            Console::writeln(sprintf('<error>server is not running now !</error>'));
+            return true;
+        }
+
+        $pid = $this->getPid();
+        if ($pid < 1) {
+            Console::writeln(sprintf('<error>server is not running now !</error>'));
+            return false;
+        }
+
+        // SIGTERM = 15
+        if (ServerHelper::killAndWait($pid, 15)) {
+            Console::writeln(sprintf('<success>server is stop now! send signal %s to pid:%s</success>', 15, $pid));
+            return ServerHelper::removePidFile(Cloud::$app->getPidFile());
+        }
+
+        return false;
+    }
+    /**
+     * Check if the server is running
+     *
+     * @return bool
+     */
+    public function isRunning(): bool
+    {
+        $pidFile = $this->getPidFile();
+
+        // Is pid file exist ?
+        if (file_exists($pidFile)) {
+            // Get pid file content and parse the content
+            $pidFile = file_get_contents($pidFile);
+
+            // Parse and record PIDs
+            [$masterPID, $managerPID] = explode(',', $pidFile);
+            // Format type
+            $masterPID  = (int)$masterPID;
+            $managerPID = (int)$managerPID;
+
+            $this->pidMap['masterPid']  = $masterPID;
+            $this->pidMap['managerPid'] = $managerPID;
+            return $masterPID > 0 && Process::kill($masterPID, 0);
+        }
+
+        return false;
+    }
     /**
      * env path
      * @return string
@@ -156,7 +209,6 @@ class App
     }
     public function initLog()
     {
-//        $format = '%datetime% [%level_name%] [%channel%] [%event%] [tid:%tid%] [cid:%cid%] [traceid:%traceid%] [spanid:%spanid%] [parentid:%parentid%] %messages%';
         $format = '%datetime% [%level_name%] [%channel%] %messages%';
         $dateFormat = 'Y-m-d H:i:s';
         $lineFormatter = new LineFormatter($format,$dateFormat);
@@ -247,57 +299,6 @@ class App
     public function getPidFile()
     {
         return $this->pidFile;
-    }
-    /**
-     * @return bool
-     */
-    public function stop(): bool
-    {
-        if(!$this->isRunning()){
-            Console::writeln(sprintf('<error>server is not running now !</error>'));
-            return true;
-        }
-
-        $pid = $this->getPid();
-        if ($pid < 1) {
-            Console::writeln(sprintf('<error>server is not running now !</error>'));
-            return false;
-        }
-
-        // SIGTERM = 15
-        if (ServerHelper::killAndWait($pid, 15)) {
-            Console::writeln(sprintf('<success>server is stop now! send signal %s to pid:%s</success>', 15, $pid));
-            return ServerHelper::removePidFile(Cloud::$app->getPidFile());
-        }
-
-        return false;
-    }
-    /**
-     * Check if the server is running
-     *
-     * @return bool
-     */
-    public function isRunning(): bool
-    {
-        $pidFile = $this->getPidFile();
-
-        // Is pid file exist ?
-        if (file_exists($pidFile)) {
-            // Get pid file content and parse the content
-            $pidFile = file_get_contents($pidFile);
-
-            // Parse and record PIDs
-            [$masterPID, $managerPID] = explode(',', $pidFile);
-            // Format type
-            $masterPID  = (int)$masterPID;
-            $managerPID = (int)$managerPID;
-
-            $this->pidMap['masterPid']  = $masterPID;
-            $this->pidMap['managerPid'] = $managerPID;
-            return $masterPID > 0 && Process::kill($masterPID, 0);
-        }
-
-        return false;
     }
     /**
      * @param string $name

@@ -89,6 +89,8 @@ class Application extends App implements ApplicationInterface
     {
         Process::signal(SIGTERM,function($signo){
             (new Shutdown())->shutdown();
+            TcpServer::$tcpServer->shutdown();
+            WebsocketServer::$httpServer->shutdown();
             exit;
         });
     }
