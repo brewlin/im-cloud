@@ -6,8 +6,6 @@
  * Time: 下午 4:08
  */
 return [
-    //default process
-    'server' => env("SERVER",\Core\Cloud::Process),
     'setting' => [
         'daemonize' => (int)env("DAEMONIZE", 0),
     ],

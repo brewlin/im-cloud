@@ -191,6 +191,7 @@ class Server
     {
         $masterPid  = $server->master_pid;
         $managerPid = $server->manager_pid;
+        Cloud::$app->setPidMap();
         Cloud::$app->createPidFile($masterPid,$managerPid);
     }
 

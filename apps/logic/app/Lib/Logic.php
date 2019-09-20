@@ -34,14 +34,8 @@ class Logic
                  */
                 $online = container()->get(RedisDao::class)->serverOnline($ser);
             }
-//            $pid = Cloud::server()->getSwooleServer()->worker_pid;
-//            for($i = 0;$i < env("WORKER_NUM",4);$i ++){
-//                if($pid != WorkerStartListener::INIT_LOGIC){
-//                    Cloud::server()->getSwooleServer()->sendMessage(["call" => [Logic::class,"updateOnline"],"arg" => [$online->roomCount]],$i);
-//                }
                 //当前进程则直接更新
                 self::$roomCount = $online->roomCount;
-//            }
 SLEEP:
             Coroutine::sleep(10);
         }

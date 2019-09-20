@@ -123,25 +123,8 @@ class App
      */
     public function serverHandle()
     {
-        if(!$this->checkStart()){
-            $this->handle();
-            return;
-        }
         $action = env("APP","start");
         $this->{$action}();
-    }
-
-    /**
-     * @return bool
-     */
-    public function checkStart():bool
-    {
-        $serverType = isset(config("server")["server"])??"";
-        if(empty($serverType))
-            $serverType = env("SERVER","process");
-        if($serverType == Cloud::Coroutine)
-            return false;
-        return true;
     }
 
     /**
@@ -259,12 +242,11 @@ class App
      * @param int $master
      * @param int $manager
      */
-    public function createPidFile(int $master,int $manager)
+    public function createPidFile(int $master,int $manager,$title = "")
     {
-        $this->setPidMap();
 
         $pidStr = sprintf('%s,%s', $master, $manager);
-        $title  = sprintf('php-%s master process (%s)', env("APP_NAME","im-nil-node"), ROOT);
+        $title  = $title ?? sprintf('php-%s master process (%s)', env("APP_NAME","im-nil-node"), ROOT);
 
         // Save PID to file
         $pidFile = $this->getPidFile();

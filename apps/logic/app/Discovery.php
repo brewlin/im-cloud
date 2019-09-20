@@ -6,39 +6,28 @@
  * Time: 18:30
  */
 
-namespace App\Process;
+namespace App;
 
 
 use App\Lib\CloudClient;
+use Core\Container\Mapping\Bean;
 use Log\Helper\CLog;
 use Log\Helper\Log;
-use Process\Contract\AbstractProcess;
-use Process\Process;
+use Swoole\Coroutine;
 
 /**
- * 自定义进程
  * 1.注册服务
  * 2.定时从服务中心发现服务 并刷新到本地serviceslist
  * Class DiscoveryProcess
  * @package App\Process
+ * @Bean()
  */
-class DiscoveryProcess extends AbstractProcess
+class Discovery
 {
-    public function __construct()
-    {
-        $this->name = "im-logic-discovery";
-    }
-
-    public function check(): bool
-    {
-        return true;
-    }
-
     /**
-     * 自定义子进程 执行入口
-     * @param Process $process
+     * discovery
      */
-    public function run(Process $process)
+    public function run()
     {
         $registerStatus = false;
         //注册失败则一直重试注册到发现中心
@@ -58,7 +47,7 @@ class DiscoveryProcess extends AbstractProcess
             }
             CloudClient::updateService($services);
 SLEEP:
-            sleep(10);
+            Coroutine::sleep(10);
         }
     }
 }

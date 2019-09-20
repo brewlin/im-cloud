@@ -19,18 +19,6 @@ class Cloud
     public static $app;
 
     /**
-     * @var string
-     */
-    const Coroutine = "coroutine";
-
-    /**
-     * @var string
-     */
-    const Process = "process";
-
-
-
-    /**
      * get app server 
      * @return App
      */

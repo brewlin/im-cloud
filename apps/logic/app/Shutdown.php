@@ -6,36 +6,27 @@
  * Time: 下午 5:24
  */
 
-namespace App\Event;
+namespace App;
 
 
-use Co\Context;
-use Core\Co;
 use Core\Console\Console;
-use Core\Context\ContextWaitGroup;
-use Core\Swoole\ShutdownInterface;
 use Log\Helper\Log;
-use Swoole\Coroutine;
-use Swoole\Server as SwooleServer;
 
 /**
  * Class ShutdownListener
  * @package App\Event
  */
-class ShutdownListener implements ShutdownInterface
+class Shutdown
 {
     /**
-     * @param SwooleServer $server
+     * @param
      */
-    public function onShutdown(SwooleServer $server): void
+    public function shutdown(): void
     {
         Log::info("注销 注册中心 im-logic-node 节点");
-        Console::writeln(sprintf('<success>注销 注册中心 im-logic-node 节点 now!</success>'));
+        Console::writeln(sprintf('<success>注销 注册中心 logic-s 节点 now!</success>'));
         //注销节点
-//        Co::create(function (){
-            provider()->select()->deregisterService("grpc-im-logic-node");
-//        });
-//        sleep(10);
+        provider()->select()->deregisterService("grpc-im-logic-node");
 
     }
 

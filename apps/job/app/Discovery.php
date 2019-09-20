@@ -9,6 +9,7 @@
 namespace App;
 
 
+use App\Lib\CloudClient;
 use App\Lib\LogicClient;
 use Core\Cloud;
 use Core\Processor\ProcessorInterface;
@@ -33,25 +34,20 @@ class Discovery
      */
     public function run()
     {
-        $registerStatus = false;
-        while(!$registerStatus){
-            $registerStatus = provider()->select()->registerService();
-            if(!$registerStatus){
-                CLog::error("consul register false sleep 1 sec to reregiseter");
-                Coroutine::sleep(1);
-            }
-        }
+        Log::info("discvoery process start");
+        //job节点无需注册 服务中心
         $config = config("discovery");
-        $discovery = $config["consul"]["discovery"]["name"];
+        $discoveryname = $config["consul"]["discovery"]["name"];
         while (true){
-            $services = provider()->select()->getServiceList($discovery);
+            $services = provider()->select()->getServiceList($discoveryname);
             if(empty($services)){
-                Log::error("not find any instance node:$discovery");
-                LogicClient::updateService([]);
+                Log::error("not find instance node:$discoveryname");
+                CloudClient::updateService([]);
                 goto SLEEP;
             }
-            LogicClient::updateService($services);
-SLEEP:
+            //独立子进程直接sleep阻塞即可
+            CloudClient::updateService($services);
+            SLEEP:
             Coroutine::sleep(5);
         }
     }
