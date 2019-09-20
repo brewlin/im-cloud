@@ -21,6 +21,7 @@
 <a href="https://github.com/swoole/swoole-src">
 <img src="https://camo.githubusercontent.com/936045a17b533972b1519eda85879839d97940ea/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f73776f6f6c652d2533453d342e342e312d627269676874677265656e2e7376673f6d61784167653d32353932303030" alt="Swoole Version" data-canonical-src="https://img.shields.io/badge/swoole-%3E=4.4.1-brightgreen.svg?maxAge=2592000" style="max-width:100%;"></a>
 <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/brewlin/im-cloud">
+<img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/brewlin/im-cloud">
 </p>
 
 基于原生 swoole 全协程化构建 im-cloud中间件，多节点扩容
@@ -40,6 +41,7 @@
 + [`apps`](./apps)单进程全协程化server版本(`single process coroutine`) 
     - `done soon..`
 + [`notice`](./NOTICE.md)
++ [`api`](./API.md)
 
 
 ## 流程图
