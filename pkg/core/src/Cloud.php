@@ -42,8 +42,17 @@ class Cloud
      * get swoole server
      * @return Server
      */
-    public static function server():Server{
+    public static function server():Server
+    {
         return Server::getServer();
+    }
+    /**
+     * @return \Swoole\Server
+     */
+    public static function swooleServer():\Swoole\Server
+    {
+        return self::server()->getSwooleServer();
+
     }
 
 }

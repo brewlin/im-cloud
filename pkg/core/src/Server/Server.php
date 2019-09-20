@@ -9,6 +9,7 @@
 namespace Core\Server;
 
 
+use Core\App;
 use Core\Cloud;
 use Core\Console\Console;
 use Core\Container\Container;
@@ -47,20 +48,9 @@ class Server
      * @var string
      */
     protected $pidName = "php-im-";
-
     /**
-     * Record started server PIDs and with current workerId
-     *
-     * @var array
+     * @return Server
      */
-    private $pidMap = [
-        'masterPid'  => 0,
-        'managerPid' => 0,
-        // if = 0, current is at master/manager process.
-        'workerPid'  => 0,
-        // if < 0, current is at master/manager process.
-        'workerId'   => -1,
-    ];
     public static function getServer():?Server
     {
         return self::$server;
@@ -191,103 +181,6 @@ class Server
     }
 
     /**
-     * @param bool $onlyTaskWorker
-     *
-     * @return bool
-     */
-    public function reload(bool $onlyTaskWorker = false): bool
-    {
-        if(!$this->isRunning()){
-            Console::writeln(sprintf('<error>server is not running now !</error>'));
-            return false;
-        }
-        if (($pid = $this->pidMap['masterPid']) < 1) {
-            Console::writeln(sprintf('<error>server is not running now !</error>'));
-            return false;
-        }
-
-        // SIGUSR1(10):
-        //  Send a signal to the management process that will smoothly restart all worker processes
-        // SIGUSR2(12):
-        //  Send a signal to the management process, only restart the task process
-        $signal = $onlyTaskWorker ? 12 : 10;
-        Console::writeln(sprintf('<success>server is reload now! send signal %s to pid:%s</success>', $signal, $pid));
-
-        return ServerHelper::sendSignal($pid, $signal);
-    }
-
-    /**
-     * @return bool
-     */
-    public function restart():bool
-    {
-        $this->stop();
-        Console::writeln(sprintf('<success>start the server now!</success>'));
-        $this->start();
-    }
-    /**
-     * @return bool
-     */
-    public function stop(): bool
-    {
-        if(!$this->isRunning()){
-            Console::writeln(sprintf('<error>server is not running now !</error>'));
-            return true;
-        }
-
-        $pid = $this->getPid();
-        if ($pid < 1) {
-            Console::writeln(sprintf('<error>server is not running now !</error>'));
-            return false;
-        }
-
-        // SIGTERM = 15
-        if (ServerHelper::killAndWait($pid, 15, $this->pidName)) {
-            Console::writeln(sprintf('<success>server is stop now! send signal %s to pid:%s</success>', 15, $pid));
-            return ServerHelper::removePidFile(Cloud::$app->getPidFile());
-        }
-
-        return false;
-    }
-
-    /**
-     * Check if the server is running
-     *
-     * @return bool
-     */
-    public function isRunning(): bool
-    {
-        $pidFile = Cloud::$app->getPidFile();
-
-        // Is pid file exist ?
-        if (file_exists($pidFile)) {
-            // Get pid file content and parse the content
-            $pidFile = file_get_contents($pidFile);
-
-            // Parse and record PIDs
-            [$masterPID, $managerPID] = explode(',', $pidFile);
-            // Format type
-            $masterPID  = (int)$masterPID;
-            $managerPID = (int)$managerPID;
-
-            $this->pidMap['masterPid']  = $masterPID;
-            $this->pidMap['managerPid'] = $managerPID;
-
-            return $masterPID > 0 && Process::kill($masterPID, 0);
-        }
-
-        return false;
-    }
-    /**
-     * @param string $name
-     *
-     * @return int
-     */
-    public function getPid(string $name = 'masterPid'): int
-    {
-        return $this->pidMap[$name] ?? 0;
-    }
-    /**
      * On master start event
      *
      * @param SwooleServer $server
@@ -296,41 +189,11 @@ class Server
      */
     public function onStart(SwooleServer $server): void
     {
-        // Save PID to property
-        $this->setPidMap($server);
-
         $masterPid  = $server->master_pid;
         $managerPid = $server->manager_pid;
-
-        $pidStr = sprintf('%s,%s', $masterPid, $managerPid);
-        $title  = sprintf('php-%s master process (%s)', env("APP_NAME","im-nil-node"), ROOT);
-
-        // Save PID to file
-        $pidFile = Cloud::$app->getPidFile();
-        Dir::make(dirname($pidFile));
-        file_put_contents($pidFile, $pidStr);
-        // Set process title
-        Sys::setProcessTitle($title);
-
-        // Update setting property
-//        $this->setSetting($server->setting);
-
+        Cloud::$app->createPidFile($masterPid,$managerPid);
     }
-    /**
-     * Set pid map
-     *
-     * @param SwooleServer $server
-     */
-    protected function setPidMap(SwooleServer $server): void
-    {
-        if ($server->master_pid > 0) {
-            $this->pidMap['masterPid'] = $server->master_pid;
-        }
 
-        if ($server->manager_pid > 0) {
-            $this->pidMap['managerPid'] = $server->manager_pid;
-        }
-    }
 
     /**
      * Manager start event
@@ -338,11 +201,7 @@ class Server
      */
     public function onManagerStart(SwooleServer $server): void
     {
-//        CLog::info("swoole manage  process pid: {$server->manager_pid} is start");
-        // Server pid map
-        $this->setPidMap($server);
-        // Set process title
-//        Sys::setProcessTitle(sprintf('%s manager process (%s)', $this->pidName.env("APP_NAME"),ROOT));
+        Cloud::$app->setPidMap();
         Sys::setProcessTitle(sprintf('php-%s manager process (%s)',env("APP_NAME","im-nil-node"),ROOT));
     }
 
@@ -364,8 +223,8 @@ class Server
     {
         CLog::info("swoole worker process pid:{$server->worker_pid} is start");
         // Save PID and workerId
-        $this->pidMap['workerId']  = $workerId;
-        $this->pidMap['workerPid'] = $server->worker_pid;
+        App::$pidMap['workerId']  = $workerId;
+        App::$pidMap['workerPid'] = $server->worker_pid;
     }
 
     /**
