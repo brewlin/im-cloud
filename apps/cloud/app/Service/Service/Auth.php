@@ -44,17 +44,12 @@ class Auth
         //check data
         $this->checkAuth($packet);
         //grpc - register to logic node
-        try{
-            //step 1
-            [$mid,$key,$roomId,$accepts,$heartbeat] = $this->registerLogic($body);
-            //step 2
-            \bean(Bucket::class)->push($key,$fd,$mid,$roomId);
-            //step 3
-            $this->registerSuccess();
-        }catch (\Throwable $e){
-            Log::error("auth error fd:$fd {$e->getMessage()}");
-            throw $e;
-        }
+        //step 1
+        [$mid,$key,$roomId,$accepts,$heartbeat] = $this->registerLogic($body);
+        //step 2
+        \bean(Bucket::class)->push($key,$fd,$mid,$roomId);
+        //step 3
+        $this->registerSuccess();
     }
     /**
      * step 1

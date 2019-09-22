@@ -11,7 +11,6 @@ use App\Connection\Connection;
 use App\Lib\LogicClient;
 use App\Packet\Packet;
 use App\Packet\Protocol;
-use App\Packet\Task;
 use App\Service\Dao\Bucket;
 use App\Service\Dao\Push;
 use Core\Cloud;
@@ -42,7 +41,7 @@ class Heartbeat
         $server = LogicClient::getLogicClient();
         if(empty($server))
             throw  new \Exception("not find any logic node");
-        \bean(Task::class)->deliver(Heartbeat::class,"heartbeatLogic",[$server,$fd]);
+        $this->heartbeatLogic($server,$fd);
 
         /** @var Push $push */
         $push = \bean(Push::class);
@@ -54,7 +53,7 @@ class Heartbeat
      * step 2
      * @param int $fd
      */
-    public static function heartbeatLogic(string $grpcServer ,int $fd)
+    public  function heartbeatLogic(string $grpcServer ,int $fd)
     {
         /** @var Connection $conn */
         $conn  = \bean(\App\Connection\Bucket::class)->get($fd);

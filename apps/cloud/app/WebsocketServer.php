@@ -97,7 +97,7 @@ class WebsocketServer implements ApplicationInterface
             }
             try {
                 Log::info("fd:{$conn->getFd()} data:{$data->data}");
-                $this->dispatch($data);
+                $this->dispatch($data,$conn);
             } catch (\Throwable $e) {
                 Log::error(
                     sprintf("file:%s line:%s code:%s msg:%s",
@@ -121,12 +121,12 @@ class WebsocketServer implements ApplicationInterface
      * @param Frame $frame
      * @throws \Exception
      */
-    public function dispatch(Frame $frame)
+    public function dispatch(Frame $frame,Con $conn)
     {
         /** @var Packet $packet */
         $packet = bean(Packet::class)->unpack($frame->data);
         Context::withValue(Packet::class,$packet);
-        Context::withValue("fd",$frame->fd);
+        Context::withValue("fd",$conn->getFd());
 
         //dispatch
         container()->get(Dispatcher::class)

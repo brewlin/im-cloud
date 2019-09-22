@@ -7,7 +7,7 @@
  */
 
 namespace App\Connection;
-use App\cloud\app\Service\Service\Disconnect;
+use App\Service\Service\Disconnect;
 use Core\Container\Mapping\Bean;
 
 /**
@@ -107,7 +107,7 @@ class Bucket
         if(empty($key)||empty($mid))return;
         $this->pop($key,$fd);
         //grpc disconnect
-        go([\bean(Disconnect::class),"disconnect"],[$mid,$key]);
+        \bean(Disconnect::class)->disconnect($mid,$key);
     }
 
     /**

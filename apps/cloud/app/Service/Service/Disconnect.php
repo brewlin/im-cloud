@@ -6,7 +6,7 @@
  * Time: 下午 2:52
  */
 
-namespace App\cloud\app\Service\Service;
+namespace App\Service\Service;
 
 use Core\Container\Mapping\Bean;
 use Grpc\Client\GrpcLogicClient;
