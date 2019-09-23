@@ -7,4 +7,4 @@ FROM brewlin/im-cloud-base
 
 ADD . /website/im-cloud
 
-ENTRYPOINT ["php", "/website/im-cloud/app/job/bin/app","--start","--log=true","--debug"]
+ENTRYPOINT ["php", "/website/im-cloud/appm/job/bin/app","--start","--log=true","--debug"]
