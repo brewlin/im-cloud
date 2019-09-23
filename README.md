@@ -41,7 +41,7 @@
 + [`appm`](./appm)多进程版本(`multi process coroutine`) 测试和单元测试中
     - `test version` 
 + [`apps`](./apps)单进程全协程化server版本(`single process coroutine`) 
-    - `done soon..`
+    - 分支`apps` 待官方实现http2协议,暂取消合并到master
 + [`notice`](./NOTICE.md)
 + [`api`](./API.md)
 
