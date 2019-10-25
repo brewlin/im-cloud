@@ -1,5 +1,5 @@
 <p align="center">
-    <a href="https://github.com/brewlin/im-cloud" target="_blank">
+    <a href="http://docs.huido.site/wiki/im-cloud/index/" target="_blank">
         <img src="https://github.com/brewlin/im-cloud/blob/master/resource/im-logo.png?raw=true" alt="im-cloud"/>
     </a>
 </p>
