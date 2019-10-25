@@ -1,10 +1,10 @@
 <p align="center">
-    <a href="http://docs.huido.site/wiki/im-cloud/index/" target="_blank">
+    <a href="https://github.com/brewlin/im-cloud" target="_blank">
         <img src="https://github.com/brewlin/im-cloud/blob/master/resource/im-logo.png?raw=true" alt="im-cloud"/>
     </a>
 </p>
 <p>
-  <a href="https://github.com/brewlin/im-cloud">
+  <a href="http://docs.huido.site/wiki/im-cloud/index/">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" target="_blank" />
   </a>
   <a href="https://github.com/brewlin/im-cloud/LICENSE">
