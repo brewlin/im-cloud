@@ -1,0 +1,19 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Created by PhpStorm.
+ * User: brewlin
+ * Date: 2019/6/12 0012
+ * Time: 下午 2:48
+ */
+
+require_once dirname(__DIR__) . '/vendor/autoload.php';
+define("ROOT",dirname(__DIR__));
+
+\Swoole\Runtime::enableCoroutine();
+
+Swoole\Coroutine::set([
+    'max_coroutine' => 300000,
+]);
+// Run application
+(new \App\Application())->run();
