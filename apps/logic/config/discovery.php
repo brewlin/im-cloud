@@ -16,7 +16,7 @@ return [
             'Check'             => [
                 'id'       => '',
                 'name'     => '',
-                'http'      => "http://127.0.0.1:".env('HTTP_PORT',9600)."/health",
+                'http'      => "http://127.0.0.1:".env('DISCOVERY_CHECK_PORT',9600)."/health",
                 'interval' => "10s",
                 'timeout'  => "10s",
             ],

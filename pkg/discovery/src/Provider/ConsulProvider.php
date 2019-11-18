@@ -203,7 +203,7 @@ class ConsulProvider implements ProviderInterface
         }
         $hostName = gethostname();
         if(empty($register['ID'])){
-            $register['ID'] = sprintf('service-%s-%s', $register["Name"], $hostName);
+            $register['ID'] = sprintf('service-%s-%s-%s', $register["Name"], $hostName,$config["port"]);
         }
         $this->address = $config["address"];
         $this->port = $config["port"];
@@ -364,7 +364,7 @@ class ConsulProvider implements ProviderInterface
      */
     private function getServiceId(string $service):string
     {
-        return "service-{$service}-".gethostname();
+        return "service-{$service}-".gethostname()."-".env("GRPC_PORTGRPC_PORT",9500);
     }
 
     /**

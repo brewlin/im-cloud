@@ -16,7 +16,7 @@ return [
             'Check'             => [
                 'id'       => '',
                 'name'     => '',
-                'http'      => "http://127.0.0.1:".env('GRPC_PORT',9500)."/health",
+                'http'      => "http://127.0.0.1:".env('DISCOVERY_CHECK_PORT',9500)."/health",
                 'interval' => "10s",
                 'timeout'  => "10s",
             ],
