@@ -48,7 +48,9 @@ class PushMidController extends BaseController
         /**
          * @var LogicPush
          */
-        Task::deliver(LogicPush::class,"pushMids",[(int)$arg["op"],$arg["mids"],$arg["msg"]]);
+        Co::create(function ()use($arg){
+            LogicPush::pushMids((int)$arg["op"],$arg["mids"],$arg["msg"]);
+        });
     }
 
 }

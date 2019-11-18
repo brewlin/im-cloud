@@ -8,6 +8,7 @@
 
 namespace App\Api;
 use App\Task\LogicPush;
+use Core\Co;
 use Core\Container\Mapping\Bean;
 use Core\Context\Context;
 use Task\Task;
@@ -42,7 +43,9 @@ class PushKeyController extends BaseController
         /**
          * @var LogicPush
          */
-        Task::deliver(LogicPush::class,"pushKeys",[(int)$arg["op"],$arg["keys"],$arg["msg"]]);
+        Co::create(function()use($arg){
+            LogicPush::pushKeys((int)$arg["op"],$arg["keys"],$arg["msg"]);
+        });
     }
 
 }

@@ -83,7 +83,8 @@ class Cloud
         foreach ($keys as $key){
 //            Coroutine::create(function ()use($key,$body,$op){
                     /** @var Task $task */
-                    \bean(Task::class)->deliver(Push::class,"push",[$key,$op,$body]);
+//                    \bean(Task::class)->deliver(Push::class,"push",[$key,$op,$body]);
+            Push::push($key,$op,$body);
 //            });
         }
 

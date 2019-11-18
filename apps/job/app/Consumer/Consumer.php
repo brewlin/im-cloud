@@ -44,7 +44,9 @@ class Consumer extends ConsumerMessage
 //            return Result::REQUEUE;
             return Result::DROP;
         }
-        Task::deliver(Job::class,"push",[$data]);
+        Co::create(function ()use($data){
+            Job::push($data);
+        });
         return Result::ACK;
     }
 
