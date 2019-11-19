@@ -96,6 +96,11 @@ class ConsulProvider implements ProviderInterface
      * @var array
      */
     private $discoveryParam;
+    /**
+     * register service id
+     * @var string
+     */
+    const ServerId = "service-%s-%s-%s";
 
     /**
      * get service list
@@ -127,7 +132,7 @@ class ConsulProvider implements ProviderInterface
         $nodes = [];
         foreach ($services as $service) {
             if (!isset($service['Service'])) {
-                Log::warning("consul[Service] 服务健康节点集合，数据格式不不正确，Data=" . $result);
+                Log::warning("consul[Service] 服务健康节点集合，数据格式不不正确，Data=" . $service);
                 continue;
             }
             $serviceInfo = $service['Service'];
@@ -203,7 +208,7 @@ class ConsulProvider implements ProviderInterface
         }
         $hostName = gethostname();
         if(empty($register['ID'])){
-            $register['ID'] = sprintf('service-%s-%s-%s', $register["Name"], $hostName,$config["port"]);
+            $register['ID'] = sprintf('service-%s-%s-%s', $register["Name"], $hostName,$register["Port"]);
         }
         $this->address = $config["address"];
         $this->port = $config["port"];
@@ -364,7 +369,7 @@ class ConsulProvider implements ProviderInterface
      */
     private function getServiceId(string $service):string
     {
-        return "service-{$service}-".gethostname()."-".env("GRPC_PORTGRPC_PORT",9500);
+        return sprintf(self::ServerId,$service,gethostname(),$this->registerPort);
     }
 
     /**

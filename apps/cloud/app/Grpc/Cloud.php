@@ -9,10 +9,10 @@
 namespace App\Grpc;
 
 
+use App\Connection\Bucket;
 use App\Service\Dao\Broadcast;
 use App\Packet\Task;
 use App\Service\Dao\BroadcastRoom;
-use App\Service\Dao\Bucket;
 use App\Service\Dao\Push;
 use App\Service\Dao\Room;
 use Core\Co;
@@ -146,7 +146,7 @@ class Cloud
     public function rooms()
     {
         $roomRpy = new RoomsReply();
-        $roomids = Bucket::buckets();
+        $roomids = \bean(Bucket::class)->buckets();
         $roomRpy->setRooms($roomids);
         return Context::get()->getResponse()
                              ->withContent(

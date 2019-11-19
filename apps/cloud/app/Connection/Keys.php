@@ -23,10 +23,13 @@ class Keys
     private $keys = [];
 
     /**
-     * @return array
+     * @return int|bool
      */
-    public function getFd(string $key): array
+    public function getFd(string $key)
     {
+        if(!isset($this->keys[$key])){
+            return false;
+        }
         return $this->keys[$key];
     }
 

@@ -15,6 +15,7 @@ use App\Packet\Protocol;
 use Core\Cloud;
 use Core\Container\Mapping\Bean;
 use Log\Helper\Log;
+use \App\Connection\Bucket;
 
 /**
  * Class Push
@@ -30,7 +31,7 @@ class Push
     public function push(string $key,int $op,$body)
     {
         Log::info("Cloud push:{$key}  data:".json_encode($body));
-        if(!($fd = Bucket::fd($key))) return;
+        if(!($fd = (\bean(Bucket::class)->fd($key))))return;
 
         self::pushFd($fd,$op,$body);
     }
