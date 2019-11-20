@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package im.cloud;
+
+
+/*
+ * v1.0.0
+ * protocol
+ */
+message Proto {
+    int32 ver = 1 ;
+    int32 op = 2 ;
+    int32 seq = 3;
+    bytes body = 4 ;
+}
+
+message Empty{}
+
+message PushMsgReq {
+    repeated string keys = 1;
+    int32 protoOp = 3;
+    Proto proto = 2;
+}
+
+message PushMsgReply {}
+
+message BroadcastReq{
+    int32 protoOp = 1;
+    Proto proto = 2;
+    int32 speed = 3;
+}
+
+message BroadcastReply{}
+
+message BroadcastRoomReq {
+    string roomID = 1;
+    Proto proto = 2;
+}
+
+message BroadcastRoomReply{}
+
+message RoomsReq{}
+
+message RoomsReply {
+    map<string,bool> rooms = 1;
+}
+
+service Cloud {
+    // Ping Service
+    rpc Ping(Empty) returns(Empty);
+    // Close Service
+    rpc CClose(Empty) returns(Empty);
+    //PushMsg push by key or mid
+    rpc PushMsg(PushMsgReq) returns (PushMsgReply);
+    // Broadcast send to every enrity
+    rpc Broadcast(BroadcastReq) returns (BroadcastReply);
+    // BroadcastRoom broadcast to one room
+    rpc BroadcastRoom(BroadcastRoomReq) returns (BroadcastRoomReply);
+    // Rooms get all rooms
+    rpc Rooms(RoomsReq) returns (RoomsReply);
+}
