@@ -123,11 +123,11 @@ service Logic {
 	//ServerList
 	rpc Nodes(NodesReq) returns (NodesReply);
     //PushMsg push by key or mid
-    rpc PushMsg(cloud.PushMsgReq) returns (cloud.PushMsgReply);
+    rpc PushMsg(PushMsgReq) returns (PushMsgReply);
     // Broadcast send to every enrity
-    rpc Broadcast(cloud.BroadcastReq) returns (cloud.BroadcastReply);
+    rpc Broadcast(BroadcastReq) returns (BroadcastReply);
     // BroadcastRoom broadcast to one room
-    rpc BroadcastRoom(cloud.BroadcastRoomReq) returns (cloud.BroadcastRoomReply);
+    rpc BroadcastRoom(BroadcastRoomReq) returns (BroadcastRoomReply);
     // Rooms get all rooms
-    rpc Rooms(cloud.RoomsReq) returns (cloud.RoomsReply);
+    rpc Rooms(RoomsReq) returns (RoomsReply);
 }
