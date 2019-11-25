@@ -29,7 +29,7 @@ class LogicPush
      * @param $msg
      * @throws \Exception
      */
-    public function pushKeys(int $op,array $keys,$msg)
+    public static function pushKeys(int $op,array $keys,$msg)
     {
 //        Co::create(function()use($op,$keys,$msg){
             /** @var RedisDao $servers */
@@ -53,7 +53,7 @@ class LogicPush
      * @param $msg
      * @throws \Exception
      */
-    public function pushMids(int $op,array $mids,$msg)
+    public static function pushMids(int $op,array $mids,$msg)
     {
 //        Co::create(function ()use($op,$mids,$msg){
             /** @var RedisDao $servers */
@@ -78,7 +78,7 @@ class LogicPush
      * @param $msg
      * @throws \Exception
      */
-    public function pushRoom(int $op,$type,$room,$msg)
+    public static function pushRoom(int $op,$type,$room,$msg)
     {
         Co::create(function ()use($op,$type,$room,$msg){
             \container()
@@ -93,7 +93,7 @@ class LogicPush
      * @param int $speed
      * @param $msg
      */
-    public function pushAll(int $op,$msg)
+    public static function pushAll(int $op,$msg)
     {
         \container()
             ->get(QueueDao::class)

@@ -37,7 +37,7 @@ class PushAllController extends BaseController
             "op" => $post["operation"],
             "msg" => $post["msg"]
         ];
-        Task::deliver(LogicPush::class,"pushAll",[(int)$arg['op'],$arg['msg']]);
+        LogicPush::pushAll((int)$arg['op'],$arg['msg']);
     }
 
 }

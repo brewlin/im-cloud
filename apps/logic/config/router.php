@@ -12,6 +12,13 @@ HttpRouter::post('/im.logic.Logic/Disconnect', '/Grpc/Logic/disConnect');
 HttpRouter::post('/im.logic.Logic/Heartbeat', '/Grpc/Logic/heartBeat');
 HttpRouter::post('/im.logic.Logic/RenewOnline', '/Grpc/Logic/renewOnline');
 
+//---- push
+HttpRouter::post('/im.logic.Logic/PushKeys', '/Grpc/LogicPush/pushKeys');
+HttpRouter::post('/im.logic.Logic/PushMids', '/Grpc/LogicPush/pushMids');
+HttpRouter::post('/im.logic.Logic/PushAll', '/Grpc/LogicPush/pushAll');
+HttpRouter::post('/im.logic.Logic/PushRoom', '/Grpc/LogicPush/pushRoom');
+
+
 //consul health check
 HttpRouter::get("/health","/Api/HealthController/health");
 
