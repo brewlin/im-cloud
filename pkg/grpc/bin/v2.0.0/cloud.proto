@@ -44,6 +44,55 @@ message RoomsReq{}
 message RoomsReply {
     map<string,bool> rooms = 1;
 }
+enum Operation {
+    option allow_alias = true;
+	// OpHandshake handshake
+	OpHandshake = 0;
+	// OpHandshakeReply handshake reply
+	OpHandshakeReply = 1;
+
+	// OpHeartbeat heartbeat
+	OpHeartbeat = 2;
+	// OpHeartbeatReply heartbeat reply
+	OpHeartbeatReply = 3;
+
+	// OpSendMsg send message.
+	OpSendMsg = 4;
+	// OpSendMsgReply  send message reply
+	OpSendMsgReply = 5;
+
+	// OpDisconnectReply disconnect reply
+	OpDisconnectReply = 6;
+
+	// OpAuth auth connnect
+	OpAuth = 7;
+	// OpAuthReply auth connect reply
+	OpAuthReply = 8;
+
+	// OpRaw raw message
+	OpRaw = 9;
+
+	// OpProtoReady proto ready
+	OpProtoReady = 10;
+	// OpProtoFinish proto finish
+	OpProtoFinish = 1;
+
+	// OpChangeRoom change room
+	OpChangeRoom = 12;
+	// OpChangeRoomReply change room reply
+	OpChangeRoomReply = 13;
+
+	// OpSub subscribe operation
+	OpSub = 14;
+	// OpSubReply subscribe operation
+	OpSubReply = 15;
+
+	// OpUnsub unsubscribe operation
+	OpUnsub = 16;
+	// OpUnsubReply unsubscribe operation reply
+	OpUnsubReply = 17;
+
+}
 
 service Cloud {
     // Ping Service
