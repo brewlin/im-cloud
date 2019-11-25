@@ -1,4 +1,4 @@
-## grpc proto build
+## windows grpc proto build
 
 ```$xslt
 sh gen.sh
