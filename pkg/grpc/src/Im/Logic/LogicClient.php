@@ -128,4 +128,60 @@ class LogicClient extends \Grpc\BaseStub {
         $metadata, $options);
     }
 
+    /**
+     * PushKeys push by key
+     * @param \Im\Logic\PushKeysReq $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     */
+    public function PushKeys(\Im\Logic\PushKeysReq $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/im.logic.Logic/PushKeys',
+        $argument,
+        ['\Im\Logic\PushKeysReply', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * PushMids push by mids
+     * @param \Im\Logic\PushMidsReq $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     */
+    public function PushMids(\Im\Logic\PushMidsReq $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/im.logic.Logic/PushMids',
+        $argument,
+        ['\Im\Logic\PushMidsReply', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * BroadcastRoom broadcast to one room
+     * @param \Im\Logic\PushRoomReq $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     */
+    public function PushRoom(\Im\Logic\PushRoomReq $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/im.logic.Logic/PushRoom',
+        $argument,
+        ['\Im\Logic\PushRoomReply', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * Boradcast broadcast all of the server
+     * @param \Im\Logic\PushAllReq $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     */
+    public function PushAll(\Im\Logic\PushAllReq $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/im.logic.Logic/PushAll',
+        $argument,
+        ['\Im\Logic\PushAllReply', 'decode'],
+        $metadata, $options);
+    }
+
 }

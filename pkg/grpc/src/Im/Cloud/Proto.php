@@ -9,7 +9,7 @@ use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
- * v1.0.0
+ * v2.0.0
  * protocol
  *
  * Generated from protobuf message <code>im.cloud.Proto</code>
