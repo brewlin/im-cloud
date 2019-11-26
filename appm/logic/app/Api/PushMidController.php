@@ -17,6 +17,7 @@ use Core\Cloud;
 use Core\Co;
 use Core\Container\Mapping\Bean;
 use Core\Context\Context;
+use Im\Cloud\Operation;
 use Log\Helper\Log;
 use Swoole\Coroutine;
 use Task\Task;
@@ -35,12 +36,11 @@ class PushMidController extends BaseController
     public function mids()
     {
         $post  = Context::get()->getRequest()->input();
-        if(empty($post["operation"]) || empty($post["mids"]) ||empty($post["msg"])){
+        if( empty($post["mids"]) ||empty($post["msg"])){
             return $this->error("缺少参数");
         }
         $this->end();
         $arg = [
-            "op" => $post["operation"],
             "mids" => is_array($post["mids"])?$post["mids"]:[$post["mids"]],
             "msg" => $post["msg"]
         ];
@@ -48,7 +48,7 @@ class PushMidController extends BaseController
         /**
          * @var LogicPush
          */
-        Task::deliver(LogicPush::class,"pushMids",[(int)$arg["op"],$arg["mids"],$arg["msg"]]);
+        Task::deliver(LogicPush::class,"pushMids",[Operation::OpRaw,$arg["mids"],$arg["msg"]]);
     }
 
 }

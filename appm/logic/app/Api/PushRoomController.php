@@ -12,6 +12,7 @@ namespace App\Api;
 use App\Task\LogicPush;
 use Core\Container\Mapping\Bean;
 use Core\Context\Context;
+use Im\Cloud\Operation;
 use Task\Task;
 
 /**
@@ -27,18 +28,17 @@ class PushRoomController extends BaseController
      */
     public function room(){
         $post  = Context::get()->getRequest()->input();
-        if(empty($post["operation"]) || empty($post["room"]) || empty($post["type"]) | empty($post['msg'])){
+        if(empty($post["room"]) || empty($post["type"]) | empty($post['msg'])){
             return $this->error("缺少参数");
         }
         $this->end();
         $arg = [
-            "op" => $post["operation"],
             "type" => $post["type"],
             "room" => $post["room"],
             'msg' => $post['msg']
         ];
         /** Task::deliver */
-        Task::deliver(LogicPush::class,"pushRoom",[(int)$arg['op'],$arg['type'],$arg['room'],$arg['msg']]);
+        Task::deliver(LogicPush::class,"pushRoom",[Operation::OpRaw,$arg['type'],$arg['room'],$arg['msg']]);
     }
 
 }

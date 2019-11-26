@@ -1,0 +1,2 @@
+#11.26
+    - http api 去除operation参数，默认为Operation::Opraw 推送参数

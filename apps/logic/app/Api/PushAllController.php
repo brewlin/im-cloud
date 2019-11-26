@@ -12,6 +12,7 @@ namespace App\Api;
 use App\Task\LogicPush;
 use Core\Container\Mapping\Bean;
 use Core\Context\Context;
+use Im\Cloud\Operation;
 use ImQueue\Amqp\Consumer;
 use Task\Task;
 
@@ -29,15 +30,12 @@ class PushAllController extends BaseController
     public function all()
     {
         $post  = Context::get()->getRequest()->input();
-        if(empty($post["operation"])){
+        if(empty($post["msg"])){
             return $this->error("缺少参数");
         }
         $this->end();
-        $arg = [
-            "op" => $post["operation"],
-            "msg" => $post["msg"]
-        ];
-        LogicPush::pushAll((int)$arg['op'],$arg['msg']);
+        $msg = $post['msg'];
+        LogicPush::pushAll(Operation::OpRaw,$msg);
     }
 
 }

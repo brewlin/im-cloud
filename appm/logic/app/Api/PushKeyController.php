@@ -10,6 +10,7 @@ namespace App\Api;
 use App\Task\LogicPush;
 use Core\Container\Mapping\Bean;
 use Core\Context\Context;
+use Im\Cloud\Operation;
 use Task\Task;
 
 /**
@@ -30,19 +31,18 @@ class PushKeyController extends BaseController
     public function keys()
     {
         $post  = Context::get()->getRequest()->input();
-        if(empty($post["operation"]) || empty($post["keys"])){
+        if(empty($post["msg"]) || empty($post["keys"])){
             return $this->error("缺少参数");
         }
         $this->end();
         $arg = [
-            "op" => $post["operation"],
             "keys" => is_array($post["keys"])?$post["keys"]:[$post["keys"]],
             "msg" => $post["msg"]
         ];
         /**
          * @var LogicPush
          */
-        Task::deliver(LogicPush::class,"pushKeys",[(int)$arg["op"],$arg["keys"],$arg["msg"]]);
+        Task::deliver(LogicPush::class,"pushKeys",[Operation::OpRaw,$arg["keys"],$arg["msg"]]);
     }
 
 }
