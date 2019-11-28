@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: brewlin
  * Date: 2019/8/2 0002
- * Time: 下午 6:08
+ * Time: 下坈 6:08
  */
 
 namespace App\Service\Service;
@@ -42,6 +42,9 @@ class Dispatcher
             case Operation::OpHeartbeat:
                 container()->get(Heartbeat::class)
                            ->heartbeat();
+                break;
+            //grpc push
+            case Operation::OpRaw:
                 break;
             default:
         }
