@@ -45,6 +45,7 @@ class Dispatcher
                 break;
             //grpc push
             case Operation::OpRaw:
+                \bean(Push::class)->push();
                 break;
             default:
         }

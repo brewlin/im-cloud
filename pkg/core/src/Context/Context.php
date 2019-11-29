@@ -89,11 +89,12 @@ class Context
         self::$contextArg[$tid][$key] = $value;
     }
 
+    const DefaultVal = "fd";
     /**
      * @param string $key
      * @return mixed
      */
-    public static function value(string $key)
+    public static function value(string $key = self::DefaultVal)
     {
         $tid = Co::tid();
         if(isset(self::$contextArg[$tid]) && isset(self::$contextArg[$tid][$key]))
