@@ -55,7 +55,7 @@ class LogicClient
             Log::error("not logic node find");
             return false;
         }
-
+        //grpc 请求负载均衡
         $node = \bean(RandomBalancer::class)->select(self::$table->getKeys());
         return $node;
     }

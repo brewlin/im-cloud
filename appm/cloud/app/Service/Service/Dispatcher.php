@@ -44,7 +44,7 @@ class Dispatcher
                            ->heartbeat();
                 break;
             case Operation::OpRaw:
-                // \container()->get()
+                \bean(Push::class)->push();
                 break;
             default:
         }
