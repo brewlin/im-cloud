@@ -5,6 +5,9 @@
     const verOffset = 6;
     const opOffset = 8;
     const seqOffset = 12;
+    const heartOp = 2 ;
+    const authOp = 7;
+    const pushOp = 9;
     const wsurl = "ws://127.0.0.1:9500/sub";
     // const wsurl = "ws://192.168.199.183:9500/sub";
     // const wsurl = "ws://www.huido.site:9500/sub";
@@ -108,35 +111,31 @@
 
                 document.getElementById("status").innerHTML =  "<color style='color:red'>failed<color>";
             }
-
-            function heartbeat() {
-                var hm = '{"type":"heartbeat"}';
+            function push(msg ,type,tips){
                 var headerBuf = new ArrayBuffer(rawHeaderLen);
                 var headerView = new DataView(headerBuf, 0);
-                var bodybuf = textEncoder.encode(hm);
+                var bodybuf = textEncoder.encode(msg);
                 headerView.setInt32(packetOffset, rawHeaderLen + bodybuf.byteLength);
                 headerView.setInt16(headerOffset, rawHeaderLen);
                 headerView.setInt16(verOffset, 1);
-                headerView.setInt32(opOffset, 2);
+                headerView.setInt32(opOffset, type);
                 headerView.setInt32(seqOffset, 1);
                 ws.send(mergeArrayBuffer(headerBuf,bodybuf));
-                console.log("send: heartbeat");
-                appendMsg("send: heartbeat");
+                console.log(tips);
+                appendMsg(tips);
+            }
+            function pushMsg(msg) {
+                push(msg,pushOp,"push msg")
+            }
+            function heartbeat() {
+                var hm = '{"type":"heartbeat"}';
+                var tips = "send: heartbeat";
+                push(hm,heartOp,tips)
             }
 
             function auth() {
                 var token = '{"mid":123, "room_id":"live://1000", "platform":"web", "accepts":[1000,1001,1002]}'
-                var headerBuf = new ArrayBuffer(rawHeaderLen);
-                var headerView = new DataView(headerBuf, 0);
-                var bodyBuf = textEncoder.encode(token);
-                headerView.setInt32(packetOffset, rawHeaderLen + bodyBuf.byteLength);
-                headerView.setInt16(headerOffset, rawHeaderLen);
-                headerView.setInt16(verOffset, 1);
-                headerView.setInt32(opOffset, 7);
-                headerView.setInt32(seqOffset, 1);
-                ws.send(mergeArrayBuffer(headerBuf, bodyBuf));
-
-                appendMsg("send: auth token: " + token);
+                push(token,authOp,"send: auth token: " + token)
             }
 
             function messageReceived(ver, body) {
