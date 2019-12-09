@@ -124,13 +124,15 @@
                 console.log(tips);
                 appendMsg(tips);
             }
-            function pushMsg(msg) {
-                push(msg,pushOp,"push msg")
+            function pushMsg() {
+                var msgjs = '{"cmd":"pushMids","data":{"msg":"push from js","mids":123}}';
+                push(msgjs,pushOp,"push msg")
             }
             function heartbeat() {
                 var hm = '{"type":"heartbeat"}';
                 var tips = "send: heartbeat";
                 push(hm,heartOp,tips)
+                pushMsg()
             }
 
             function auth() {

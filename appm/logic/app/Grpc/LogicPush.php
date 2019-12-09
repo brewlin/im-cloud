@@ -49,7 +49,10 @@ class LogicPush
         response()->withContent($pushKeysRpy)->end();
 
         /** @var array $keys */
-        $keys = $pushKeysReq->getKeys();
+        $keys = [];
+        foreach($pushKeysReq->getKeys() as $key){
+            $keys[] = $key;
+        }
         $msg = $pushKeysReq->getMsg();
         if(empty($keys) || empty($msg))
         {
@@ -76,7 +79,10 @@ class LogicPush
 
         response()->withContent($pushMidsReply)->end();
         /** @var array $mids */
-        $mids = $pushMidsReq->getMsg();
+        $mids = [] ;
+        foreach($pushMidsReq->getMids() as $mid){
+            $mids[] = $mid;
+        }
         $msg = $pushMidsReq->getMsg();
         if(empty($msg) || empty($msg)){
             Log::error("require msg and mids");

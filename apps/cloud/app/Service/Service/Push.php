@@ -35,8 +35,9 @@ class Push
      */
     public function push()
     {
-        /** @var array  $data */
+        /** @var Packet  $packet */
         $packet = Context::value(Packet::class);
+        $packet = $packet->getBody();
         //数据包格式错误
         if(!isset($packet[self::Action]) || !in_array($packet[self::Action],self::Exector) || !is_array($packet) || !isset($packet[self::Body])){
             Log::error(sprintf("parse client data error,client fd:%s,data:%s",Context::value(),is_array($packet)?json_encode($packet):$packet));
