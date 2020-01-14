@@ -43,6 +43,14 @@ class Context
     private static $contextArg = [];
 
     /**
+     * @var array
+     * @example
+     * [
+     *      'tid' => [pool1,pool2,poo3]
+     * ]
+     */
+    private static $pool = [];
+    /**
      * Get context
      * @return ContextInterface|HttpContext
      */
@@ -119,12 +127,24 @@ class Context
     }
 
     /**
+     * add pool
+     * @param $pool
+     */
+    public static function addPool($pool):void
+    {
+        self::$pool[Co::tid()][] = $pool;
+    }
+    /**
      * Destroy context
      */
     public static function destroy(): void
     {
         $tid = Co::tid();
-
+        if (isset(self::$pool[$tid])){
+            foreach (self::$pool[$tid] as $pool){
+                $pool->release($pool);
+            }
+        }
         if (isset(self::$context[$tid])) {
             // clear self data.
             self::$context[$tid]->clear();

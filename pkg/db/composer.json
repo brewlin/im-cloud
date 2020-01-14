@@ -1,0 +1,21 @@
+{
+    "name": "brewlin/im-db",
+    "description": "mysql componet",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "xiaodo",
+            "email": "97404667@qq.com"
+        }
+    ],
+    "autoload":{
+        "psr-4":{
+            "Db\\":"src"
+        }
+
+    },
+    "require": {
+        "hyperf/database": "^1.1"
+    }
+}
