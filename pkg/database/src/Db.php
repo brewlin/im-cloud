@@ -19,14 +19,35 @@ use Throwable;
 /**
  * Class Db
  * @package Db
+ * @method static void beginTransaction()
+ * @method static void commit()
+ * @method static void rollBack($toLevel = null)
+ * @method static Builder table($table = "test")
  */
 class Db
 {
     /**
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @return mixed
+     */
+    public static function __callStatic(string $method, array $arguments)
+    {
+        /** @var DbConnectionPool $pool */
+        $pool = self::connection();
+        /** @var MySqlConnection $connection */
+        $connection = $pool->createConnection();
+        Context::addPool($pool);
+        $res = $connection->{$method}(...$arguments);
+        return $res;
+
+    }
+    /**
      * @param string $pool
      *
      */
-    public static function connection()
+    private static function connection()
     {
         try {
             /** @var DbConnectionPool $pool */
@@ -40,19 +61,4 @@ class Db
         return $pool;
     }
 
-    /**
-     * @param string $method
-     * @param array  $argument
-     * @return mixed
-     */
-    public static function table($table = "test"):Builder
-    {
-        /** @var DbConnectionPool $pool */
-        $pool = self::connection();
-        /** @var MySqlConnection $connection */
-        $connection = $pool->createConnection();
-        Context::addPool($pool);
-        return $connection->table($table);
-
-    }
 }

@@ -2,7 +2,7 @@
 /**
  * Created by PhpStorm.
  * User: brewlin
- * Date: 2019/6/28 0028
+ * Date: 2020/1/15 0000 0028
  * Time: 下午 5:43
  */
 
@@ -52,6 +52,17 @@ class BaseController
             ->withContentType("application/json")
             ->withContent($data)
             ->end();
+    }
+    public function getCurrentUser()
+    {
+        //从请求上下文获取 全局 request() response()
+        $headerToken = request()->getHeaderLine('token');
+        $requestToken = request()->input('token');
+        $token = $headerToken ? $headerToken : $requestToken;
+        $rpcDao = App::getBean(RpcDao::class);
+        $user = $rpcDao->userCache('getUserByToken',$token);
+        $this->user = $user;
+        $this->user['fd'] = $rpcDao->userCache('getFdByNum',$user['number']);
     }
 
 }

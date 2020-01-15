@@ -2,11 +2,11 @@
 /**
  * Created by PhpStorm.
  * User: brewlin
- * Date: 2019/7/8 0008
+ * Date: 2020/1/15 0008
  * Time: 下午 5:40
  */
 
-namespace App\Api;
+namespace App\Lib;
 
 
 class MsgEnum
