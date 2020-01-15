@@ -6,7 +6,7 @@
  * Time: 下午 4:34
  */
 
-namespace Db\Connector;
+namespace Database\Connector;
 
 
 use Core\Container\Mapping\Bean;

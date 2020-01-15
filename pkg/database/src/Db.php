@@ -6,12 +6,11 @@
  * Time: 下午 4:29
  */
 
-namespace Db;
+namespace Database;
 
 use Core\Context\Context;
 use Core\Pool\PoolFactory;
-use Db\Connector\MysqlConnector;
-use Db\Pool\DbConnectionPool;
+use Database\Pool\DbConnectionPool;
 
 use Hyperf\Database\MySqlConnection;
 use Hyperf\Database\Query\Builder;
@@ -32,14 +31,9 @@ class Db
         try {
             /** @var DbConnectionPool $pool */
             $pool = bean(PoolFactory::class)->getPool(DbConnectionPool::class);
-            /** @var MysqlConnector $con */
-//            $con = $pool->createConnection();
-//           $connection = Container::getInstance()->get(PhpRedisConnector::class);
-//           $config = Container::getInstance()->get(RedisDb::class);
-//           $con = $connection->connect($config->getConfig(),[]);
 
         } catch (Throwable $e) {
-            throw new Exception(
+            throw new \Exception(
                 sprintf('Pool error is %s file=%s line=%d', $e->getMessage(), $e->getFile(), $e->getLine())
             );
         }
@@ -57,8 +51,6 @@ class Db
         $pool = self::connection();
         /** @var MySqlConnection $connection */
         $connection = $pool->createConnection();
-//        $res = $connection->{$method}(...$arguments);
-//        $pool->release($pool);
         Context::addPool($pool);
         return $connection->table($table);
 

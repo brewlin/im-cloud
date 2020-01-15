@@ -1,21 +1,21 @@
-<?php
+<?php declare(strict_types=1);
+
+
+namespace App;
+
+
 /**
- * Created by PhpStorm.
- * User: brewlin
- * Date: 2020/1/14
- * Time: 16:11
+ * Class AutoLoader
  */
-
-namespace Db;
-
 class AutoLoader implements \Core\Contract\LoaderInterface
 {
+    /**
+     * @return array
+     */
     public function getPrefixDirs(): array
     {
         return [
             __NAMESPACE__ => __DIR__,
         ];
-        // TODO: Implement getPrefixDirs() method.
     }
-
 }

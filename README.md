@@ -64,6 +64,7 @@ im-cloud 业务流程
 ### @[process](pkg/process)(done) 自定义进程管理器
 ### @[redis](pkg/redis)(done) redis连接池
 ### @[queue](pkg/queue)(done amqp,soon kafak) 消息队列连接池
+### @[database](pkg/database)(soon) db连接池
 ### @[memory](pkg/memory)(done)swoole 相关内存操作封装
 ### @[task](pkg/task)(done) 异步任务投递组件
 ### @[cloud](appm/cloud) (test verion)

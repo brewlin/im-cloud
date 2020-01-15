@@ -6,12 +6,13 @@
  * Time: 下午 5:54
  */
 
-namespace Db\Pool;
+namespace Database\Pool;
 
 
 use Core\Container\Mapping\Bean;
+use Core\Pool\PoolConnectionInterface;
 use Core\Pool\PoolFactory;
-use Db\Connector\MysqlConnector;
+use Database\Connector\MysqlConnector;
 use Hyperf\Database\MySqlConnection;
 
 /**
@@ -19,7 +20,7 @@ use Hyperf\Database\MySqlConnection;
  * @package Db\Pool
  * @Bean()
  */
-class DbConnectionPool
+class DbConnectionPool implements PoolConnectionInterface
 {
     /**
      * @var array $config
@@ -82,6 +83,6 @@ class DbConnectionPool
         $config = config("db");
         $obj = new DbConnectionPool();
 
-        return  $obj->init($config);
+        return  $obj->init($config["db"]);
     }
 }

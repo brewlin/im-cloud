@@ -141,7 +141,7 @@ class AnnotationRegister
             "Task\\",
             "Log\\",
             "Memory\\",
-            "Db\\",
+            "Database\\",
         ]));
         $resource->load();
     }

@@ -4,10 +4,9 @@ return [
         'driver'   => 'mysql',
         'host'     => 'localhost',
         'port'     => 3306,
-        'dsn'      => 'mysql:dbname=dbname;host=127.0.0.1:3306',
         'database'  => 'test',
-        'username' => 'test',
-        'password' => 'test',
+        'username' => 'root',
+        'password' => 'roadforhacker',
         'prefix'   => '',
         'options'  => [
             'charset'  => 'utf8mb4',
