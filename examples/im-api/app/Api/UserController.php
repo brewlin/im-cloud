@@ -38,12 +38,12 @@ class UserController extends BaseController
 
         if($type == 'friend')
         {
-            $info = (new UserModel())->getUser(['id' => $id]);
+            $info = \bean(UserModel::class)->getUser(['id' => $id]);
             $info['type'] = 'friend';
         }else if($type == 'group')
         {
             //调用群组服务
-            $info = (new GroupModel())->getGroup(['id' => $id] , true);
+            $info = bean(GroupModel::class)->getGroup(['id' => $id] , true);
             $info['type'] = 'group';
         }else
         {
@@ -60,7 +60,7 @@ class UserController extends BaseController
     public function userQuit($request)
     {
         $token = request()->input("token");
-        $user   = (new UserCacheService)->getUserByToken($token);
+        $user   = \bean(UserCacheService::class)->getUserByToken($token);
         $info = [
             'user' => $user,
             'token' => $token,
@@ -79,17 +79,17 @@ class UserController extends BaseController
     */
     private function delCache($info)
     {
-        $fd = (new UserCacheService)->getFdByNum($info['user']['number']);
-        (new UserCacheService)->delTokenUser($info['token']);
-        (new UserCacheService)->delNumberUserOtherInfo($info['user']['number']);
-        (new UserCacheService)->delFdToken($fd);
-        (new UserCacheService)->delFds($fd);
+        $fd = \bean(UserCacheService::class)->getFdByNum($info['user']['number']);
+        \bean(UserCacheService::class)->delTokenUser($info['token']);
+        \bean(UserCacheService::class)->delNumberUserOtherInfo($info['user']['number']);
+        \bean(UserCacheService::class)->delFdToken($fd);
+        \bean(UserCacheService::class)->delFds($fd);
 
         //调用群组服务 获取群数量
-        $groups = (new GroupModel())->getGroup([['user_number','=',$info['user']['number']]]);
+        $groups = bean(GroupModel::class)->getGroup(['user_number' => $info['user']['number']]);
         if($groups)
             foreach ($groups as $val)
-                (new UserCacheService())->delGroupFd($val->gnumber, $fd);
+                \bean(UserCacheService::class)->delGroupFd($val->gnumber, $fd);
     }
 
     /*
@@ -98,8 +98,8 @@ class UserController extends BaseController
     private function offLine($user)
     {
         // 从用户服务 获取分组好友
-        $friends = (new UserGroupModel())->getAllFriends($user['id']);
-        $friends = (new MemberService())->getFriends($friends);
+        $friends = \bean(UserGroupModel::class)->getAllFriends($user['id']);
+        $friends = \bean(MemberService::class)->getFriends($friends);
 
         $server = Cloud::swooleServer();
         $data = [
@@ -114,7 +114,7 @@ class UserController extends BaseController
             foreach ($val['list'] as $v)
                 if ($v['status'])
                 {
-                    $fd = (new UserCacheService)->getFdByNum($v['number']);
+                    $fd = \bean(UserCacheService::class)->getFdByNum($v['number']);
                     $server->push($fd, json_encode($data));
                 }
     }
@@ -129,13 +129,13 @@ class UserController extends BaseController
         $this->getCurrentUser();
 
         //调用用户服务 更新签名
-        $userRes = (new UserModel)->updateByWhere(['sign' => $sign],['id' => $this->user['id']]);
+        $userRes = \bean(UserModel::class)->updateByWhere(['sign' => $sign],['id' => $this->user['id']]);
 
 
         //更新Redis缓存
-        $user = (new UserModel)->updateByWhere(['id' => $this->user['id']],true);
+        $user = \bean(UserModel::class)->updateByWhere(['id' => $this->user['id']],true);
         $user = $userRes['data'];
-        (new UserCacheService)->saveTokenToUser(request()->input('token') , $user);
+        \bean(UserCacheService::class)->saveTokenToUser(request()->input('token') , $user);
         return $this->success([],'成功');
     }
     /**
@@ -151,12 +151,12 @@ class UserController extends BaseController
         //搜索用户
         if($type == UserEnum::Friend)
         {
-            $res = (new UserModel)->searchUser($value);
+            $res = \bean(UserModel::class)->searchUser($value);
         }
         else//搜索群组
         {
             //调用群组服务  搜索群组
-            $groupRes = (new GroupModel())->searchGroup($value);
+            $groupRes = bean(GroupModel::class)->searchGroup($value);
             $res = $groupRes['data'];
         }
         return $this->success(['count' => count($res),'limit' => 16]);
@@ -177,12 +177,12 @@ class UserController extends BaseController
         if($type == UserEnum::Friend)
         {
             //搜索用户
-            $res = (new UserModel)->searchUser($value );
+            $res = \bean(UserModel::class)->searchUser($value );
         }
         else
         {
             //搜索群组
-            $groupRes = (new GroupModel())->searchGroup($value);
+            $groupRes = bean(GroupModel::class)->searchGroup($value);
 ;
             $res = $groupRes['data'];
         }

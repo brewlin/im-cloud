@@ -26,16 +26,6 @@ class UserCacheService {
 		if (!is_array($user)) {
 			$user = json_decode(json_encode($user), true);
 		}
-		$user = [
-			'id' => $user['id'],
-			'number' => $user['number'],
-			'nickname' => $user['nickname'],
-			'username' => $user['username'],
-			'sex' => $user['sex'],
-			'avatar' => $user['avatar'],
-			'sign' => $user['sign'],
-			'last_login' => $user['lastLogin'],
-		];
 		$key = \config('cache.cacheName.token_user');
 		$key = sprintf($key, $token);
 		return Redis::hMSet($key, $user);
@@ -100,7 +90,6 @@ class UserCacheService {
 	public function getUserByToken($token) {
 		$key = \config('cache.cacheName.token_user');
 		$key = sprintf($key, $token);
-
 		return Redis::hGetAll($key);
 	}
 

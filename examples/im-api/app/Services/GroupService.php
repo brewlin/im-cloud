@@ -23,24 +23,41 @@ use Database\Db;
 class GroupService
 {
 
+    /**
+     * @param $id
+     * @return array
+     */
     public function getGroupMembers($id)
     {
-        $owner = (new GroupModel())->getGroupOwner($id);
+        $owner = bean(GroupModel::class)->getGroupOwner($id);
         //获取群成员
-        $memberList = (new GroupMemberModel())->getGroupMembers($owner['gnumber']);
+        $memberList = \bean(GroupMemberModel::class)->getGroupMembers($owner['gnumber']);
 
         //调用用户服务  获取用户列表
-        $userRes = (new UserModel())->getUserByNumbers($memberList);
+        $userRes = \bean(UserModel::class)->getUserByNumbers($memberList);
         $list = $userRes['data'];
         return compact('owner','list');
 
     }
 
+    /**
+     * @param $id
+     * @param $number
+     * @return int
+     */
     public function leaveGroup($id,$number)
     {
-        $groupNumber = (new GroupMemberModel())->getNumberById($id);
-        return (new GroupMemberModel())->delMemberById($number,$groupNumber);
+        $groupNumber = \bean(GroupMemberModel::class)->getNumberById($id);
+        return \bean(GroupMemberModel::class)->delMemberById($number,$groupNumber);
     }
+
+    /**
+     * @param $data
+     * @param $number
+     * @param $userNumber
+     * @return bool
+     * @throws \Exception
+     */
     public function createGroup($data,$number ,$userNumber)
     {
         // 保存群信息，并加入群
@@ -60,8 +77,8 @@ class GroupService
         Db::beginTransaction();
         try
         {
-            $id = (new GroupModel())->newGroup($group_data);
-            (new GroupMemberModel())->newGroupMember($member_data);
+            $id = bean(GroupModel::class)->newGroup($group_data);
+            \bean(GroupMemberModel::class)->newGroupMember($member_data);
             Db::commit();
         }catch (\Throwable $e)
         {

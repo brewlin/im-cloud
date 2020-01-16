@@ -11,8 +11,8 @@ namespace App\Api;
 
 
 use App\Models\GroupMemberModel;
-use App\Models\Service\MemberService;
 use App\Models\UserGroupModel;
+use App\Services\MemberService;
 use App\Services\UserCacheService;
 use Core\Container\Mapping\Bean;
 
@@ -26,19 +26,20 @@ class InitController extends BaseController
     /**
      * RequestMapping(route="init")
      */
-    public function initIm()
+    public function init()
     {
 
         //从缓存服务 获取自己信息
         $token = request()->input('token');
-        $user = (new UserCacheService())->getUserByToken($token);
+        $user = \bean(UserCacheService::class)->getUserByToken($token);
+        $this->user['status'];
         $user['status'] = 'online';
 
         // 从用户服务 获取分组好友
-        $friends = (new UserGroupModel)->getAllFriends($user['id']);
-        $data = (new MemberService)->getFriends($friends);
+        $friends = \bean(UserGroupModel::class)->getAllFriends($user['id']);
+        $data = \bean(MemberService::class)->getFriends($friends);
         //从群组服务 获取群组信息
-        $groups = (new GroupMemberModel())->getGroupNames();
+        $groups = \bean(GroupMemberModel::class)->getGroupNames();
 
         return $this->success(['mine' => $user ,'friend' => $data, 'group' => $groups?$groups:[]],'',0);
     }

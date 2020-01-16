@@ -18,15 +18,29 @@ use Database\Db;
  */
 class UserRecordModel
 {
+    /**
+     * @param $where
+     * @param $data
+     * @return int
+     */
     public function updateByWhere($where ,$data)
     {
         return Db::table('user_record')->where($where)->update($data);
     }
 
+    /**
+     * @param $data
+     * @return bool
+     */
     public function newRecord($data)
     {
         return Db::table('user_record')->insert($data);
     }
+
+    /**
+     * @param $value
+     * @return float|int
+     */
     public function getTimeStampAttr($value)
     {
         return strtotime($value)*1000;
@@ -38,8 +52,8 @@ class UserRecordModel
      */
     public function getAllChatRecordById($current , $toId)
     {
-        $recordList1 = Db::table('user_record')->where('user_id' ,'=',$current)->where('friend_id','=',$toId)->get()->toArray();
-        $recordList2 = Db::table('user_record')->where('user_id' ,'=',$toId)->where('friend_id','=',$current)->get()->toArray();
+        $recordList1 = Db::table('user_record')->where('user_id' ,'=',$current)->where('friend_id','=',$toId)->get();
+        $recordList2 = Db::table('user_record')->where('user_id' ,'=',$toId)->where('friend_id','=',$current)->get();
         $recordList = array_merge($recordList1,$recordList2);
         foreach ($recordList as $k => $v)
         {
@@ -61,7 +75,7 @@ class UserRecordModel
         $list = Db::table('user_record')
             ->where('user_id','=',$uid)
             ->where('is_read','=',0)
-            ->get()->toArray();
+            ->get();
         foreach ($list as $k => $v)
         {
             $user = Db::table('user')->find($v['userId'])->first();

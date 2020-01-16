@@ -25,7 +25,7 @@ class MsgController extends BaseController
     {
         //返回form和to都为自己的信息
         $this->getCurrentUser();
-        $res = (new MsgModel())->getDataByUserId($this->user['id']);
+        $res = \bean(MsgModel::class)->getDataByUserId($this->user['id']);
         return $this->success($res,$this->user);
     }
 

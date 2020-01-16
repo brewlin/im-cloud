@@ -32,27 +32,25 @@ class LoginController extends BaseController
     {
         $email = request()->post('email');
         $password = request()->post('password');
-
         // 查询用户是否已经存在
-        $user = (new UserModel())->getUser(['email' => $email],true);
+        $user = \bean(UserModel::class)->getUser(['email' => $email],true);
         if (empty($user))
-            throw new \Exception(['msg' => '无效账号']);
-
+            throw new \Exception( '无效账号');
         // 比较密码是否一致
         if (strcmp(md5($password), $user['password']))
-            throw new \Exception(['msg' => '密码错误',]);
+            throw new \Exception('密码错误');
 
         // 更新登录时间
         $update = [ 'last_login' => time()];
-        (new UserModel())->updateUser($user['id'], $update);
+        \bean(UserModel::class)->updateUser($user['id'], $update);
 
         // 生成 token
         $token = Common::getRandChar(16);
         // 将用户信息存入缓存
-        (new UserCacheService())->saveNumToToken($user['number'], $token);
-        (new UserCacheService())->saveTokenToUser($token,$user);
+        \bean(UserCacheService::class)->saveNumToToken($user['number'], $token);
+        \bean(UserCacheService::class)->saveTokenToUser($token,$user);
 
-//        $userFd = (new UserCacheService())->getFdByNum($user['number']);
+//        $userFd = \bean(UserCacheService::class)->getFdByNum($user['number']);
 //        if ($userFd)
 //            Cloud::swooleServer()->push($userFd, json_encode(['type' => 'ws', 'method' => 'belogin', 'data' => 'logout']));
 //        }
@@ -76,16 +74,18 @@ class LoginController extends BaseController
 
         // 判断两次密码是否输入一致
         if (strcmp($password, $repassword))
-            throw new \Exception(['msg' => '两次密码输入不一致']);
+            throw new \Exception("两次密码输入不一致");
 
         // 查询用户是否已经存在
-        $user = (new UserModel())->getUser(['email' ,'=', $email]);
+        /** @var UserModel $user */
+        $user = \bean(UserModel::class)->getUser(['email' => $email]);
         if (!empty($user))
-            throw new \Exception(['msg' => '该用户已存在']);
+            throw new \Exception("该用户已存在");
 
         // 生成唯一number
         $number = Common::generate_code();
-        $usermodel = new UserModel();
+        /** @var UserModel $usermodel */
+        $usermodel = \bean(UserModel::class);
         while ($usermodel->getUser(['number' => $number]))
             $number = Common::generate_code();
 
@@ -101,7 +101,7 @@ class LoginController extends BaseController
         try
         {
             $uid = $usermodel->newUser($data);
-            (new UserGroupModel())->addGroup($uid,"我的好友");
+            \bean(UserGroupModel::class)->addGroup($uid,"我的好友");
             Db::commit();
         }catch (\Throwable $e)
         {

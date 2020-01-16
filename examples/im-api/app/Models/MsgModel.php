@@ -26,7 +26,7 @@ class MsgModel
             ->orWhere('to','=',$userId)
             ->orderBy('send_time','desc')
             ->get()
-            ->toArray();
+            ;
         foreach ($msg as $k => $v)
         {
             $msg[$k]['to'] = Db::table('user')->where('id' ,'=', $v['to'])->first();
@@ -41,20 +41,42 @@ class MsgModel
     {
         return Db::table('msg')->insert($data);
     }
+
+    /**
+     * @param $id
+     * @return \Hyperf\Utils\Collection
+     */
     public function getDataById($id)
     {
-        return Db::table('msg')->find($id)->get()->toArray();
+        return Db::table('msg')->find($id)->get();
     }
+
+    /**
+     * @param $id
+     * @param $where
+     * @return int
+     */
     public function updateById($id , $where)
     {
         return Db::table('msg')->where(['id' => $id])->update($where);
     }
+
+    /**
+     * @param $where
+     * @param $update
+     * @return int
+     */
     public function updateByWhere($where ,$update)
     {
         return Db::table('msg')->where($where)->update($update);
     }
+
+    /**
+     * @param $where
+     * @return \Hyperf\Utils\Collection
+     */
     public function getOneByWhere($where)
     {
-        return Db::table('msg')->where($where)->get()->toArray();
+        return Db::table('msg')->where($where)->get();
     }
 }

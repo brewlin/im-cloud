@@ -18,9 +18,13 @@ use Database\Db;
  */
 class UserGroupModel
 {
+    /**
+     * @param $id
+     * @return \Hyperf\Utils\Collection
+     */
     public function getAllFriends($id)
     {
-        $list = Db::table('user_group')->where('user_id','=',$id)->get()->toArray();
+        $list = Db::table('user_group')->where('user_id','=',$id)->get();
         foreach ($list as $k => $v)//
         {
            $list[$k]['list'] = Db::table('user_group_member')->where('user_group_id','=',$v['id']);
@@ -48,8 +52,16 @@ class UserGroupModel
      */
     public function editGroup($id , $groupname)
     {
-        return Db::table('user_group')->where('id','=',$id)->update(['group_name','=',$groupname]);
+        return Db::table('user_group')->where('id','=',$id)
+                                            ->update(['group_name' => $groupname]);
     }
+
+    /**
+     * @param $attr
+     * @param $condition
+     * @param bool $single
+     * @return int
+     */
     public function updateByWhere($attr , $condition ,$single = true)
     {
         if($single)
@@ -69,7 +81,7 @@ class UserGroupModel
             return false;
         }
         $default = $this->getDefaultGroupUser($user['id']);
-        Db::table('user_group_member')->where([['user_id','=',$user['id']],['user_group_id','=',$id]])
+        Db::table('user_group_member')->where(['user_id' => $user['id'],'user_group_id' => $id])
                                              ->update(['user_group_id' => $default['id']]);
         return Db::table('user_group')->delete($id);
     }
@@ -78,6 +90,9 @@ class UserGroupModel
      */
     public function getDefaultGroupUser($userId)
     {
-        return Db::table('user_group')->where('user_id','=',$userId)->orderBy('id')->get()->first();
+        return Db::table('user_group')
+                        ->where('user_id','=',$userId)
+                        ->orderBy('id')
+                        ->first();
     }
 }

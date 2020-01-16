@@ -18,6 +18,9 @@ use Database\Db;
  */
 class GroupRecordModel
 {
+    /**
+     * @param $data
+     */
     public function newRecord($data)
     {
         Db::table('group_record')->insert($data);
@@ -32,7 +35,7 @@ class GroupRecordModel
         $recordList = Db::table('group_record')->where('uid','=',$uid)
                             ->where('gnumber','=',$id)
                             ->get(["uid as id","created_time as timestamp","data as content"])
-                            ->toArray();
+                            ;
         foreach ($recordList as $k => $v)
         {
             $user = Db::table('user')->where('number','=', $v['user_number'])->first();

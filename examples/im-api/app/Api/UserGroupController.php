@@ -32,8 +32,8 @@ class UserGroupController extends BaseController
         $groupname = request()->query('groupname');
 
         //调用user服务
-        $id = (new UserCacheService())->getIdByToken($token);
-        $groupId = (new UserGroupModel)->addGroup($id , $groupname);
+        $id = \bean(UserCacheService::class)->getIdByToken($token);
+        $groupId = \bean(UserGroupModel::class)->addGroup($id , $groupname);
 
         return $this->success(['id' => $groupId , 'groupname' => $groupname]);
     }
@@ -49,7 +49,7 @@ class UserGroupController extends BaseController
         $data = request()->query();
 
         //调用用户服务
-        $res = (new UserGroupModel)->updateByWhere(['groupname' => $data['groupname']],['id' => $data['id']]);
+        $res = \bean(UserGroupModel::class)->updateByWhere(['groupname' => $data['groupname']],['id' => $data['id']]);
         if(!$res)
             return $this->error([],'修改失败');
         return $this->success([],'修改成功');
@@ -63,7 +63,7 @@ class UserGroupController extends BaseController
     public function delMyGroup()
     {
         $this->getCurrentUser();
-        $res = (new UserGroupModel)->delGroup(request()->query('id'),$this->user);
+        $res = \bean(UserGroupModel::class)->delGroup(request()->query('id'),$this->user);
         if($res)
             return $this->error([],'删除成功');
         return $this->error([],'删除失败');

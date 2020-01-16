@@ -29,7 +29,6 @@ class FetchModeEvent implements EventDispatcherInterface
         }
 
     }
-
     /**
      * @param object $event
      */

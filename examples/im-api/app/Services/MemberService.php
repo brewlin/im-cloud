@@ -6,14 +6,14 @@
  * Time: 上午 10:38
  */
 
-namespace App\Models\Service;
+namespace App\Services;
 
 use App\Models\GroupMemberModel;
 use App\Models\MsgModel;
 use App\Models\UserGroupMemberModel;
 use App\Models\UserModel;
 use App\Services\UserCacheService;
-use App\Services\UserGroupMemberService;
+use Core\Container\Mapping\Bean;
 
 /**
  * Class MemberService
@@ -23,7 +23,10 @@ use App\Services\UserGroupMemberService;
 class MemberService
 {
 
-
+    /**
+     * @param $arr
+     * @return mixed
+     */
     public function getFriends($arr)
     {
         foreach ($arr as &$group)
@@ -56,30 +59,38 @@ class MemberService
     public function newFriends($data ,$currentUid)
     {
         //添加自己的好友
-        (new UserGroupMemberModel())->newFriend($currentUid ,$data['friend_id'] ,$data['group_user_id']);
+        bean(UserGroupMemberModel::class)->newFriend($currentUid ,$data['friend_id'] ,$data['group_user_id']);
         //请求方添加好友
         //获取消息里的数据
-        $friend = (new MsgModel())->getDataById($data['msg_id']);
-        (new UserGroupMemberModel())->newFriend($friend['from'] , $friend['to'] ,$friend['userGroupId']);
+        $friend = \bean(MsgModel::class)->getDataById($data['msg_id']);
+        bean(UserGroupMemberModel::class)->newFriend($friend['from'] , $friend['to'] ,$friend['userGroupId']);
     }
+
+    /**
+     * @param $where
+     * @return UserModel|\Hyperf\Database\Model\Model|object|null
+     */
     public function friendInfo($where)
     {
-        $user = (new UserModel())->getUserById($where);
-        $status  = (new UserCacheService())->getTokenByNum($user['number']);
+        $user = \bean(UserModel::class)->getUserById($where);
+        $status  = \bean(UserCacheService::class)->getTokenByNum($user['number']);
         $user['status'] = $status?'online':'offline';   // 是否在线
         $user['online'] = $status ? true : false;
         return $user;
     }
 
-    // 处理接收或拒绝添加好友的通知操作
+    /**
+     * 处理接收或拒绝添加好友的通知操作
+     * @param $data
+     */
     public function doReq($data)
     {
         $from_number = $data['from_number'];
         $number      = $data['number'];
         $check       = $data['check'];
 
-        $from_user = (new FriendService())->friendInfo(['number'=>$from_number]);
-        $user = (new FriendService())->friendInfo(['number'=>$number]);
+        $from_user = \bean(FriendService::class)->friendInfo(['number'=>$from_number]);
+        $user = \bean(FriendService::class)->friendInfo(['number'=>$number]);
 
 
         if($from_user['online']){
@@ -106,10 +117,13 @@ class MemberService
 
     /*
      * 检查二人是否是好友关系
+     * @param $user1_id
+     * @param $user2_id
+     * @return bool
      */
     public  function checkIsFriend($user1_id, $user2_id)
     {
-        $ids = (new UserGroupMemberModel())->getAllFriends($user1_id);
+        $ids = bean(UserGroupMemberModel::class)->getAllFriends($user1_id);
         if(in_array($user2_id, $ids)){
             return true;
         }

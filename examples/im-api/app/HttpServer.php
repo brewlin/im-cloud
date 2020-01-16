@@ -61,7 +61,13 @@ class HttpServer implements ApplicationInterface
     public function httpListen($request,$response)
     {
         $request = HttpRequest::new($request);
+        Log::debug(json_encode(["get" => $request->query(),"post" => $request->post()]));
         $response = HttpResponse::new($response);
+        if(bean(Listener\OnRequestListener::class)->onRequest($request,$response)){
+            Context::compelete();
+            return;
+        }
+
         HttpDispatcher::dispatch($request,$response);
     }
 

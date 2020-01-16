@@ -35,7 +35,7 @@ class UserRecordController extends BaseController
         $data = \request()->query();
         if($data['type'] == 'friend')
         {
-            $res = (new UserRecordModel())->getAllChatRecordById($uid , $data['id']);
+            $res = \bean(UserRecordModel::class)->getAllChatRecordById($uid , $data['id']);
         }else if($data['type'] == 'group')
         {
             $group = Db::table('group')->find($data['id'])->first();
@@ -43,7 +43,7 @@ class UserRecordController extends BaseController
             $res = (new GroupRecordModel())->getAllChatRecordById($uid , $groupNumber);
         }else
         {
-            $res = (new UserRecordModel())->getAllChatRecordById($uid , $data['id']);
+            $res = \bean(UserRecordModel::class)->getAllChatRecordById($uid , $data['id']);
         }
         return $this->success($res);
     }
@@ -62,7 +62,7 @@ class UserRecordController extends BaseController
         $where = ['friend_id' => $this->user['id'],'user_id' => request()->post('uid'),'is_read' => 0];
         $data = ['is_read' => 1];
         $type = request()->post('type');
-        (new UserRecordModel())->updateByWhere($where,$data);
+        \bean(UserRecordModel::class)->updateByWhere($where,$data);
         return $this->success([],'收取消息成功');
     }
 }

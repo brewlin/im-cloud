@@ -7,7 +7,8 @@
  */
 
 namespace App\Api;
-use App\Api\MsgEnum;
+use App\Lib\MsgEnum;
+use App\Services\UserCacheService;
 use Core\Context\Context;
 
 /**
@@ -16,6 +17,10 @@ use Core\Context\Context;
  */
 class BaseController
 {
+    /**
+     * @var array
+     */
+    protected $user = [];
     public function error($msg = "",$data = [],$code = MsgEnum::Error)
     {
         $data = [
@@ -53,16 +58,14 @@ class BaseController
             ->withContent($data)
             ->end();
     }
+
+    /**
+     * init user cache
+     * @return void
+     */
     public function getCurrentUser()
     {
-        //从请求上下文获取 全局 request() response()
-        $headerToken = request()->getHeaderLine('token');
-        $requestToken = request()->input('token');
-        $token = $headerToken ? $headerToken : $requestToken;
-        $rpcDao = App::getBean(RpcDao::class);
-        $user = $rpcDao->userCache('getUserByToken',$token);
-        $this->user = $user;
-        $this->user['fd'] = $rpcDao->userCache('getFdByNum',$user['number']);
+
     }
 
 }

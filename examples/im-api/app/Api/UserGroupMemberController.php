@@ -33,7 +33,7 @@ class UserGroupMemberController extends BaseController
     {
         $data = request()->input();
         $this->getCurrentUser();
-        $res = (new UserGroupMemberModel)->editFriendRemarkName($this->user['id'] , $data['friend_id'] , $data['friend_name']);
+        $res = \bean(UserGroupMemberModel::class)->editFriendRemarkName($this->user['id'] , $data['friend_id'] , $data['friend_name']);
         if($res)
             return $this->success($data['friend_name']);
         return $this->error('','修改失败');
@@ -49,12 +49,12 @@ class UserGroupMemberController extends BaseController
     {
         $data = request()->post();
         $this->getCurrentUser();
-        $res = (new UserGroupMemberModel)->moveFriend($this->user['id'] , $data['friend_id'] , $data['groupid']);
+        $res = \bean(UserGroupMemberModel::class)->moveFriend($this->user['id'] , $data['friend_id'] , $data['groupid']);
         ;
         if($res)
         {
             //返回好友信息
-            $user = (new UserModel)->getUserById($data['friend_id']);
+            $user = \bean(UserModel::class)->getUserById($data['friend_id']);
             return $this->success($user);
         }
         return $this->error('','移动失败');
@@ -69,7 +69,7 @@ class UserGroupMemberController extends BaseController
     {
         $data = request()->post();
         $this->getCurrentUser();
-        $res = (new UserGroupMemberModel)->removeFriend($this->user['id'] , $data['friend_id']);
+        $res = \bean(UserGroupMemberModel::class)->removeFriend($this->user['id'] , $data['friend_id']);
         if($res)
             return $this->success('','删除成功');
         return $this->error('','修改失败');
@@ -81,7 +81,7 @@ class UserGroupMemberController extends BaseController
     public function getRecommendFriend()
     {
         //获取所有好友
-        $list = (new UserModel)->getAllUser();
+        $list = \bean(UserModel::class)->getAllUser();
         //去除已经是本人的好友关系
         return $this->success($list);
     }

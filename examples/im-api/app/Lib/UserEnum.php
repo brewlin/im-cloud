@@ -13,4 +13,5 @@ class UserEnum
 {
     const Friend = 'friend';
     const Group = 'group';
+    const User = 'cache_user_data';
 }

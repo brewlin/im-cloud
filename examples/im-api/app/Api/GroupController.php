@@ -30,7 +30,7 @@ class GroupController extends BaseController
     {
         $id = request()->get('id');
         //调用群组服务 获取群信息
-        $groupRes = (new GroupService)->getGroupMembers($id);
+        $groupRes = bean(GroupService::class)->getGroupMembers($id);
   
 
         return $this->success($groupRes['data']);
@@ -48,7 +48,7 @@ class GroupController extends BaseController
         $id = request()->query('id');
 
         //调用群组服务 退出群组
-        (new GroupService)->leaveGroup($id,$number);
+        bean(GroupService::class)->leaveGroup($id,$number);
 
         return $this->success('','退出成功');
     }
@@ -60,7 +60,7 @@ class GroupController extends BaseController
     {
         $this->getCurrentUser();
         //调用群组服务 获取群组信息
-        $groupRes = (new GroupModel())->getGroup([['user_number','=',$this->user['number']]]);
+        $groupRes = bean(GroupModel::class)->getGroup(['user_number' => $this->user['number']]);
         $list = $groupRes['data'];
         if(count($list) > 50)
             return $this->error('超过最大建群数量');
@@ -83,7 +83,7 @@ class GroupController extends BaseController
         $number = Common::generate_code(8);
 
         //调用群组服务 创建群
-        $id = (new GroupService)->createGroup($data,$number,$this->user['number']);
+        $id = bean(GroupService::class)->createGroup($data,$number,$this->user['number']);
         
         $sendData  = [
             'id'            => $id,
@@ -94,7 +94,7 @@ class GroupController extends BaseController
 
         ];
         // 创建缓存
-        (new UserCacheService)->setGroupFds($number, $this->user['fd']);
+        \bean(UserCacheService::class)->setGroupFds($number, $this->user['fd']);
         $server = Cloud::swooleServer();
         $server->push($this->user['fd'] , json_encode(['type'=>'ws','method'=> 'newGroup','data'=> $sendData]));
         $server->push($this->user['fd'] , json_encode(['type'=>'ws','method'=> 'ok','data'=> '创建成功']));

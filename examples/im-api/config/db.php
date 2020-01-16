@@ -4,7 +4,7 @@ return [
         'driver'   => 'mysql',
         'host'     => 'localhost',
         'port'     => 3306,
-        'database'  => 'test',
+        'database'  => 'chat',
         'username' => 'root',
         'password' => 'roadforhacker',
         'prefix'   => '',
