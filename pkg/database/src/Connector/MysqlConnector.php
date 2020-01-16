@@ -140,6 +140,10 @@ class MysqlConnector
     {
         try{
             $client = new MySqlConnection($client,$this->database,$this->prefix,$config);
+            //register event
+            if(config('server')['db'] && \bean(config('server')['db'])){
+                $client->setEventDispatcher(\bean(config('server')['db']));
+            }
         }catch (\Throwable $e){
             throw new \Exception(
                 sprintf('mysql connect error(%s)', $e->getMessage())

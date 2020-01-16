@@ -12,5 +12,6 @@ return [
     ],
     'scan' => [
     ],
-    'exception' => App\Exception\Exception::class
+    'exception' => App\Exception\Exception::class,
+    'db' => \App\Event\FetchModeEvent::class
 ];
