@@ -107,7 +107,7 @@ class MysqlConnector
             $this->option = $option;
         }
         if(!empty($config['database'])){
-            $this->dbname = $config['database'];
+            $this->database = $config['database'];
         }
         if(!empty($config['prefix'])){
             $this->prefix = $config['prefix'];
