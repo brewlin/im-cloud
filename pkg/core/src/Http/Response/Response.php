@@ -110,7 +110,8 @@ class Response implements ResponseInterface
      */
     public static function new(CoResponse $coResponse): self
     {
-        $self = self::__instance();
+//        $self = self::__instance();
+        $self = new self();
 
         // $self = \bean('httpResponse');
         /** @var Response $self */

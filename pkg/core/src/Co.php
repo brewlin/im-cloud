@@ -97,6 +97,7 @@ class Co
 
                 Context::getWaitGroup()->done();
             }
+            unset(self::$mapping[$id]);
         });
     }
 

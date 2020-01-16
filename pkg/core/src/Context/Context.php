@@ -143,6 +143,7 @@ class Context
         if (isset(self::$pool[$tid])){
             foreach (self::$pool[$tid] as $pool){
                 $pool->release($pool);
+                unset(self::$pool[$tid]);
             }
         }
         if (isset(self::$context[$tid])) {

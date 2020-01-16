@@ -166,7 +166,8 @@ class Request extends PsrRequest
     public static function new(CoRequest $coRequest): self
     {
         /** @var Request $self */
-        $self = self::__instance();
+//        $self = self::__instance();
+        $self = new self();
 
         $serverParams = array_merge(self::DEFAULT_SERVER, $coRequest->server);
 
