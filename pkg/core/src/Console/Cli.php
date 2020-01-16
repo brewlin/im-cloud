@@ -26,7 +26,7 @@ class Cli
     /**
      * @var string
      */
-    private $version = '1.0.0';
+    private $version = '2.2.0';
 
     /**
      * @var string

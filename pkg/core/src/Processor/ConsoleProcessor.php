@@ -36,8 +36,8 @@ class ConsoleProcessor extends Processor
     public function handleArg(array $arg){
         /** @var Cli $cli */
         $cli = new Cli();
+        $cli->showApplicationHelp();
         if(empty($arg) || isset($arg['h'])){
-            $cli->showApplicationHelp();
             exit;
         }
         if(isset($arg['v'])){
