@@ -11,5 +11,6 @@ return [
         'http_parse_post' => true,
     ],
     'scan' => [
-    ]
+    ],
+    'exception' => App\Exception\Exception::class
 ];

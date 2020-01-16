@@ -11,7 +11,9 @@ namespace Core\Http;
 
 use Core\Container\Container;
 use Core\Context\Context;
+use Core\Contract\AppExceptionInterface;
 use Core\Http\Request\Request;
+use Core\Http\Response\ErrMsg;
 use Core\Http\Response\Response;
 use FastRoute\Dispatcher;
 use Log\Helper\CLog;
@@ -19,9 +21,7 @@ use Log\Helper\Log;
 
 class HttpDispatcher
 {
-    const METHOD_NOT_ALLOWED = "not support this method";
-    const NOT_FOUND = "not found that action";
-    const SERVER_ERROR =" internel error";
+
     public static function dispatch(Request $request,Response $response)
     {
         //manager context
@@ -49,12 +49,12 @@ class HttpDispatcher
         switch ($routeInfo[0]) {
             case Dispatcher::NOT_FOUND:
                 // ... 404 Not Found 没找到对应的方法
-                $response->withStatus(404)->withContent(self::NOT_FOUND);
+                return $response->withStatus(404)->withContent(ErrMsg::err(ErrMsg::NOT_FOUND));
                 break;
             case Dispatcher::METHOD_NOT_ALLOWED:
                 $allowedMethods = $routeInfo[1];
                 // ... 405 Method Not Allowed  方法不允许
-                $response->withStatus(405)->withContent(self::METHOD_NOT_ALLOWED);
+                return $response->withStatus(405)->withContent(ErrMsg::err(ErrMsg::METHOD_NOT_ALLOWED));
                 break;
             case Dispatcher::FOUND: // 找到对应的方法
                 try{
@@ -63,14 +63,19 @@ class HttpDispatcher
                     $classname = implode($handler,"\\");
                     $rsp = bean($classname)->$action();
                     if($rsp instanceof Response){
-                        $response = $rsp;
+                        return $rsp;
                     }else{
-                        $response->withContent(json_encode($rsp));
+                        return $response->withContent(json_encode($rsp));
                     }
                 }catch (\Throwable $e){
-                    Log::error("router dispatcher is error  msg:%s file:%s line:%s",$e->getMessage(),$e->getFile(),$e->getLine());
-                    $response->withStatus(500)
-                        ->withContent($e->getMessage());
+                    Log::error("msg:%s file:%s line:%s",$e->getMessage(),$e->getFile(),$e->getLine());
+                    if(config('server')['exception'] && bean(config('server')['exception'])){
+                        /** @var AppExceptionInterface $exceptionhanlder */
+                        $exceptionhanlder = bean(config('server')['exception']);
+                        return $exceptionhanlder->handlerException($response,$e);
+                    }
+                    return $response->withStatus(500)
+                        ->withContent(ErrMsg::err($e->getMessage()));
                 }
                 break;
         }
