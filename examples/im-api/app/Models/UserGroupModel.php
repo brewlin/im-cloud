@@ -24,10 +24,10 @@ class UserGroupModel
      */
     public function getAllFriends($id)
     {
-        $list = Db::table('user_group')->where('user_id','=',$id)->get();
+        $list = Db::table('user_group')->where('user_id','=',$id)->get()->toArray();
         foreach ($list as $k => $v)//
         {
-           $list[$k]['list'] = Db::table('user_group_member')->where('user_group_id','=',$v['id']);
+           $list[$k]['list'] = Db::table('user_group_member')->where('user_group_id','=',$v['id'])->get()->toArray();
         }
         return $list;
     }

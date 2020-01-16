@@ -50,7 +50,7 @@ class OnRequestListener
             return true;
         }
         $user['fd'] = $usercacehe->getFdByNum($user['number']);
-        Context::withValue(UserEnum::User,$token);
+        Context::withValue(UserEnum::User,$user);
         return false;
     }
 }

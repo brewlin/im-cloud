@@ -94,7 +94,7 @@ class UserModel
      */
     public function getUserById($id)
     {
-        return Db::table('user')->find($id)->first();
+        return Db::table('user')->find($id);
     }
 
     /**

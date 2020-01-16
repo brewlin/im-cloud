@@ -10,11 +10,13 @@ namespace App\Api;
 
 
 
+use App\Lib\UserEnum;
 use App\Models\GroupMemberModel;
 use App\Models\UserGroupModel;
 use App\Services\MemberService;
 use App\Services\UserCacheService;
 use Core\Container\Mapping\Bean;
+use Core\Context\Context;
 
 /**
  * Class InitController
@@ -30,9 +32,7 @@ class InitController extends BaseController
     {
 
         //从缓存服务 获取自己信息
-        $token = request()->input('token');
-        $user = \bean(UserCacheService::class)->getUserByToken($token);
-        $this->user['status'];
+        $user = Context::value(UserEnum::User);
         $user['status'] = 'online';
 
         // 从用户服务 获取分组好友

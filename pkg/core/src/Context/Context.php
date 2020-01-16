@@ -105,7 +105,6 @@ class Context
     public static function value(string $key = self::DefaultVal)
     {
         $tid = Co::tid();
-        var_dump($tid,self::$contextArg);
         if(isset(self::$contextArg[$tid]) && isset(self::$contextArg[$tid][$key]))
             return self::$contextArg[$tid][$key];
         return false;

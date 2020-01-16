@@ -31,8 +31,8 @@ class MemberService
     {
         foreach ($arr as &$group)
         {
-            $group['groupname'] = $group['groupName'];
-            unset($group['groupName']);
+            $group['groupname'] = $group['group_name'];
+            unset($group['group_name']);
             $group['online'] = 0;
             foreach ($group['list'] as $k => &$friend)
             {
@@ -40,11 +40,11 @@ class MemberService
                 if(!empty($friend['remark_name']))
                 {
                     $name = $friend['remark_name'];
-                    $group['list'][$k] = $this->friendInfo(['id' => $friend['friendId']]);
+                    $group['list'][$k] = $this->friendInfo(['id' => $friend['friend_id']]);
                     $group['list'][$k]['username'] = $name;
                 }else
                 {
-                    $group['list'][$k] = $this->friendInfo(['id' => $friend['friendId']]);
+                    $group['list'][$k] = $this->friendInfo(['id' => $friend['friend_id']]);
                 }
             }
         }
