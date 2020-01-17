@@ -10,3 +10,6 @@ HttpRouter::post("/register","/Api/LoginController/register");
 
 //init data
 HttpRouter::post("/init","/Api/InitController/init");
+//group
+HttpRouter::get("/api/im/members","/Api/GroupController/getMembers");
+

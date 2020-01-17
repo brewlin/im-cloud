@@ -26,7 +26,7 @@ class UserGroupController extends BaseController
      * Strings(from=ValidatorFrom::GET,name="groupname")
      * @param Request $request
      */
-    public function addMyGroup($request)
+    public function addMyGroup()
     {
         $token = request()->query('token');
         $groupname = request()->query('groupname');
@@ -44,7 +44,7 @@ class UserGroupController extends BaseController
      * Strings(from=ValidatorFrom::GET,name="groupname")
      * @param Request $request
      */
-    public function editMyGroup($request)
+    public function editMyGroup()
     {
         $data = request()->query();
 

@@ -48,7 +48,7 @@ class Application extends App
     public function process()
     {
         //discovery consul..
-//        go([bean(Discovery::class),"run"]);
+        go([bean(Discovery::class),"run"]);
     }
 
     /**

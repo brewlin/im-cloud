@@ -56,7 +56,7 @@ class UserRecordController extends BaseController
      * Strings(from=ValidatorFrom::POST,name="token")
      * @param Request $request
      */
-    public function updateIsReadChatRecord($request)
+    public function updateIsReadChatRecord()
     {
         $this->getCurrentUser();
         $where = ['friend_id' => $this->user['id'],'user_id' => request()->post('uid'),'is_read' => 0];

@@ -45,7 +45,7 @@ class UserGroupMemberController extends BaseController
      * Strings(from=ValidatorFrom::POST,name="groupid")
      * @param Request $request
      */
-    public function moveFriendToGroup($request)
+    public function moveFriendToGroup()
     {
         $data = request()->post();
         $this->getCurrentUser();
@@ -65,7 +65,7 @@ class UserGroupMemberController extends BaseController
      * Strings(from=ValidatorFrom::POST,name="friend_id")
      * @param Request $request
      */
-    public function removeFriend($request)
+    public function removeFriend()
     {
         $data = request()->post();
         $this->getCurrentUser();

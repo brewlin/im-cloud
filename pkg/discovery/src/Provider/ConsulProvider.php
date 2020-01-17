@@ -122,6 +122,7 @@ class ConsulProvider implements ProviderInterface
                 $services = $cli->body;
                 $cli->close();
                 $services = json_decode($services,true);
+                if(!is_array($services))return [];
 //            $result = SaberGM::get(sprintf("http://%s:%d%s",$this->address,$this->port,$url));
 //            $services = $result->getParsedJsonArray();
         }catch (\Throwable $e){

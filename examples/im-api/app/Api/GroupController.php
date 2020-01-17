@@ -26,9 +26,10 @@ class GroupController extends BaseController
      * RequestMapping(route="/api/im/members",method={RequestMethod::GET})
      * @param Request $request
      */
-    public function getMembers($request)
+    public function getMembers()
     {
-        $id = request()->get('id');
+        $id = request()->query('id');
+        if(empty($id))return $this->error('require id arg');
         //调用群组服务 获取群信息
         $groupRes = bean(GroupService::class)->getGroupMembers($id);
   
@@ -41,7 +42,7 @@ class GroupController extends BaseController
      * Strings(from=ValidatorFrom::GET,name="id")
      * @param Request $request
      */
-    public function leaveGroup($request)
+    public function leaveGroup()
     {
         $this->getCurrentUser();
         $number = $this->user['number'];

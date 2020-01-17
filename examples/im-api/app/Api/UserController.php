@@ -30,7 +30,7 @@ class UserController extends BaseController
      * Strings(from=ValidatorFrom::GET,name="id")
      * @param Request $request
      */
-    public function getInformation($request)
+    public function getInformation()
     {
         $data = request()->input();
         $type = $data['type'];
@@ -57,7 +57,7 @@ class UserController extends BaseController
      * RequestMapping(route="user/quit")
      * @param Request $request
      */
-    public function userQuit($request)
+    public function userQuit()
     {
         $token = request()->input("token");
         $user   = \bean(UserCacheService::class)->getUserByToken($token);
@@ -169,7 +169,7 @@ class UserController extends BaseController
      * Strings(from=ValidatorFrom::GET,name="page")
      * @param Request $request
      */
-    public function findFriend($request)
+    public function findFriend()
     {
         $type = request()->query('type');
         $page = request()->query('page');

@@ -72,7 +72,7 @@ class GroupModel
     public function getGroupOwner($id)
     {
         $res = Db::table("group")->find($id);
-        $res['username'] = Db::table("user")->findOne(['number' => $res['user_number']])->getResult();
+        $res['username'] = Db::table("user")->where(['number' => $res['user_number']])->first();
         return $res;
     }
 
