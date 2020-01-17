@@ -59,7 +59,7 @@ class HttpDispatcher
                 return $response->withStatus(405)->withContent(ErrMsg::err(ErrMsg::METHOD_NOT_ALLOWED));
                 break;
             case Dispatcher::FOUND: // 找到对应的方法
-                EventManager::trigger(EventEnum::AfterFindRouter,\request(),$response);
+                $rsp = EventManager::trigger(EventEnum::AfterFindRouter,\request(),$response);
                 try{
                     $handler = explode("/","App".$routeInfo[1]); // 获得处理函数
                     $action = array_pop($handler);
@@ -71,15 +71,9 @@ class HttpDispatcher
                         return $response->withContent(json_encode($rsp));
                     }
                 }catch (\Throwable $e){
-                    Log::error("msg:%s file:%s line:%s",$e->getMessage(),$e->getFile(),$e->getLine());
-                    if(config('server')['exception'] && bean(config('server.exception'))){
-                        /** @var AppExceptionInterface $exceptionhanlder */
-                        $exceptionhanlder = bean(config('server.exception'));
-                        return $exceptionhanlder->handlerException($response,$e);
-                    }
-                    return $response->withStatus(500)
-                        ->withContent(ErrMsg::err($e->getMessage()));
+                    $rsp = EventManager::trigger(EventEnum::AppException,$response,$e);
                 }
+                if($rsp instanceof Response)return $rsp;
                 break;
         }
         return $response;

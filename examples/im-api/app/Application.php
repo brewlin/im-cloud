@@ -49,8 +49,6 @@ class Application extends App
     {
         //discovery consul..
 //        go([bean(Discovery::class),"run"]);
-        //loadonline
-//        go([bean(InitLogic::class)],"run")
     }
 
     /**

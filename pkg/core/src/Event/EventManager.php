@@ -37,7 +37,7 @@ class EventManager
         if(!$obj)return;
 
         if($obj instanceof EventDispatcherInterface) {
-            $obj->dispatch(...$param);
+            return $obj->dispatch(...$param);
         }
     }
 

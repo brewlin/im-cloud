@@ -6,7 +6,7 @@
  * Time: 下午 2:45
  */
 
-namespace App\Listener;
+namespace App\Event;
 
 use App\Lib\UserEnum;
 use App\Services\UserCacheService;
@@ -21,7 +21,7 @@ use Core\Http\Response\Response;
 /**
  * Class OnRequestListener
  * @package App\Listener
- * @Event()
+ * @Event(alias=EventEnum::AfterFindRouter)
  */
 class FindRouterEvent implements EventDispatcherInterface
 {
@@ -32,8 +32,8 @@ class FindRouterEvent implements EventDispatcherInterface
      */
     public function dispatch(...$param)
     {
-        var_dump("dispath sdfsdfsfind");
-        list($request,$response) = $param;
+        $request = request();
+        $response = response();
         if(in_array($request->getUriPath(),['/login','/register']))return false;
 
         //从请求上下文获取 全局 request() response()

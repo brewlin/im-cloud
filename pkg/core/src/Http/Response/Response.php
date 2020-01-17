@@ -169,9 +169,10 @@ class Response implements ResponseInterface
     /**
      *
      */
-    public function end():void
+    public function end():Response
     {
         $this->send();
+        return $this;
     }
 
     /**

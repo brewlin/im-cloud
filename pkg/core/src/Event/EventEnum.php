@@ -21,4 +21,7 @@ class EventEnum
     /** @var string  */
     const DbFetchMode = "database_fetch_mode_event";
 
+    /** @var string */
+    const AppException = "app_exception_event";
+
 }
