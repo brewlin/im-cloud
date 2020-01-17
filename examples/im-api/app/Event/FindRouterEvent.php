@@ -12,23 +12,28 @@ use App\Lib\UserEnum;
 use App\Services\UserCacheService;
 use Core\Container\Mapping\Bean;
 use Core\Context\Context;
+use Core\Event\EventDispatcherInterface;
+use Core\Event\EventEnum;
+use Core\Event\Mapping\Event;
 use Core\Http\Request\Request;
 use Core\Http\Response\Response;
 
 /**
  * Class OnRequestListener
  * @package App\Listener
- * @Bean()
+ * @Event()
  */
-class OnRequestListener
+class FindRouterEvent implements EventDispatcherInterface
 {
     /**
      * @param Request $request
      * @param Response $response
      * @return bool
      */
-    public function onRequest(Request $request, Response $response): bool
+    public function dispatch(...$param)
     {
+        var_dump("dispath sdfsdfsfind");
+        list($request,$response) = $param;
         if(in_array($request->getUriPath(),['/login','/register']))return false;
 
         //从请求上下文获取 全局 request() response()

@@ -11,6 +11,9 @@ namespace Core\Container;
 
 use Core\Annotation\AnnotationRegister;
 use Core\Container\Mapping\Bean;
+use Core\Container\Parser\BeanParser;
+use Core\Event\EventManager;
+use Core\Event\Mapping\Event;
 
 class ContainerRegister
 {
@@ -29,6 +32,8 @@ class ContainerRegister
                 foreach ($anno as $annoObj) {
                     if ($annoObj instanceof Bean) {
                         Container::getInstance()->create($ns);
+                    }else if($annoObj instanceof Event){
+                        EventManager::register($ns,$annoObj);
                     }
                 }
             }

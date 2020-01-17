@@ -12,6 +12,8 @@ namespace Core\Http;
 use Core\Container\Container;
 use Core\Context\Context;
 use Core\Contract\AppExceptionInterface;
+use Core\Event\EventEnum;
+use Core\Event\EventManager;
 use Core\Http\Request\Request;
 use Core\Http\Response\ErrMsg;
 use Core\Http\Response\Response;
@@ -57,6 +59,7 @@ class HttpDispatcher
                 return $response->withStatus(405)->withContent(ErrMsg::err(ErrMsg::METHOD_NOT_ALLOWED));
                 break;
             case Dispatcher::FOUND: // 找到对应的方法
+                EventManager::trigger(EventEnum::AfterFindRouter,\request(),$response);
                 try{
                     $handler = explode("/","App".$routeInfo[1]); // 获得处理函数
                     $action = array_pop($handler);
@@ -69,9 +72,9 @@ class HttpDispatcher
                     }
                 }catch (\Throwable $e){
                     Log::error("msg:%s file:%s line:%s",$e->getMessage(),$e->getFile(),$e->getLine());
-                    if(config('server')['exception'] && bean(config('server')['exception'])){
+                    if(config('server')['exception'] && bean(config('server.exception'))){
                         /** @var AppExceptionInterface $exceptionhanlder */
-                        $exceptionhanlder = bean(config('server')['exception']);
+                        $exceptionhanlder = bean(config('server.exception'));
                         return $exceptionhanlder->handlerException($response,$e);
                     }
                     return $response->withStatus(500)
