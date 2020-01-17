@@ -57,7 +57,7 @@ im-cloud 业务流程
 ![](./resource/im-cloudt-task.png)
 
 ## 组件依赖
-> 相关组件为纯swoole实现
+> 相关组件为纯swoole实现,组件设计借鉴 Swoft 框架
 ### @[core](pkg/core) (done) 核心架构
 ### @[grpc](pkg/grpc) (done) grpc包依赖 grpc-client连接池
 ### @[discovery](pkg/discovery) (done) 服务发现注册
