@@ -95,15 +95,15 @@ class PhpRedisConnector
     protected function establishConnection(Redis $client, array $config): void
     {
         $parameters = [
-            $config['host'],
-            $config['port'],
-            $config['timeout'],
+            $config['host']??"127.0.0.1",
+            $config['port']??"6379",
+            $config['timeout']??8,
             '',
-            $config['retry_interval'],
+            $config['retry_interval']??8,
         ];
 
         if (version_compare(phpversion('redis'), '3.1.3', '>=')) {
-            $parameters[] = $config['read_timeout'];
+            $parameters[] = $config['read_timeout']??0;
         }
 
         $result = $client->connect(...$parameters);
