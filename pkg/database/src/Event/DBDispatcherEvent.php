@@ -9,30 +9,30 @@
 namespace Database\Event;
 
 use Core\Container\Mapping\Bean;
-use Core\Event\EventDispatcherInterface;
 use Core\Event\EventEnum;
 use Core\Event\EventManager;
 use Core\Event\Mapping\Event;
 use Hyperf\Database\Events\StatementPrepared;
 use Log\Helper\Log;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use PDO;
 use Hyperf\Database\Events\QueryExecuted;
 /**
  * Class FetchModeEvent
  * @package App\Event
- * @Event(alias=EventEnum::DbFetchMode)
+ * @Bean()
  */
-class FetchModeEvent implements EventDispatcherInterface
+class DBDispatcherEvent implements EventDispatcherInterface
 {
     /**
      * @param $event
      */
-    public function dispatch(...$param){
-        $event = $param[0];
+    public function dispatch($event){
+        if ($event instanceof QueryExecuted){
+            EventManager::trigger(EventEnum::DbQueryExec,$event);
+        }
         if ($event instanceof StatementPrepared) {
-            Log::debug("fetch mode event");
-
-//            EventManager::trigger(EventEnum::DbFetchMode,$event);
+            EventManager::trigger(EventEnum::DbFetchMode,$event);
         }
     }
 }

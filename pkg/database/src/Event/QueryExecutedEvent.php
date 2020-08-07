@@ -20,19 +20,18 @@ use Hyperf\Database\Events\QueryExecuted;
 /**
  * Class FetchModeEvent
  * @package App\Event
- * @Event(alias=EventEnum::DbFetchMode)
+ * @Event(alias=EventEnum::DbQueryExec)
  */
-class FetchModeEvent implements EventDispatcherInterface
+class QueryExecutedEvent implements EventDispatcherInterface
 {
     /**
      * @param $event
      */
-    public function dispatch(...$param){
+    public function dispatch(...$param)
+    {
         $event = $param[0];
-        if ($event instanceof StatementPrepared) {
-            Log::debug("fetch mode event");
-
-//            EventManager::trigger(EventEnum::DbFetchMode,$event);
+        if ($event instanceof QueryExecuted){
+            Log::debug("execute query:".$event->sql);
         }
     }
 }

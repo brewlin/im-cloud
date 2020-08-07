@@ -10,7 +10,7 @@ namespace Database\Connector;
 
 
 use Core\Container\Mapping\Bean;
-use Database\Event\FetchModeEvent;
+use Database\Event\DBDispatcherEvent;
 use Hyperf\Database\MySqlConnection;
 
 /**
@@ -142,7 +142,7 @@ class MysqlConnector
         try{
             $client = new MySqlConnection($client,$this->database,$this->prefix,$config);
             //register event
-            $client->setEventDispatcher(\bean(FetchModeEvent::class));
+            $client->setEventDispatcher(\bean(DBDispatcherEvent::class));
         }catch (\Throwable $e){
             throw new \Exception(
                 sprintf('mysql connect error(%s)', $e->getMessage())
