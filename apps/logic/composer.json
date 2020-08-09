@@ -10,23 +10,7 @@
     "description": "Modern High performance Coroutine PHP Application, base on Swoole",
     "license": "Apache-2.0",
     "require": {
-        "php": ">=7.0",
-        "swoole/etcd-client": "^1.0",
-        "brewlin/log": "@dev",
-        "brewlin/stdlib":"@dev",
-        "nikic/fast-route": "^1.3",
-        "vlucas/phpdotenv": "^2.5",
-        "psr/http-message": "^1.0",
-        "toolkit/cli-utils": "~1.0",
-        "brewlin/im-grpc":"@dev",
-        "brewlin/im-core":"@dev",
-        "brewlin/im-discovery":"@dev",
-        "brewlin/im-process":"@dev",
-        "brewlin/im-queue":"@dev",
-        "brewlin/im-redis":"@dev",
-        "brewlin/im-task":"@dev",
-        "brewlin/im-memory":"@dev"
-
+        "brewlin/framework":"@dev"
     },
     "autoload": {
         "psr-4":{
@@ -35,44 +19,8 @@
     },
     "repositories": {
         "0":{
-            "type":"path",
-            "url":"../../pkg/grpc"
-        },
-        "1":{
-            "type":"path",
-            "url":"../../pkg/core"
-        },
-        "2":{
-            "type":"path",
-            "url":"../../pkg/discovery"
-        },
-        "3":{
-            "type":"path",
-            "url":"../../pkg/process"
-        },
-        "4":{
-            "type":"path",
-            "url":"../../pkg/queue"
-        },
-        "5":{
-            "type":"path",
-            "url":"../../pkg/log"
-        },
-        "6":{
-            "type":"path",
-            "url":"../../pkg/stdlib"
-        },
-        "7":{
-            "type":"path",
-            "url":"../../pkg/redis"
-        },
-        "8":{
-            "type":"path",
-            "url":"../../pkg/task"
-        },
-        "9":{
-            "type":"path",
-            "url":"../../pkg/memory"
+            "type":"vcs",
+            "url":"https://www.github.com/brewlin/framework"
         },
         "packagist": {
             "type": "composer",

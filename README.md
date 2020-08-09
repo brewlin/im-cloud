@@ -55,22 +55,6 @@ im-cloud 数据流程图
 im-cloud 业务流程
 -----
 ![](./resource/im-cloudt-task.png)
-
-## 组件依赖
-> 相关组件为纯swoole实现,组件设计借鉴 Swoft 框架
-### @[core](pkg/core) (done) 核心架构
-### @[grpc](pkg/grpc) (done) grpc包依赖 grpc-client连接池
-### @[discovery](pkg/discovery) (done) 服务发现注册
-### @[process](pkg/process)(done) 自定义进程管理器
-### @[redis](pkg/redis)(done) redis连接池
-### @[queue](pkg/queue)(done amqp,soon kafak) 消息队列连接池
-### @[database](pkg/database)(done) db连接池
-### @[memory](pkg/memory)(done)swoole 相关内存操作封装
-### @[task](pkg/task)(done) 异步任务投递组件
-### @[cloud](appm/cloud) (test verion)
-### @[job](appm/job)   (test version)
-### @[logic](appm/logic) (test version)
-
 ## 相关文档
 - [im-cloud 基于swoole 原生协程构建分布式推送中间件](./docs)
 - [im-cloud 分布式中间件的安装部署](./docs)
